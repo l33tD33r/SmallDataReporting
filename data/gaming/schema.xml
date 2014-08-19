@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema>
+	<DataTables>
+        <!--Generic Tables-->
+	    <DataTable name="Player">
+	        <DataFields>
+	            <StringField name="Name" />
+	            <StringField name="Email" />
+	            <StringField name="Notes" />
+	        </DataFields>
+	    </DataTable>
+	    <DataTable name="Location">
+	        <DataFields>
+                <StringField name="Name" />
+	            <NumberField name="Latitude" />
+	            <NumberField name="Longitude" />
+	            <StringField name="Description" />
+	        </DataFields>
+	    </DataTable>
+        <DataTable name="Game">
+            <DataFields>
+                <StringField name="Name" />
+                <StringField name="Description" />
+            </DataFields>
+        </DataTable>
+        <DataTable name="GameInstance">
+            <DataFields>
+                <ReferenceField name="Game" relatedTable="Game" setFieldName="GameInstances" />
+                <ReferenceField name="Location" relatedTable="Location" setFieldName="GameInstances" />
+                <DateField name="DatePlayed" />
+                <StringField name="Notes" />
+            </DataFields>
+        </DataTable>
+        <DataTable name="GamePlayer">
+            <KeyFields>
+                <ReferenceField name="Player" relatedTable="Player" setFieldName="GamePlayers" />
+                <ReferenceField name="GameInstance" relatedTable="GameInstance" setFieldName="GamePlayers" />
+            </KeyFields>
+            <DataFields>
+                <IntegerField name="WinningRank" />
+            </DataFields>
+        </DataTable>
+        <!--Settlers of Catan Tables-->
+        <DataTable name="SettlersOfCatan_Color">
+            <KeyFields>
+                <StringField name="Name" />
+            </KeyFields>
+        </DataTable>
+        <DataTable name="SettlersOfCatan_GameInstance">
+            <KeyFields>
+                <ReferenceField name="GameInstance" relatedTable="GameInstance" setFieldName="SettlersOfCatan_GameInstances" />
+            </KeyFields>
+            <DataFields>
+                <BooleanField name="CitiesAndKnights" />
+                <BooleanField name="Seafarers" />
+            </DataFields>
+        </DataTable>
+        <DataTable name="SettlersOfCatan_GamePlayer">
+            <KeyFields>
+                <ReferenceField name="GamePlayer" relatedTable="GamePlayer" setFieldName="SettlersOfCatan_GamePlayers" />
+                <ReferenceField name="GameInstance" relatedTable="SettlersOfCatan_GameInstance" setFieldName="SettlersOfCatan_GamePlayers" />
+            </KeyFields>
+            <DataFields>
+                <ReferenceField name="Color" relatedTable="SettlersOfCatan_Color" setFieldName="SettlersOfCatan_GamePlayers" />
+                <IntegerField name="Points" />
+                <IntegerField name="StartingPosition" />
+                <BooleanField name="Winner" />
+            </DataFields>
+        </DataTable>
+	</DataTables>
+</Schema>

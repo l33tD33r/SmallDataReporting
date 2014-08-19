@@ -14,6 +14,8 @@ import l33tD33r.app.database.report.storage.ReportProvider;
 import l33tD33r.app.database.schema.SchemaManager;
 import l33tD33r.app.database.schema.storage.FileSchemaProvider;
 import l33tD33r.app.ui.workspace.WorkspaceController;
+
+import java.io.File;
 //import l33tD33r.app.ui.workspace.content.FileDataProvider;
 //import l33tD33r.app.ui.workspace.content.FileReportProvider;
 
@@ -40,16 +42,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
-        schemaProvider= new FileSchemaProvider("E:\\Development\\C#\\Projects\\ConvertGamingHistoryStorageXml\\ConvertGamingHistoryStorageXml\\Data\\UpdatedSystemData\\schema.xml");
+        schemaProvider= new FileSchemaProvider(".\\data\\gaming\\schema.xml");
 
         SchemaManager.createSingleton(schemaProvider);
 
-        dataProvider = new FileDataProvider("E:\\Development\\C#\\Projects\\ConvertGamingHistoryStorageXml\\ConvertGamingHistoryStorageXml\\Data\\UpdatedSystemData\\latest_data.xml");
+        dataProvider = new FileDataProvider(".\\data\\gaming\\data.xml");
 
         DataManager.createSingleton(dataProvider);
 
-        reportProvider = new FileReportProvider("E:\\Development\\C#\\Projects\\ConvertGamingHistoryStorageXml\\ConvertGamingHistoryStorageXml\\Data\\UpdatedSystemData\\report.xml");
+        reportProvider = new FileReportProvider(".\\data\\gaming\\report.xml");
 
         ReportManager.createSingleton(reportProvider);
 
@@ -63,7 +64,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(root, 800, 600);
 
-        stage.setTitle("Small Data Reporting");
+        stage.setTitle("SmallData Reporting");
         stage.setScene(scene);
         stage.show();
     }

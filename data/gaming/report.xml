@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Reports>
+    <Report type="Table">
+        <Table>SettlersOfCatan_GamePlayer</Table>
+        <Name>Winning Starting Positions (3-player)</Name>
+        <Title>Winning Starting Positions (3-player)</Title>
+        <Filter>
+            <Expression type="And">
+                <Children>
+                    <Expression type="Equals">
+                        <Left>
+                            <Expression type="SetCount">
+                                <FieldPath>GameInstance.SettlersOfCatan_GamePlayers</FieldPath>
+                            </Expression>
+                        </Left>
+                        <Right>
+                            <Expression type="Value">
+                                <Type>Integer</Type>
+                                <Value>3</Value>
+                            </Expression>
+                        </Right>
+                    </Expression>
+                    <Expression type="Field">
+                        <FieldPath>Winner</FieldPath>
+                    </Expression>
+                </Children>
+            </Expression>
+        </Filter>
+        <Group>true</Group>
+        <Columns>
+            <Column>
+                <Header>Position</Header>
+                <Width>200</Width>
+                <Name>Position</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>StartingPosition</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Count</Header>
+                <Width>200</Width>
+                <Name>Count</Name>
+                <GroupRule>Sum</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Value">
+                        <Type>Integer</Type>
+                        <Value>1</Value>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Player</Header>
+                <Width>200</Width>
+                <Name>Player</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>GamePlayer.Player.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Table">
+        <Table>SettlersOfCatan_GamePlayer</Table>
+        <Name>Winning Starting Positions (4-player)</Name>
+        <Title>Winning Starting Positions (4-player)</Title>
+        <Filter>
+            <Expression type="And">
+                <Children>
+                    <Expression type="Equals">
+                        <Left>
+                            <Expression type="SetCount">
+                                <FieldPath>GameInstance.SettlersOfCatan_GamePlayers</FieldPath>
+                            </Expression>
+                        </Left>
+                        <Right>
+                            <Expression type="Value">
+                                <Type>Integer</Type>
+                                <Value>4</Value>
+                            </Expression>
+                        </Right>
+                    </Expression>
+                    <Expression type="Field">
+                        <FieldPath>Winner</FieldPath>
+                    </Expression>
+                </Children>
+            </Expression>
+        </Filter>
+        <Group>true</Group>
+        <Columns>
+            <Column>
+                <Header>Position</Header>
+                <Width>200</Width>
+                <Name>Position</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>StartingPosition</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Count</Header>
+                <Width>200</Width>
+                <Name>Count</Name>
+                <GroupRule>Sum</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Value">
+                        <Type>Integer</Type>
+                        <Value>1</Value>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Player</Header>
+                <Width>200</Width>
+                <Name>Player</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>GamePlayer.Player.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Table">
+        <Table>SettlersOfCatan_GamePlayer</Table>
+        <Name>Winning Starting Positions (5-player)</Name>
+        <Title>Winning Starting Positions (5-player)</Title>
+        <Filter>
+            <Expression type="And">
+                <Children>
+                    <Expression type="Equals">
+                        <Left>
+                            <Expression type="SetCount">
+                                <FieldPath>GameInstance.SettlersOfCatan_GamePlayers</FieldPath>
+                            </Expression>
+                        </Left>
+                        <Right>
+                            <Expression type="Value">
+                                <Type>Integer</Type>
+                                <Value>5</Value>
+                            </Expression>
+                        </Right>
+                    </Expression>
+                    <Expression type="Field">
+                        <FieldPath>Winner</FieldPath>
+                    </Expression>
+                </Children>
+            </Expression>
+        </Filter>
+        <Group>true</Group>
+        <Columns>
+            <Column>
+                <Header>Position</Header>
+                <Width>200</Width>
+                <Name>Position</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>StartingPosition</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Count</Header>
+                <Width>200</Width>
+                <Name>Count</Name>
+                <GroupRule>Sum</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Value">
+                        <Type>Integer</Type>
+                        <Value>1</Value>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Player</Header>
+                <Width>200</Width>
+                <Name>Player</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>GamePlayer.Player.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Table">
+        <Table>SettlersOfCatan_GamePlayer</Table>
+        <Name>Winning Starting Positions (6-player)</Name>
+        <Title>Winning Starting Positions (6-player)</Title>
+        <Filter>
+            <Expression type="And">
+                <Children>
+                    <Expression type="Equals">
+                        <Left>
+                            <Expression type="SetCount">
+                                <FieldPath>GameInstance.SettlersOfCatan_GamePlayers</FieldPath>
+                            </Expression>
+                        </Left>
+                        <Right>
+                            <Expression type="Value">
+                                <Type>Integer</Type>
+                                <Value>6</Value>
+                            </Expression>
+                        </Right>
+                    </Expression>
+                    <Expression type="Field">
+                        <FieldPath>Winner</FieldPath>
+                    </Expression>
+                </Children>
+            </Expression>
+        </Filter>
+        <Group>true</Group>
+        <Columns>
+            <Column>
+                <Header>Position</Header>
+                <Width>200</Width>
+                <Name>Position</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>StartingPosition</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Count</Header>
+                <Width>200</Width>
+                <Name>Count</Name>
+                <GroupRule>Sum</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Value">
+                        <Type>Integer</Type>
+                        <Value>1</Value>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Player</Header>
+                <Width>200</Width>
+                <Name>Player</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>GamePlayer.Player.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+        </Columns>
+    </Report>
+	<Report type="Table">
+		<Table>SettlersOfCatan_GamePlayer</Table>
+		<Name>Settlers Winners</Name>
+        <Title>Settlers Winners</Title>
+		<Filter>
+			<Expression type="Field">
+				<FieldPath>Winner</FieldPath>
+			</Expression>
+		</Filter>
+		<Group>false</Group>
+		<Columns>
+			<Column>
+                <Header>Date</Header>
+                <Width>200</Width>
+                <Name>Date</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>GameInstance.GameInstance.DatePlayed</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Date</DataType>
+            </Column>
+            <Column>
+                <Header>Player</Header>
+                <Width>200</Width>
+                <Name>Player</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>GamePlayer.Player.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+			<Column>
+                <Header>Score</Header>
+                <Width>200</Width>
+                <Name>Score</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Points</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+			<Column>
+                <Header>Position</Header>
+                <Width>200</Width>
+                <Name>Position</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>StartingPosition</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+		</Columns>
+	</Report>
+    <Report type="Table">
+        <Table>SettlersOfCatan_GamePlayer</Table>
+        <Name>Settlers Players</Name>
+        <Title>Settlers Players</Title>
+        <Filter />
+		<ResultFilter>
+			<Expression type="GreaterThanOrEqual">
+				<Left>
+					<Expression type="Column">
+						<Name>GamesPlayed</Name>
+					</Expression>
+				</Left>
+				<Right>
+					<Expression type="Value">
+						<Type>Integer</Type>
+						<Value>10</Value>
+					</Expression>
+				</Right>
+			</Expression>
+		</ResultFilter>
+        <Group>true</Group>
+        <Columns>
+            <Column>
+                <Header>Player</Header>
+                <Width>200</Width>
+                <Name>Player</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>GamePlayer.Player.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+			<Column>
+				<Header>Played</Header>
+				<Width>200</Width>
+				<Name>GamesPlayed</Name>
+				<GroupRule>Sum</GroupRule>
+				<SortRule>Ascending</SortRule>
+				<ColumnExpression>
+					<Expression type="Value">
+						<Type>Integer</Type>
+						<Value>1</Value>
+					</Expression>
+				</ColumnExpression>
+				<DataType>Integer</DataType>
+			</Column>
+            <Column>
+                <Header>Wins</Header>
+                <Width>200</Width>
+                <Name>Wins</Name>
+                <GroupRule>Sum</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="If">
+                        <Condition>
+                            <Expression type="Field">
+                                <FieldPath>Winner</FieldPath>
+                            </Expression>
+                        </Condition>
+                        <TrueValue>
+                            <Expression type="Value">
+                                <Type>Integer</Type>
+                                <Value>1</Value>
+                            </Expression>
+                        </TrueValue>
+                        <FalseValue>
+                            <Expression type="Value">
+                                <Type>Integer</Type>
+                                <Value>0</Value>
+                            </Expression>
+                        </FalseValue>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+			<Column>
+				<Header>Win Average</Header>
+                <Width>200</Width>
+                <Name>WinAverage</Name>
+                <GroupRule>Average</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="If">
+                        <Condition>
+							<Expression type="Field">
+								<FieldPath>Winner</FieldPath>
+							</Expression>
+						</Condition>
+						<TrueValue>
+							<Expression type="Value">
+								<Type>Number</Type>
+								<Value>1.0</Value>
+							</Expression>
+						</TrueValue>
+						<FalseValue>
+							<Expression type="Value">
+								<Type>Number</Type>
+								<Value>0.0</Value>
+							</Expression>
+						</FalseValue>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+			</Column>
+            <Column>
+                <Header>Best Score</Header>
+                <Width>200</Width>
+                <Name>BestScore</Name>
+                <GroupRule>Max</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Points</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Average Score</Header>
+                <Width>200</Width>
+                <Name>AverageScore</Name>
+                <GroupRule>Average</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Points</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Worst Score</Header>
+                <Width>200</Width>
+                <Name>WorstScore</Name>
+                <GroupRule>Min</GroupRule>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Points</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+        </Columns>
+    </Report>
+	<Report type="Table">
+		<Table>GamePlayer</Table>
+		<Name>Players Game Played</Name>
+		<Title>Players Game Played</Title>
+		<Filter />
+		<Group>true</Group>
+		<Columns>
+			<Column>
+				<Header>Player</Header>
+				<Width>200</Width>
+				<Name>Player</Name>
+				<GroupRule>By</GroupRule>
+				<SortRule>Descending</SortRule>
+				<ColumnExpression>
+					<Expression type="Field">
+						<FieldPath>Player.Name</FieldPath>
+					</Expression>
+				</ColumnExpression>
+				<DataType>String</DataType>
+			</Column>
+			<Column>
+				<Header>Best Rank</Header>
+				<Width>200</Width>
+				<Name>BestRank</Name>
+				<GroupRule>Min</GroupRule>
+				<SortRule>Ascending</SortRule>
+				<ColumnExpression>
+					<Expression type="Field">
+						<FieldPath>WinningRank</FieldPath>
+					</Expression>
+				</ColumnExpression>
+				<DataType>Integer</DataType>
+			</Column>
+			<Column>
+				<Header>Worst Rank</Header>
+				<Width>200</Width>
+				<Name>WorstRank</Name>
+				<GroupRule>Max</GroupRule>
+				<SortRule>Ascending</SortRule>
+				<ColumnExpression>
+					<Expression type="Field">
+						<FieldPath>WinningRank</FieldPath>
+					</Expression>
+				</ColumnExpression>
+				<DataType>Integer</DataType>
+			</Column>
+			<Column>
+				<Header>Games Played</Header>
+				<Width>200</Width>
+				<Name>GamesPlayed</Name>
+				<GroupRule>Sum</GroupRule>
+				<SortRule>Ascending</SortRule>
+				<ColumnExpression>
+					<Expression type="Value">
+						<Type>Integer</Type>
+						<Value>1</Value>
+					</Expression>
+				</ColumnExpression>
+				<DataType>Integer</DataType>
+			</Column>
+		</Columns>
+	</Report>
+	<Report type="Table">
+		<Table>GameInstance</Table>
+		<Name>Games Played</Name>
+		<Title>Games Played</Title>
+		<Filter />
+		<Group>false</Group>
+		<Columns>
+			<Column>
+				<Header>Game</Header>
+				<Width>200</Width>
+				<Name>Game</Name>
+				<GroupRule>By</GroupRule>
+				<SortRule>Ascending</SortRule>
+				<ColumnExpression>
+					<Expression type="Field">
+						<FieldPath>Game.Name</FieldPath>
+					</Expression>
+				</ColumnExpression>
+				<DataType>String</DataType>
+			</Column>
+			<Column>
+				<Header>Location</Header>
+				<Width>200</Width>
+				<Name>Location</Name>
+				<GroupRule>By</GroupRule>
+				<SortRule>Ascending</SortRule>
+				<ColumnExpression>
+					<Expression type="Field">
+						<FieldPath>Location.Name</FieldPath>
+					</Expression>
+				</ColumnExpression>
+				<DataType>String</DataType>
+			</Column>
+			<Column>
+				<Header>Date Played</Header>
+				<Width>150</Width>
+				<Name>DatePlayed</Name>
+				<GroupRule>By</GroupRule>
+				<SortRule>Ascending</SortRule>
+				<ColumnExpression>
+					<Expression type="Field">
+						<FieldPath>DatePlayed</FieldPath>
+					</Expression>
+				</ColumnExpression>
+				<DataType>Date</DataType>
+			</Column>
+		</Columns>
+	</Report>
+</Reports>
