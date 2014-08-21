@@ -1,3 +1,9 @@
 *.class
 out/production/SmallDataReporting/l33tD33r/app/ui/schema.xml
 out/production/SmallDataReporting/l33tD33r/app/ui/workspace.fxml
+/data/gaming/transaction.data.xml
+/data/gaming/transaction.report.xml
+/data/gaming/transaction.schema.xml
+/out/production/SmallDataReporting/gaming/transaction.data.xml
+/out/production/SmallDataReporting/gaming/transaction.report.xml
+/out/production/SmallDataReporting/gaming/transaction.schema.xml
