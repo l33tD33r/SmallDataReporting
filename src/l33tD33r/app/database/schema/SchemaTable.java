@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.LinkedHashMap;
 
 public class SchemaTable {
-	protected String name;
-	protected LinkedHashMap<String,SchemaField> keyFieldsMap;
-	protected LinkedHashMap<String,SchemaField> dataFieldsMap;
-	protected LinkedHashMap<String,SchemaField> allFieldsMap;
+	private String name;
+    private String reportFieldName;
+    private LinkedHashMap<String,SchemaField> keyFieldsMap;
+    private LinkedHashMap<String,SchemaField> dataFieldsMap;
+    private LinkedHashMap<String,SchemaField> allFieldsMap;
 		
 	public SchemaTable() {
 		keyFieldsMap = new LinkedHashMap<String,SchemaField>();
@@ -23,7 +24,23 @@ public class SchemaTable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
+    public String getReportFieldName() { return reportFieldName; }
+
+    public void setReportFieldName(String reportFieldName) { this.reportFieldName = reportFieldName; }
+
+    public List<SchemaField> getReportFields() {
+        ArrayList<SchemaField> reportFields = new ArrayList<>();
+
+        for (String reportFieldName : getReportFieldName().split("\\|")) {
+            reportFields.add(getField(reportFieldName));
+        }
+
+        return reportFields;
+    }
+
+//    public SchemaField getReportField() { return getField(getReportFieldName()); }
+
 	public void addKeyField(SchemaField field) {
 		this.keyFieldsMap.put(field.getName(), field);
 		this.allFieldsMap.put(field.getName(), field);

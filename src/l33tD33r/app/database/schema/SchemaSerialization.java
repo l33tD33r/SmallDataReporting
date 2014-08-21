@@ -35,6 +35,8 @@ public class SchemaSerialization {
 		SchemaTable table = new SchemaTable();
 		String name = dataTableElement.getAttribute("name");
 		table.setName(name);
+        String reportFieldName = dataTableElement.getAttribute("reportField");
+        table.setReportFieldName(reportFieldName);
 		
 		for (SchemaField keyField : getKeyFields(dataTableElement)) {
 			table.addKeyField(keyField);

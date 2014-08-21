@@ -55,6 +55,9 @@ public class SchemaManager {
 			for (SchemaField field : table.getAllFields()) {
 				if (field.getType() == FieldType.Reference) {
 					SchemaTable relatedTable = this.tablesMap.get(field.getRelatedTableName());
+                    if (relatedTable == null) {
+                        throw new RuntimeException("Related table does not exist:"+field.getRelatedTableName());
+                    }
 					field.setRelatedTable(relatedTable);
 					
 					SchemaField setField = new SchemaField();

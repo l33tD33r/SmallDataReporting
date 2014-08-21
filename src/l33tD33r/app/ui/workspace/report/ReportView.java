@@ -20,14 +20,20 @@ import l33tD33r.app.database.report.ReportManager;
 import l33tD33r.app.database.schema.SchemaField;
 import l33tD33r.app.database.schema.SchemaTable;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Simon on 2/16/14.
  */
 public class ReportView {
+
+    private DataTable currentDataTable;
+
+    private Report currentReport;
 
     private TableView<Map> tableView;
 
@@ -62,7 +68,7 @@ public class ReportView {
         tableView.getColumns().clear();
         data.clear();
 
-        DataTable dataTable = DataManager.getSingleton().getTable(qualifiedTableName);
+        currentDataTable = DataManager.getSingleton().getTable(qualifiedTableName);
 
         TableColumn<Map, String> rowColumn = new TableColumn<>("Row");
         rowColumn.setMinWidth(50);
@@ -72,7 +78,7 @@ public class ReportView {
         rowColumn.setCellFactory(cellFactoryForMap);
         tableView.getColumns().addAll(rowColumn);
 
-        for (SchemaField field : dataTable.getSchema().getAllFields()) {
+        for (SchemaField field : currentDataTable.getSchema().getAllFields()) {
             if (field.getType() == FieldType.Set) {
                 continue;
             }
@@ -89,12 +95,12 @@ public class ReportView {
         ArrayList<Map<String,String>> newData = new ArrayList<>();
 
         int row = 0;
-        for (DataRecord dataRecord : dataTable.getAllRecords()) {
+        for (DataRecord dataRecord : currentDataTable.getAllRecords()) {
             Map<String, String> dataRow = new HashMap<>();
 
             dataRow.put("Row", Integer.toString(++row));
 
-            for (SchemaField field : dataTable.getSchema().getAllFields()) {
+            for (SchemaField field : currentDataTable.getSchema().getAllFields()) {
                 if (field.getType() == FieldType.Set) {
                     continue;
                 }
@@ -111,9 +117,28 @@ public class ReportView {
 
     private String getFieldValue(SchemaField field, DataRecord dataRecord) {
         if (field.getType() == FieldType.Reference) {
-            SchemaField referenceField = getReferenceDisplayField(field.getRelatedTable());
-            DataRecord referenceRecord = dataRecord.getFieldReference(field.getName());
-            return getFieldValue(referenceField, referenceRecord);
+            List<SchemaField> reportFields = field.getRelatedTable().getReportFields();
+            if (reportFields.size() == 0) {
+                throw new RuntimeException(MessageFormat.format("Table ''{0}'' does not have any report fields specified", field.getRelatedTableName()));
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            boolean addedFieldValue = false;
+
+            for (SchemaField reportField : reportFields) {
+                if (addedFieldValue) {
+                    sb.append("|");
+                } else {
+                    addedFieldValue = true;
+                }
+                DataRecord referenceRecord = dataRecord.getFieldReference(field.getName());
+                if (referenceRecord != null) {
+                    sb.append(getFieldValue(reportField, referenceRecord));
+                }
+            }
+
+            return sb.toString();
         } else {
             return  dataRecord.getFieldValueString(field.getName());
         }
@@ -150,7 +175,7 @@ public class ReportView {
         tableView.getColumns().clear();
         data.clear();
 
-        Report report = ReportManager.getSingleton().getReport(reportName);
+        currentReport = ReportManager.getSingleton().getReport(reportName);
 
         TableColumn<Map, String> rowColumn = new TableColumn<>("Row");
         rowColumn.setMinWidth(50);
@@ -160,12 +185,12 @@ public class ReportView {
         rowColumn.setCellFactory(cellFactoryForMap);
         tableView.getColumns().addAll(rowColumn);
 
-        for (int columnIndex=0; columnIndex < report.getColumnCount(); columnIndex++) {
-            TableColumn<Map, String> dataColumn = new TableColumn<>(report.getColumnHeader(columnIndex));
+        for (int columnIndex=0; columnIndex < currentReport.getColumnCount(); columnIndex++) {
+            TableColumn<Map, String> dataColumn = new TableColumn<>(currentReport.getColumnHeader(columnIndex));
             dataColumn.setMinWidth(50);
             dataColumn.setMaxWidth(200);
             dataColumn.setPrefWidth(100);
-            dataColumn.setCellValueFactory(new MapValueFactory<String>(report.getColumnName(columnIndex)));
+            dataColumn.setCellValueFactory(new MapValueFactory<String>(currentReport.getColumnName(columnIndex)));
             dataColumn.setCellFactory(cellFactoryForMap);
 
             tableView.getColumns().add(dataColumn);
@@ -173,7 +198,7 @@ public class ReportView {
 
         ArrayList<Map<String,String>> newData = new ArrayList<>();
 
-        Query query = report.getQuery();
+        Query query = currentReport.getQuery();
 
         for (int rowIndex=0; rowIndex < query.getRowCount(); rowIndex++) {
             query.setPosition(rowIndex);
@@ -184,8 +209,8 @@ public class ReportView {
 
             dataRow.put("Row", Integer.toString(rowIndex+1));
 
-            for (int columnIndex=0; columnIndex < report.getColumnCount(); columnIndex++) {
-                String columnName = report.getColumnName(columnIndex);
+            for (int columnIndex=0; columnIndex < currentReport.getColumnCount(); columnIndex++) {
+                String columnName = currentReport.getColumnName(columnIndex);
                 String columnValue = currentRow.getValue(columnIndex).toString();
 
                 dataRow.put(columnName, columnValue);
@@ -195,5 +220,11 @@ public class ReportView {
         }
 
         data.addAll(newData);
+    }
+
+    public DataTable getCurrentDataTable() {return currentDataTable; }
+
+    public Report getCurrentReport() {
+        return currentReport;
     }
 }

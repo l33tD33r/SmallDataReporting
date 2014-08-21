@@ -97,6 +97,9 @@ public class DataSerialization {
                 if (dataField.getType() == FieldType.Set) {
                     continue;
                 }
+                if (dataField.getValue() == null) {
+                    continue;
+                }
                 Element dataFieldElement = dataDocument.createElement("DataField");
                 dataFieldElement.setAttribute("name", dataField.getName());
                 XmlUtils.writeStringValue(dataDocument, dataFieldElement, dataField.getValueString());

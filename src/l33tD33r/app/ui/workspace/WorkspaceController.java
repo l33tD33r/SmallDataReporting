@@ -8,6 +8,9 @@ import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import l33tD33r.app.database.data.DataTable;
+import l33tD33r.app.database.utility.FileUtils;
+import l33tD33r.app.ui.workspace.data.CreateRecordStage;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import l33tD33r.app.database.data.DataManager;
@@ -94,7 +97,7 @@ public class WorkspaceController {
         });
     }
 
-    public void handleFileImport(ActionEvent event) {
+    public void handleImportData(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select File");
         File initialDirectory = new File("E:\\Development\\C#\\Projects\\ConvertGamingHistoryStorageXml\\ConvertGamingHistoryStorageXml\\Data\\UpdatedSystemData");
@@ -111,11 +114,11 @@ public class WorkspaceController {
             FileInputStream fis = new FileInputStream(file);
             document = XmlUtils.createDocument(fis);
         } catch (FileNotFoundException e) {
-
+            throw new RuntimeException(e);
         } catch (SAXException e) {
-
+            throw new RuntimeException(e);
         } catch (IOException e) {
-
+            throw new RuntimeException(e);
         }
 
         if (document == null) {
@@ -134,6 +137,17 @@ public class WorkspaceController {
             ReportManager.getSingleton().reloadReports();
             loadReports();
             return;
+        }
+    }
+
+    public void handleSaveDataChanges(ActionEvent event) {
+        File transactionDataFile = new File(Main.GAMING_RESOURCE_DIRECTORY_PATH + "\\transaction." + Main.DATA_FILE_NAME);
+        File dataFile = new File(Main.GAMING_RESOURCE_DIRECTORY_PATH + "\\" + Main.DATA_FILE_NAME);
+
+        try {
+            FileUtils.copyFile(transactionDataFile, dataFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -256,5 +270,16 @@ public class WorkspaceController {
         }
 
         reportsRootItem.setExpanded(true);
+    }
+
+    public void handleAddRecord(ActionEvent event) {
+
+        DataTable currentDataTable = reportView.getCurrentDataTable();
+        if (currentDataTable == null) {
+            return;
+        }
+
+        CreateRecordStage createRecordStage = new CreateRecordStage(reportView);
+        createRecordStage.show();
     }
 }

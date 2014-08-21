@@ -2,14 +2,14 @@
 <Schema>
 	<DataTables>
         <!--Generic Tables-->
-	    <DataTable name="Player">
+	    <DataTable name="Player" reportField="Name">
 	        <DataFields>
 	            <StringField name="Name" />
 	            <StringField name="Email" />
 	            <StringField name="Notes" />
 	        </DataFields>
 	    </DataTable>
-	    <DataTable name="Location">
+	    <DataTable name="Location" reportField="Name">
 	        <DataFields>
                 <StringField name="Name" />
 	            <NumberField name="Latitude" />
@@ -17,13 +17,13 @@
 	            <StringField name="Description" />
 	        </DataFields>
 	    </DataTable>
-        <DataTable name="Game">
+        <DataTable name="Game" reportField="Name">
             <DataFields>
                 <StringField name="Name" />
                 <StringField name="Description" />
             </DataFields>
         </DataTable>
-        <DataTable name="GameInstance">
+        <DataTable name="GameInstance" reportField="Game|Location|DatePlayed">
             <DataFields>
                 <ReferenceField name="Game" relatedTable="Game" setFieldName="GameInstances" />
                 <ReferenceField name="Location" relatedTable="Location" setFieldName="GameInstances" />
@@ -31,7 +31,7 @@
                 <StringField name="Notes" />
             </DataFields>
         </DataTable>
-        <DataTable name="GamePlayer">
+        <DataTable name="GamePlayer" reportField="Player|GameInstance">
             <KeyFields>
                 <ReferenceField name="Player" relatedTable="Player" setFieldName="GamePlayers" />
                 <ReferenceField name="GameInstance" relatedTable="GameInstance" setFieldName="GamePlayers" />
@@ -41,12 +41,12 @@
             </DataFields>
         </DataTable>
         <!--Settlers of Catan Tables-->
-        <DataTable name="SettlersOfCatan_Color">
+        <DataTable name="SettlersOfCatan_Color" reportField="Name">
             <KeyFields>
                 <StringField name="Name" />
             </KeyFields>
         </DataTable>
-        <DataTable name="SettlersOfCatan_GameInstance">
+        <DataTable name="SettlersOfCatan_GameInstance" reportField="GameInstance">
             <KeyFields>
                 <ReferenceField name="GameInstance" relatedTable="GameInstance" setFieldName="SettlersOfCatan_GameInstances" />
             </KeyFields>
@@ -55,7 +55,7 @@
                 <BooleanField name="Seafarers" />
             </DataFields>
         </DataTable>
-        <DataTable name="SettlersOfCatan_GamePlayer">
+        <DataTable name="SettlersOfCatan_GamePlayer" reportField="GamePlayer|GameInstance">
             <KeyFields>
                 <ReferenceField name="GamePlayer" relatedTable="GamePlayer" setFieldName="SettlersOfCatan_GamePlayers" />
                 <ReferenceField name="GameInstance" relatedTable="SettlersOfCatan_GameInstance" setFieldName="SettlersOfCatan_GamePlayers" />
@@ -64,6 +64,76 @@
                 <ReferenceField name="Color" relatedTable="SettlersOfCatan_Color" setFieldName="SettlersOfCatan_GamePlayers" />
                 <IntegerField name="Points" />
                 <IntegerField name="StartingPosition" />
+                <BooleanField name="Winner" />
+            </DataFields>
+        </DataTable>
+        <!--Settlers of Catan Tables-->
+        <DataTable name="TwilightImperium_Expansion" reportField="Name">
+            <KeyFields>
+                <StringField name="Name"/>
+            </KeyFields>
+        </DataTable>
+        <DataTable name="TwilightImperium_Option" reportField="Name">
+            <KeyFields>
+                <ReferenceField name="Expansion" relatedTable="TwilightImperium_Expansion" />
+                <StringField name="Name" />
+            </KeyFields>
+        </DataTable>
+        <DataTable name="TwilightImperium_Race" reportField="Name">
+            <KeyFields>
+                <StringField name="Name" />
+            </KeyFields>
+        </DataTable>
+        <DataTable name="TwilightImperium_Technology" reportField="Name">
+            <KeyFields>
+                <StringField name="Name" />
+            </KeyFields>
+            <DataFields>
+                <ReferenceField name="Type" relatedTable="TwilightImperium_TechnologyType" />
+            </DataFields>
+        </DataTable>
+        <DataTable name="TwilightImperium_ConditionOperation" reportField="Value">
+            <KeyFields>
+                <StringField name="Value" />
+            </KeyFields>
+        </DataTable>
+        <DataTable name="TwilightImperium_TechnologyPrerequisite" reportField="Requirement">
+            <DataFields>
+                <ReferenceField name="Technology" relatedTable="TwilightImperium_Technology" />
+                <ReferenceField name="Requirement" relatedTable="TwilightImperium_Technology" />
+                <ReferenceField name="RequirementCombination" relatedTable="TwilightImperium_ConditionOperation"/>
+            </DataFields>
+        </DataTable>
+        <DataTable name="TwilightImperium_TechnologyType" reportField="Color">
+            <KeyFields>
+                <StringField name="Color" />
+            </KeyFields>
+            <DataFields>
+                <StringField name="Name" />
+            </DataFields>
+        </DataTable>
+        <DataTable name="TwilightImperium_StartingTechnology" reportField="Race|Technology">
+            <DataFields>
+                <ReferenceField name="Race" relatedTable="TwilightImperium_Race" />
+                <ReferenceField name="Technology" relatedTable="TwilightImperium_Technology" />
+            </DataFields>
+        </DataTable>
+        <DataTable name="TwilightImperium_WinType" reportField="Name">
+            <KeyFields>
+                <StringField name="Name" />
+            </KeyFields>
+        </DataTable>
+        <DataTable name="TwilightImperium_GameInstance" reportField="GameInstance">
+            <DataFields>
+                <ReferenceField name="GameInstance" relatedTable="GameInstance" />
+                <ReferenceField name="WinType" relatedTable="TwilightImperium_WinType" />
+            </DataFields>
+        </DataTable>
+        <DataTable name="TwilightImperium_GamePlayer" reportField="Player|GameInstance">
+            <DataFields>
+                <ReferenceField name="Player" relatedTable="GamePlayer" />
+                <ReferenceField name="GameInstance" relatedTable="TwilightImperium_GameInstance" />
+                <IntegerField name="Points" />
                 <BooleanField name="Winner" />
             </DataFields>
         </DataTable>

@@ -1,7 +1,6 @@
 package l33tD33r.app.database.utility;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 
 
@@ -23,6 +22,24 @@ public class FileUtils {
             fos.flush();
         } finally {
             fos.close();
+        }
+    }
+
+    public static void copyFile(File existingFile, File newFile) throws IOException {
+        FileInputStream existingFileInputStream = new FileInputStream(existingFile);
+
+        FileOutputStream newFileOutputStream = new FileOutputStream(newFile);
+
+        try {
+            int bufferSize = 1024;
+            byte[] buffer = new byte[bufferSize];
+            int bytesRead;
+            while ((bytesRead = existingFileInputStream.read(buffer)) > 0) {
+                newFileOutputStream.write(buffer, 0, bytesRead);
+            }
+        } finally {
+            existingFileInputStream.close();
+            newFileOutputStream.close();
         }
     }
 }

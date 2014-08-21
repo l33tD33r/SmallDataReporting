@@ -1,5 +1,6 @@
 package l33tD33r.app.database.data;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.LinkedHashMap;
@@ -100,9 +101,17 @@ public class DataManager implements DataRecordProvider, DataChangeListener {
 				for (SchemaField schemaReferenceField : schemaReferenceFields) {
 					DataField referenceField = record.getField(schemaReferenceField.getName());
 					String referenceRecordId = referenceField.getValueString();
+
+                    if (referenceRecordId == null) {
+                        continue;
+                    }
+
 					DataTable referenceTable = this.dataTablesMap.get(schemaReferenceField.getRelatedTableName());
 					
 					DataRecord referenceRecord = referenceTable.retrieveDataRecord(referenceRecordId);
+                    if (referenceRecord == null) {
+                        throw new RuntimeException(MessageFormat.format("Reference record does not exist. Field name:''{0}'' Related table name:''{1}'' Reference record id: ''{2}''",  schemaReferenceField.getName(), schemaReferenceField.getRelatedTableName(), referenceRecordId));
+                    }
 					referenceField.setReferenceDataRecord(referenceRecord);
 					
 					DataField setField = referenceRecord.getField(schemaReferenceField.getInverseFieldName());
