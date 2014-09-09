@@ -68,8 +68,8 @@ public class Main extends Application {
 
     private void loadFiles() throws IOException {
 
-        File existingSchemaFile = new File(GAMING_RESOURCE_DIRECTORY_PATH + "\\" + SCHEMA_FILE_NAME);
-        File transactionSchemaFile = new File(GAMING_RESOURCE_DIRECTORY_PATH + "\\transaction." + SCHEMA_FILE_NAME);
+        File existingSchemaFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\" + SCHEMA_FILE_NAME);
+        File transactionSchemaFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\transaction." + SCHEMA_FILE_NAME);
 
         FileUtils.copyFile(existingSchemaFile, transactionSchemaFile);
 
@@ -77,8 +77,8 @@ public class Main extends Application {
 
         SchemaManager.createSingleton(schemaProvider);
 
-        File existingReportFile = new File(GAMING_RESOURCE_DIRECTORY_PATH + "\\" + REPORT_FILE_NAME);
-        File transactionReportFile = new File(GAMING_RESOURCE_DIRECTORY_PATH + "\\transaction." + REPORT_FILE_NAME);
+        File existingReportFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\" + REPORT_FILE_NAME);
+        File transactionReportFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\transaction." + REPORT_FILE_NAME);
 
         FileUtils.copyFile(existingReportFile, transactionReportFile);
 
@@ -86,8 +86,8 @@ public class Main extends Application {
 
         ReportManager.createSingleton(reportProvider);
 
-        File existingDataFile = new File(GAMING_RESOURCE_DIRECTORY_PATH + "\\" + DATA_FILE_NAME);
-        File transactionDataFile = new File(GAMING_RESOURCE_DIRECTORY_PATH + "\\transaction." + DATA_FILE_NAME);
+        File existingDataFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\" + DATA_FILE_NAME);
+        File transactionDataFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\transaction." + DATA_FILE_NAME);
 
         FileUtils.copyFile(existingDataFile, transactionDataFile);
 
@@ -96,11 +96,17 @@ public class Main extends Application {
         DataManager.createSingleton(dataProvider);
     }
 
-    public static String GAMING_RESOURCE_DIRECTORY_PATH = ".\\data\\gaming";
+    public static final String ROOT_RESOURCE_DIRECTORY_PATH = ".\\data";
 
-    public static String SCHEMA_FILE_NAME = "schema.xml";
+    public static final String GAMING_RESOURCE_DIRECTORY_PATH = ROOT_RESOURCE_DIRECTORY_PATH + "\\gaming";
 
-    public static String REPORT_FILE_NAME = "report.xml";
+    public static final String SHADOWRUN_RESOURCE_DIRECTORY_PATH = ROOT_RESOURCE_DIRECTORY_PATH + "\\shadowrun";
 
-    public static String DATA_FILE_NAME = "data.xml";
+    public static final String DATA_RESOURCE_DIRECTORY_PATH = SHADOWRUN_RESOURCE_DIRECTORY_PATH;
+
+    public static final String SCHEMA_FILE_NAME = "schema.xml";
+
+    public static final String REPORT_FILE_NAME = "report.xml";
+
+    public static final String DATA_FILE_NAME = "data.xml";
 }

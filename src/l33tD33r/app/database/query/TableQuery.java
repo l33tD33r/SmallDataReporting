@@ -14,8 +14,8 @@ public class TableQuery extends Query {
 	
 	private String tableName;
 	
-	protected TableQuery(String tableName, ExpressionNode sourceFilterExpression, boolean group, Column[] columns, ExpressionNode resultFilterExpression) {
-		super(sourceFilterExpression, group, columns, resultFilterExpression);
+	protected TableQuery(String tableName, String name, ExpressionNode sourceFilterExpression, boolean group, Column[] columns, ExpressionNode resultFilterExpression) {
+		super(name, sourceFilterExpression, group, columns, resultFilterExpression);
 		this.tableName = tableName;
 	}
 
@@ -43,18 +43,24 @@ public class TableQuery extends Query {
 			if (!hasMoreElements()) {
 				throw new RuntimeException("no more elements");
 			}
-			return new TableDataRow(dataRecords.get(currentIndex++));
+			return new TableDataRow(TableQuery.this, dataRecords.get(currentIndex++));
 		}
 	}
 	
 	protected static class TableDataRow implements IDataRow {
 
+        private Query query;
 		private DataRecord dataRecord;
 		
-		public TableDataRow(DataRecord dataRecord) {
+		public TableDataRow(Query query, DataRecord dataRecord) {
+            this.query = query;
 			this.dataRecord = dataRecord;
 		}
-		
+
+        public IContext getContext() {
+            return query;
+        }
+
 		private static DataType getDataType(FieldType fieldType) {
 			switch (fieldType) {
 				case String:
@@ -74,44 +80,14 @@ public class TableQuery extends Query {
 			}
 		}
 		
-		@Override
-		public DataType getType(String name) {
-			return getDataType(dataRecord.getFieldType(name));
-		}
+//		@Override
+//		public DataType getType(String name) {
+//			return getDataType(dataRecord.getFieldType(name));
+//		}
 
 		@Override
 		public Object getValue(String name) {
 			return dataRecord.getFieldValue(name);
-		}
-
-		@Override
-		public String getStringValue(String name) {
-			return dataRecord.getFieldValueString(name);
-		}
-
-		@Override
-		public Integer getIntegerValue(String name) {
-			return dataRecord.getFieldValueInteger(name);
-		}
-
-		@Override
-		public Double getNumberValue(String name) {
-			return dataRecord.getFieldValueDouble(name);
-		}
-
-		@Override
-		public Boolean getBooleanValue(String name) {
-			return dataRecord.getFieldValueBoolean(name);
-		}
-
-		@Override
-		public Date getDateValue(String name) {
-			return dataRecord.getFieldValueDate(name);
-		}
-
-		@Override
-		public Time getTimeValue(String name) {
-			return dataRecord.getFieldValueTime(name);
 		}
 		
 		public DataRecord getDataRecord() {

@@ -8823,6 +8823,11 @@
 						<DataField name="Name">The Lazax</DataField>
 					</DataFields>
 				</DataRecord>
+				<DataRecord id="eb027aa7-bd5d-4add-8ab6-d0cb6e8fc826">
+					<DataFields>
+						<DataField name="Name">The Mentak Coalition</DataField>
+					</DataFields>
+				</DataRecord>
 				<DataRecord id="Arborec">
 					<DataFields>
 						<DataField name="Name">The Arborec</DataField>
@@ -9151,6 +9156,12 @@
 						<DataField name="Technology">TwilightImperium_TechnologyType_8</DataField>
 					</DataFields>
 				</DataRecord>
+				<DataRecord id="0c47455d-358d-4242-ad6e-144fa8597e1f">
+					<DataFields>
+						<DataField name="Race">eb027aa7-bd5d-4add-8ab6-d0cb6e8fc826</DataField>
+						<DataField name="Technology">TwilightImperium_TechnologyType_23</DataField>
+					</DataFields>
+				</DataRecord>
 				<DataRecord id="cd3ca099-0f8b-4d92-b9a7-516d021c83a0">
 					<DataFields>
 						<DataField name="Race">NaaluCollective</DataField>
@@ -9175,6 +9186,18 @@
 						<DataField name="Technology">TwilightImperium_TechnologyType_17</DataField>
 					</DataFields>
 				</DataRecord>
+				<DataRecord id="c77952d4-6b14-4418-a4c8-29ec0954cf7b">
+					<DataFields>
+						<DataField name="Race">BaronyOfLetnev</DataField>
+						<DataField name="Technology">TwilightImperium_TechnologyType_1</DataField>
+					</DataFields>
+				</DataRecord>
+				<DataRecord id="51b8e88d-9be4-45a2-98ac-77f85da3d26c">
+					<DataFields>
+						<DataField name="Race">BaronyOfLetnev</DataField>
+						<DataField name="Technology">TwilightImperium_TechnologyType_8</DataField>
+					</DataFields>
+				</DataRecord>
 				<DataRecord id="4cf03b85-23e0-4903-b53a-45cc728ff453">
 					<DataFields>
 						<DataField name="Race">UniversitiesOfJolNar</DataField>
@@ -9185,6 +9208,12 @@
 					<DataFields>
 						<DataField name="Race">LizixMindnet</DataField>
 						<DataField name="Technology">TwilightImperium_TechnologyType_23</DataField>
+					</DataFields>
+				</DataRecord>
+				<DataRecord id="39ad8ad0-dfc7-42f0-b98d-d836b9ded71e">
+					<DataFields>
+						<DataField name="Race">YssarilTribes</DataField>
+						<DataField name="Technology">TwilightImperium_TechnologyType_8</DataField>
 					</DataFields>
 				</DataRecord>
 				<DataRecord id="9574da60-7add-4360-9b64-bc3a8cf3ecd0">
@@ -9283,10 +9312,22 @@
 						<DataField name="Technology">TwilightImperium_TechnologyType_8</DataField>
 					</DataFields>
 				</DataRecord>
+				<DataRecord id="2cf5c442-8dcc-49c3-b235-8dd6da92d16a">
+					<DataFields>
+						<DataField name="Race">eb027aa7-bd5d-4add-8ab6-d0cb6e8fc826</DataField>
+						<DataField name="Technology">TwilightImperium_TechnologyType_1</DataField>
+					</DataFields>
+				</DataRecord>
 				<DataRecord id="2a63888c-ebb2-453f-bfbd-2568aa0abaaf">
 					<DataFields>
 						<DataField name="Race">UniversitiesOfJolNar</DataField>
 						<DataField name="Technology">TwilightImperium_TechnologyType_8</DataField>
+					</DataFields>
+				</DataRecord>
+				<DataRecord id="47d2e189-e149-42f7-bb50-ff4372de4206">
+					<DataFields>
+						<DataField name="Race">YssarilTribes</DataField>
+						<DataField name="Technology">TwilightImperium_TechnologyType_12</DataField>
 					</DataFields>
 				</DataRecord>
 				<DataRecord id="ec839e7e-69f2-4232-823f-9f70e8548676">

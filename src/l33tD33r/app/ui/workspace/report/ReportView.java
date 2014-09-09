@@ -14,6 +14,7 @@ import l33tD33r.app.database.data.DataManager;
 import l33tD33r.app.database.data.DataRecord;
 import l33tD33r.app.database.data.DataTable;
 import l33tD33r.app.database.query.Query;
+import l33tD33r.app.database.query.ResultRow;
 import l33tD33r.app.database.query.Row;
 import l33tD33r.app.database.report.Report;
 import l33tD33r.app.database.report.ReportManager;
@@ -175,6 +176,10 @@ public class ReportView {
         tableView.getColumns().clear();
         data.clear();
 
+        if (reportName == null) {
+            return;
+        }
+
         currentReport = ReportManager.getSingleton().getReport(reportName);
 
         TableColumn<Map, String> rowColumn = new TableColumn<>("Row");
@@ -203,7 +208,7 @@ public class ReportView {
         for (int rowIndex=0; rowIndex < query.getRowCount(); rowIndex++) {
             query.setPosition(rowIndex);
 
-            Row currentRow = query.getCurrentRow();
+            ResultRow currentRow = query.getCurrentRow();
 
             Map<String, String> dataRow = new HashMap<>();
 

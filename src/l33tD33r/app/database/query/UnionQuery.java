@@ -6,8 +6,8 @@ public class UnionQuery extends Query {
 
 	private Query[] componentQueries;
 	
-	protected UnionQuery(Query[] componentQueries, ExpressionNode sourceFilterExpression, boolean group, Column[] columns, ExpressionNode resultFilterExpression) {
-		super(sourceFilterExpression, group, columns, resultFilterExpression);
+	protected UnionQuery(Query[] componentQueries,String name, ExpressionNode sourceFilterExpression, boolean group, Column[] columns, ExpressionNode resultFilterExpression) {
+		super(name, sourceFilterExpression, group, columns, resultFilterExpression);
 		this.componentQueries = componentQueries;
 	}
 

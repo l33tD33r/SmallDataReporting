@@ -4,36 +4,36 @@ import l33tD33r.app.database.Date;
 import l33tD33r.app.database.DateTime;
 import l33tD33r.app.database.Time;
 
-public class GroupKey {
+public class KeySet {
 
-	private Object[] groupValues;
+	private Object[] keyValues;
 	
-	public GroupKey(Object[] groupValues) {
-		this.groupValues = groupValues;
+	public KeySet(Object[] keyValues) {
+		this.keyValues = keyValues;
 	}
 	
 	public int getGroupCount() {
-		return this.groupValues.length;
+		return this.keyValues.length;
 	}
 	
 	public Object getGroupValue(int index) {
-		return this.groupValues[index];
+		return this.keyValues[index];
 	}
 	
 	@Override
 	public boolean equals(Object o) {
-		if (!(o instanceof GroupKey)) {
+		if (!(o instanceof KeySet)) {
 			return false;
 		}
-		return equals((GroupKey)o);
+		return equals((KeySet)o);
 	}
 	
-	private boolean equals(GroupKey groupKey) {
-		if (this.groupValues.length != groupKey.getGroupCount()) {
+	private boolean equals(KeySet keySet) {
+		if (this.keyValues.length != keySet.getGroupCount()) {
 			return false;
 		}
-		for (int i=0; i < this.groupValues.length; i++) {
-			if (!groupValues[i].equals(groupKey.getGroupValue(i))) {
+		for (int i=0; i < this.keyValues.length; i++) {
+			if (!keyValues[i].equals(keySet.getGroupValue(i))) {
 				return false;
 			}
 		}
@@ -43,8 +43,8 @@ public class GroupKey {
 	@Override
 	public int hashCode() {
 		StringBuilder sb = new StringBuilder();
-		for (int i=0; i < this.groupValues.length; i++) {
-			Object groupValue = this.groupValues[i]; 
+		for (int i=0; i < this.keyValues.length; i++) {
+			Object groupValue = this.keyValues[i];
 			if (groupValue instanceof String) {
 				sb.append("String");
 			} else if (groupValue instanceof Integer) {

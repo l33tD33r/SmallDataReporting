@@ -67,7 +67,7 @@
                 <BooleanField name="Winner" />
             </DataFields>
         </DataTable>
-        <!--Settlers of Catan Tables-->
+        <!--Twilight Imperium Tables-->
         <DataTable name="TwilightImperium_Expansion" reportField="Name">
             <KeyFields>
                 <StringField name="Name"/>

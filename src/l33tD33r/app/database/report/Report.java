@@ -2,6 +2,7 @@ package l33tD33r.app.database.report;
 
 import l33tD33r.app.database.query.ExpressionNode;
 import l33tD33r.app.database.query.Query;
+import l33tD33r.app.database.report.visualization.Chart;
 
 public abstract class Report {
 	
@@ -16,6 +17,8 @@ public abstract class Report {
 	private Column[] columns;
 
     private ExpressionNode resultFilterExpression;
+
+    private Chart chart;
 	
 	private Query query;
 	
@@ -74,5 +77,13 @@ public abstract class Report {
 	
 	public int getColumnWidth(int columnIndex) {
 		return columns[columnIndex].getWidth();
-	} 
+	}
+
+    public Chart getChart() {
+        return chart;
+    }
+
+    public void setChart(Chart chart) {
+        this.chart = chart;
+    }
 }

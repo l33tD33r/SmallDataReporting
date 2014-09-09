@@ -97,6 +97,9 @@ public class XmlUtils {
     }
 
     private static String getTextContent(Element element) {
+        if (element == null) {
+            return null;
+        }
         Node textNode = element.getFirstChild();
         if (textNode == null) {
             return "";

@@ -7,7 +7,9 @@ import java.util.Map;
 import l33tD33r.app.database.Date;
 import l33tD33r.app.database.Time;
 
-public abstract class Query {
+public abstract class Query implements IColumnMap, IContext {
+
+    private String name;
 
 	private ExpressionNode sourceFilterExpression;
 
@@ -19,13 +21,14 @@ public abstract class Query {
 	
 	private HashMap<String,Integer> columnNameIndexMap;
 	
-	private Row[] rows;
+	private ResultRow[] rows;
 	
 	private int currentPosition;
 
     private Parameters parameters;
 	
-	protected Query(ExpressionNode sourceFilterExpression, boolean group, Column[] columns, ExpressionNode resultFilterExpression) {
+	protected Query(String name, ExpressionNode sourceFilterExpression, boolean group, Column[] columns, ExpressionNode resultFilterExpression) {
+        this.name = name;
 		this.sourceFilterExpression = sourceFilterExpression;
 		this.group = group;
 		this.columns = columns;
@@ -33,6 +36,10 @@ public abstract class Query {
 		this.currentPosition = 0;
         this.parameters = new Parameters();
 	}
+
+    public String getName() {
+        return name;
+    }
 	
 	public int getColumnCount() {
 		return columns.length;
@@ -70,18 +77,22 @@ public abstract class Query {
 		}
 		return columnNameIndexMap.get(columnName);
 	}
+
+    public String getColumnName(int columnIndex) {
+        return getColumn(columnIndex).getName();
+    }
 	
-	protected Row[] getRows() {
-		ArrayList<Row> generatedRows = generateRows();
-		ArrayList<Row> groupedRows = group ? groupRows(generatedRows) : generatedRows;
-        ArrayList<Row> filteredRows = resultFilterExpression != null ? filterRows(groupedRows) : groupedRows;
-		ArrayList<Row> sortedRows = sortRows(filteredRows);
-		return sortedRows.toArray(new Row[sortedRows.size()]);
+	protected ResultRow[] getRows() {
+		ArrayList<ResultRow> generatedRows = generateRows();
+		ArrayList<ResultRow> groupedRows = group ? groupRows(generatedRows) : generatedRows;
+        ArrayList<ResultRow> filteredRows = resultFilterExpression != null ? filterRows(groupedRows) : groupedRows;
+		ArrayList<ResultRow> sortedRows = sortRows(filteredRows);
+		return sortedRows.toArray(new ResultRow[sortedRows.size()]);
 	}
 	
-	private ArrayList<Row> generateRows() {
+	private ArrayList<ResultRow> generateRows() {
 		IDataSource dataSource = getDataSource();
-		ArrayList<Row> rowList = new ArrayList<Row>();
+		ArrayList<ResultRow> rowList = new ArrayList<ResultRow>();
 		while (dataSource.hasMoreElements()) {
 			IDataRow dataRow = dataSource.nextElement();
 			if (includeDataRow(dataRow)) {
@@ -91,17 +102,17 @@ public abstract class Query {
 		return rowList;
 	}
 	
-	private ArrayList<Row> groupRows(ArrayList<Row> generatedRows) {
+	private ArrayList<ResultRow> groupRows(ArrayList<ResultRow> generatedRows) {
 		GroupedResults groupedResults = new GroupedResults(this);
-		for (Row generatedRow : generatedRows) {
+		for (ResultRow generatedRow : generatedRows) {
 			groupedResults.addRow(generatedRow);
 		}
 		return groupedResults.getGroupedRows();
 	}
 
-    private ArrayList<Row> filterRows(ArrayList<Row> groupedRows) {
-        ArrayList<Row> filteredRows = new ArrayList<>();
-        for (Row groupedRow : groupedRows) {
+    private ArrayList<ResultRow> filterRows(ArrayList<ResultRow> groupedRows) {
+        ArrayList<ResultRow> filteredRows = new ArrayList<>();
+        for (ResultRow groupedRow : groupedRows) {
             ResultDataRow resultRow = new ResultDataRow(this, groupedRow);
             if (includeResultRow(resultRow)) {
                 filteredRows.add(groupedRow);
@@ -117,9 +128,9 @@ public abstract class Query {
         return  resultFilterExpression.evaluateBoolean(resultRow);
     }
 	
-	private ArrayList<Row> sortRows(ArrayList<Row> filteredRows) {
+	private ArrayList<ResultRow> sortRows(ArrayList<ResultRow> filteredRows) {
 		SortedResults sortedResults = new SortedResults(this);
-		for (Row filteredRow : filteredRows) {
+		for (ResultRow filteredRow : filteredRows) {
 			sortedResults.addRow(filteredRow);
 		}
 		return sortedResults.getSortedRows();
@@ -134,13 +145,13 @@ public abstract class Query {
 		return sourceFilterExpression.evaluateBoolean(dataRow);
 	}
 
-	protected Row createRow(IDataRow dataRow) {
+	protected ResultRow createRow(IDataRow dataRow) {
 		ArrayList<Object> rowValues = new ArrayList<Object>();
 		for (Column column : columns) {
 			Object rowValue = column.getExpression().evaluate(dataRow);
 			rowValues.add(rowValue);
 		}
-		return new Row(rowValues.toArray(new Object[rowValues.size()]));
+		return new ResultRow(rowValues.toArray(new Object[rowValues.size()]), this);
 	}
 	
 	public int getRowCount() {
@@ -170,7 +181,7 @@ public abstract class Query {
 		currentPosition = position;
 	}
 	
-	public Row getCurrentRow() {
+	public ResultRow getCurrentRow() {
 		if (rows == null) {
 			throw new RuntimeException("rows == null");
 		}
@@ -178,10 +189,10 @@ public abstract class Query {
 	}
 
 	public Object getValue(int columnIndex) {
-		Row row = getCurrentRow();
+        ResultRow row = getCurrentRow();
 		return row.getValue(columnIndex);
 	}
-
+/*
 	public String getStringValue(int columnIndex) {
 		Row row = getCurrentRow();
 		return row.getStringValue(columnIndex);
@@ -211,7 +222,7 @@ public abstract class Query {
 		Row row = getCurrentRow();
 		return row.getTimeValue(columnIndex);
 	}
-
+*/
     public void setParameters(Map<String,Object> nameValueMap) {
         for (Map.Entry<String,Object> entry : nameValueMap.entrySet()) {
             setParameterInner(entry.getKey(), entry.getValue());
@@ -226,25 +237,33 @@ public abstract class Query {
         parameters.setParameter(name, value);
     }
 
+    public Object getParameter(String name) {
+        return parameters.getParameter(name);
+    }
+
     protected static class ResultDataRow implements IDataRow {
 
         private Query query;
-        private Row row;
+        private ResultRow row;
 
-        public ResultDataRow(Query query, Row row) {
+        public ResultDataRow(Query query, ResultRow row) {
             this.query = query;
             this.row = row;
+        }
+
+        public IContext getContext() {
+            return query;
         }
 
         private int getColumnIndex(String name) {
             return query.getColumnIndex(name);
         }
 
-        @Override
-        public DataType getType(String name) {
-            int columnIndex = getColumnIndex(name);
-            return query.getDataType(columnIndex);
-        }
+//        @Override
+//        public DataType getType(String name) {
+//            int columnIndex = getColumnIndex(name);
+//            return query.getDataType(columnIndex);
+//        }
 
         @Override
         public Object getValue(String name) {
@@ -252,6 +271,7 @@ public abstract class Query {
             return row.getValue(columnIndex);
         }
 
+        /*
         @Override
         public String getStringValue(String name) {
             int columnIndex = getColumnIndex(name);
@@ -287,5 +307,6 @@ public abstract class Query {
             int columnIndex = getColumnIndex(name);
             return  row.getTimeValue(columnIndex);
         }
+        */
     }
 }

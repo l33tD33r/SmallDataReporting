@@ -11,6 +11,7 @@ import javafx.stage.FileChooser;
 import l33tD33r.app.database.data.DataTable;
 import l33tD33r.app.database.utility.FileUtils;
 import l33tD33r.app.ui.workspace.data.CreateRecordStage;
+import l33tD33r.app.ui.workspace.visualization.html.WebChartView;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import l33tD33r.app.database.data.DataManager;
@@ -41,6 +42,8 @@ public class WorkspaceController {
 
     @FXML private Pane reportChartPane;
 
+    @FXML private Pane webReportChartPane;
+
     private TreeItem<ContentItem> tableRootItem, reportsRootItem;
 
     private Main mainApplication;
@@ -48,6 +51,8 @@ public class WorkspaceController {
     private ReportView reportView;
 
     private ChartView chartView;
+
+    private WebChartView webChartView;
 
     public void initialize() {
         loadTreeRoot();
@@ -65,6 +70,8 @@ public class WorkspaceController {
         reportView = new ReportView(reportTableView);
 
         chartView = new ChartView(reportChartPane);
+
+        webChartView = new WebChartView(webReportChartPane);
 
         TreeItem<ContentItem> root = new TreeItem<>(new FolderItem("Content"));
         root.setExpanded(true);
@@ -86,11 +93,17 @@ public class WorkspaceController {
                     if (clickedItem instanceof TableItem) {
                         TableItem tableItem = (TableItem)clickedItem;
                         reportView.loadTable(tableItem.getQualifiedName());
+
+                        chartView.loadChart(null);
+
+                        webChartView.loadChart(null);
                     } else if (clickedItem instanceof ReportItem) {
                         ReportItem reportItem = (ReportItem)clickedItem;
                         reportView.loadReport(reportItem.getName());
 
                         chartView.loadChart(reportItem.getName());
+
+                        webChartView.loadChart(reportItem.getName());
                     }
                 }
             }
@@ -141,8 +154,8 @@ public class WorkspaceController {
     }
 
     public void handleSaveDataChanges(ActionEvent event) {
-        File transactionDataFile = new File(Main.GAMING_RESOURCE_DIRECTORY_PATH + "\\transaction." + Main.DATA_FILE_NAME);
-        File dataFile = new File(Main.GAMING_RESOURCE_DIRECTORY_PATH + "\\" + Main.DATA_FILE_NAME);
+        File transactionDataFile = new File(Main.DATA_RESOURCE_DIRECTORY_PATH + "\\transaction." + Main.DATA_FILE_NAME);
+        File dataFile = new File(Main.DATA_RESOURCE_DIRECTORY_PATH + "\\" + Main.DATA_FILE_NAME);
 
         try {
             FileUtils.copyFile(transactionDataFile, dataFile);

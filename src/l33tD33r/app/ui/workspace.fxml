@@ -41,39 +41,52 @@
         </Menu>
       </menus>
     </MenuBar>
-    <SplitPane dividerPositions="0.33296213808463254, 0.6670378619153675" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.3930957683741648" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
-        <AnchorPane>
+        <AnchorPane prefHeight="553.0" prefWidth="150.0">
           <children>
             <TreeView fx:id="contentTreeView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
           </children>
         </AnchorPane>
-        <VBox prefHeight="200.0" prefWidth="100.0">
-          <children>
-            <AnchorPane id="Content" maxHeight="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-              <children>
-                <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                  <content>
-                    <TableView fx:id="reportTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="302.0" prefWidth="272.0" />
-                  </content>
-                </ScrollPane>
-              </children>
-            </AnchorPane>
-            <HBox alignment="CENTER_LEFT" disable="false" fillHeight="true" prefHeight="81.0" prefWidth="294.0" VBox.vgrow="NEVER">
-              <children>
-                <Button mnemonicParsing="false" onAction="#handleAddRecord" text="Add Record" />
-              </children>
-              <VBox.margin>
-                <Insets />
-              </VBox.margin>
-            </HBox>
-          </children>
-        </VBox>
-        <AnchorPane>
-          <children>
-            <Pane fx:id="reportChartPane" prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-          </children>
-        </AnchorPane>
+        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+          <tabs>
+            <Tab closable="false" text="Grid">
+              <content>
+                <VBox prefHeight="200.0" prefWidth="100.0">
+                  <children>
+                    <AnchorPane id="Content" maxHeight="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+                      <children>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                          <content>
+                            <TableView fx:id="reportTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600" prefWidth="400" />
+                          </content>
+                        </ScrollPane>
+                      </children>
+                    </AnchorPane>
+                    <HBox alignment="CENTER" disable="false" fillHeight="true" prefHeight="81.0" prefWidth="294.0" VBox.vgrow="NEVER">
+                      <children>
+                        <Button mnemonicParsing="false" onAction="#handleAddRecord" text="Add Record" />
+                      </children>
+                      <VBox.margin>
+                        <Insets />
+                      </VBox.margin>
+                    </HBox>
+                  </children>
+                </VBox>
+              </content>
+            </Tab>
+            <Tab closable="false" text="Visualization">
+              <content>
+                <Pane fx:id="reportChartPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600" prefWidth="400" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+              </content>
+            </Tab>
+            <Tab closable="false" text="Web Visualization">
+                <content>
+                    <Pane fx:id="webReportChartPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600" prefWidth="400" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                </content>
+            </Tab>
+          </tabs>
+        </TabPane>
       </items>
     </SplitPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">

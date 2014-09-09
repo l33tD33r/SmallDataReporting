@@ -3,13 +3,11 @@ package l33tD33r.app.database.report;
 import java.util.ArrayList;
 import java.util.List;
 
+import l33tD33r.app.database.query.*;
+import l33tD33r.app.database.report.visualization.Chart;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import l33tD33r.app.database.query.DataType;
-import l33tD33r.app.database.query.ExpressionNode;
-import l33tD33r.app.database.query.GroupRule;
-import l33tD33r.app.database.query.SortRule;
 import l33tD33r.app.database.utility.XmlUtils;
 
 public class ReportSerialization {
@@ -27,48 +25,178 @@ public class ReportSerialization {
 	}
 	
 	private static Report createReport(Element reportElement) {
+        Report report = null;
+
 		String type = reportElement.getAttribute("type");
-		if ("Table".equals(type)) {
-			return createTableView(reportElement);
-		}
-		throw new RuntimeException("Unknown view type: " + type);
+        switch (type) {
+            case "Table":
+                report = createTableView(reportElement);
+                break;
+            case "Join":
+                report = createJoinView(reportElement);
+                break;
+            default:
+                throw new RuntimeException("Unknown view type: " + type);
+        }
+
+        Chart chart = null;
+        Element chartElement = XmlUtils.getChildElement(reportElement, "Chart");
+        if (chartElement != null) {
+            chart = createChart(chartElement);
+        }
+        report.setChart(chart);
+
+        return report;
 	}
 	
 	private static TableReport createTableView(Element tableViewElement) {
 		String tableName = XmlUtils.getElementStringValue(tableViewElement, "Table");
 		String name = XmlUtils.getElementStringValue(tableViewElement, "Name");
 		String title = XmlUtils.getElementStringValue(tableViewElement, "Title");
-		Element filterElement = XmlUtils.getChildElement(tableViewElement, "Filter");
+
+        Element sourceFilterElement = XmlUtils.getChildElement(tableViewElement, "SourceFilter");
+        ExpressionNode sourceFilterExpression = null;
+        if (sourceFilterElement != null) {
+            sourceFilterExpression = ExpressionManager.createExpressionNode(XmlUtils.getChildElement(sourceFilterElement, "Expression"));
+        }
+
         Element resultFilterElement = XmlUtils.getChildElement(tableViewElement, "ResultFilter");
-		String groupString = XmlUtils.getElementStringValue(tableViewElement, "Group");
-		boolean group = Boolean.valueOf(groupString);
-		ExpressionNode filterExpression = ExpressionManager.createExpressionNode(XmlUtils.getChildElement(filterElement, "Expression"));
-		Element columnsElement = XmlUtils.getChildElement(tableViewElement, "Columns");
-		Column[] columns = createColumns(columnsElement);
         ExpressionNode resultFilterExpression = null;
         if (resultFilterElement != null) {
             resultFilterExpression = ExpressionManager.createExpressionNode(XmlUtils.getChildElement(resultFilterElement, "Expression"));
         }
-		return new TableReport(tableName, name, title, filterExpression, group, columns, resultFilterExpression);
+
+        String groupString = XmlUtils.getElementStringValue(tableViewElement, "Group");
+        boolean group = false;
+        if (groupString != null){
+            group = Boolean.valueOf(groupString);
+        }
+
+		Element columnsElement = XmlUtils.getChildElement(tableViewElement, "Columns");
+		Column[] columns = createColumns(columnsElement);
+
+		return new TableReport(tableName, name, title, sourceFilterExpression, group, columns, resultFilterExpression);
 	}
+
+    private static JoinReport createJoinView(Element joinViewElement) {
+        Element sourceQueriesElement = XmlUtils.getChildElement(joinViewElement, "SourceQueries");
+        String[] sourceQueries = new String[2]; // Assume 2 for now
+
+        int i=0;
+
+        for (Element sourceQueryElement : XmlUtils.getChildElements(sourceQueriesElement, "SourceQuery")) {
+            sourceQueries[i++] = XmlUtils.getStringValue(sourceQueryElement);
+        }
+
+        Element joinRulesElement = XmlUtils.getChildElement(joinViewElement, "JoinRules");
+
+        JoinRules joinRules = createJoinRules(joinRulesElement);
+
+        String name = XmlUtils.getElementStringValue(joinViewElement, "Name");
+        String title = XmlUtils.getElementStringValue(joinViewElement, "Title");
+
+        Element sourceFilterElement = XmlUtils.getChildElement(joinViewElement, "SourceFilter");
+        ExpressionNode sourceFilterExpression = null;
+        if (sourceFilterElement != null) {
+            sourceFilterExpression = ExpressionManager.createExpressionNode(XmlUtils.getChildElement(sourceFilterElement, "Expression"));
+        }
+
+        Element resultFilterElement = XmlUtils.getChildElement(joinViewElement, "ResultFilter");
+        ExpressionNode resultFilterExpression = null;
+        if (resultFilterElement != null) {
+            resultFilterExpression = ExpressionManager.createExpressionNode(XmlUtils.getChildElement(resultFilterElement, "Expression"));
+        }
+
+        String groupString = XmlUtils.getElementStringValue(joinViewElement, "Group");
+        boolean group = false;
+        if (groupString != null){
+            group = Boolean.valueOf(groupString);
+        }
+
+        Element columnsElement = XmlUtils.getChildElement(joinViewElement, "Columns");
+        Column[] columns = createColumns(columnsElement);
+
+        return new JoinReport(sourceQueries[0], sourceQueries[1], joinRules, name, title, sourceFilterExpression, group, columns, resultFilterExpression);
+    }
+
+    private static JoinRules createJoinRules(Element joinRulesElement) {
+        List<List<String>> sourceKeyNames = new ArrayList<>();
+
+        Element sourcesElement = XmlUtils.getChildElement(joinRulesElement, "Sources");
+
+        for (Element sourceNamesElement : XmlUtils.getChildElements(sourcesElement, "SourceNames")) {
+            List<String> keyNames = new ArrayList<>();
+            for (Element keyNameElement : XmlUtils.getChildElements(sourceNamesElement, "SourceName")) {
+                keyNames.add(XmlUtils.getStringValue(keyNameElement));
+            }
+            sourceKeyNames.add(keyNames);
+        }
+
+        String typeString = XmlUtils.getElementStringValue(joinRulesElement, "Type");
+        JoinType type = JoinType.valueOf(typeString);
+
+        String[] left = new String[1];
+        String[] right = new String[1];
+        return new JoinRules(sourceKeyNames.get(0).toArray(left), sourceKeyNames.get(1).toArray(right), type);
+    }
 	
 	private static Column[] createColumns(Element columnsElement) {
 		ArrayList<Column> columnList = new ArrayList<Column>();
 		for (Element columnElement : XmlUtils.getChildElements(columnsElement, "Column")) {
+
+            String name = XmlUtils.getElementStringValue(columnElement, "Name");
+
 			String header = XmlUtils.getElementStringValue(columnElement, "Header");
-			String widthString = XmlUtils.getElementStringValue(columnElement, "Width");
-			int width = Integer.valueOf(widthString);
-			String name = XmlUtils.getElementStringValue(columnElement, "Name");
-			String groupRuleString = XmlUtils.getElementStringValue(columnElement, "GroupRule");
-			GroupRule groupRule = (groupRuleString == null || groupRuleString.isEmpty()) ? null : GroupRule.valueOf(groupRuleString);
-			String sortRuleString = XmlUtils.getElementStringValue(columnElement, "SortRule");
-			SortRule sortRule = (groupRuleString == null || groupRuleString.isEmpty()) ? SortRule.Ascending : SortRule.valueOf(sortRuleString);
+
+            String widthString = XmlUtils.getElementStringValue(columnElement, "Width");
+            int width = 200;
+            if (widthString != null) {
+                width = Integer.valueOf(widthString);
+            }
+
+            String groupRuleString = XmlUtils.getElementStringValue(columnElement, "GroupRule");
+            GroupRule groupRule = null;
+            if (groupRuleString != null) {
+                groupRule = GroupRule.valueOf(groupRuleString);
+            }
+
+            String sortRuleString = XmlUtils.getElementStringValue(columnElement, "SortRule");
+            SortRule sortRule = SortRule.Ascending;
+            if (sortRuleString != null) {
+                sortRule = SortRule.valueOf(sortRuleString);
+            }
+
 			Element expressionElement = XmlUtils.getChildElement(columnElement, "ColumnExpression");
 			ExpressionNode expression = ExpressionManager.createExpressionNode(XmlUtils.getChildElement(expressionElement, "Expression"));
+
 			String dataTypeString = XmlUtils.getElementStringValue(columnElement, "DataType");
 			DataType dataType = DataType.valueOf(dataTypeString);
+
 			columnList.add(new Column(header, width, name, groupRule, sortRule, expression, dataType));
 		}
 		return columnList.toArray(new Column[columnList.size()]);
 	}
+
+    private static Chart createChart(Element chartElement) {
+        String type = XmlUtils.getElementStringValue(chartElement, "Type");
+        String title = XmlUtils.getElementStringValue(chartElement, "Title");
+        String xAxisTitle = XmlUtils.getElementStringValue(chartElement, "XAxisTitle");
+        String yAxisTitle = XmlUtils.getElementStringValue(chartElement, "YAxisTitle");
+        String categoryColumn = XmlUtils.getElementStringValue(chartElement, "CategoryColumn");
+        String seriesNameColumn = XmlUtils.getElementStringValue(chartElement, "SeriesNameColumn");
+        List<String> seriesDataColumnList = new ArrayList<>();
+        Element seriesDataColumnsElement = XmlUtils.getChildElement(chartElement, "SeriesDataColumns");
+        for (Element seriesDataColumnElement : XmlUtils.getChildElements(seriesDataColumnsElement, "SeriesDataColumn")) {
+            seriesDataColumnList.add(XmlUtils.getStringValue(seriesDataColumnElement));
+        }
+        Chart chart = new Chart();
+        chart.setType(type);
+        chart.setTitle(title);
+        chart.setXAxisTitle(xAxisTitle);
+        chart.setYAxisTitle(yAxisTitle);
+        chart.setCategoryColumnName(categoryColumn);
+        chart.setSeriesNameColumnName(seriesNameColumn);
+        chart.setSeriesDataColumnNames(seriesDataColumnList.toArray(new String[seriesDataColumnList.size()]));
+        return chart;
+    }
 }

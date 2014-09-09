@@ -4,7 +4,7 @@
         <Table>SettlersOfCatan_GamePlayer</Table>
         <Name>Winning Starting Positions (3-player)</Name>
         <Title>Winning Starting Positions (3-player)</Title>
-        <Filter>
+        <SourceFilter>
             <Expression type="And">
                 <Children>
                     <Expression type="Equals">
@@ -25,8 +25,17 @@
                     </Expression>
                 </Children>
             </Expression>
-        </Filter>
+        </SourceFilter>
         <Group>true</Group>
+        <Chart>
+            <Type>stackedcolumn</Type>
+            <Title>Winning Starting Positions (3-player)</Title>
+            <CategoryColumn>Position</CategoryColumn>
+            <SeriesNameColumn>Player</SeriesNameColumn>
+            <SeriesDataColumns>
+                <SeriesDataColumn>Count</SeriesDataColumn>
+            </SeriesDataColumns>
+        </Chart>
         <Columns>
             <Column>
                 <Header>Position</Header>
@@ -74,7 +83,7 @@
         <Table>SettlersOfCatan_GamePlayer</Table>
         <Name>Winning Starting Positions (4-player)</Name>
         <Title>Winning Starting Positions (4-player)</Title>
-        <Filter>
+        <SourceFilter>
             <Expression type="And">
                 <Children>
                     <Expression type="Equals">
@@ -95,8 +104,17 @@
                     </Expression>
                 </Children>
             </Expression>
-        </Filter>
+        </SourceFilter>
         <Group>true</Group>
+        <Chart>
+            <Type>stackedcolumn</Type>
+            <Title>Winning Starting Positions (4-player)</Title>
+            <CategoryColumn>Position</CategoryColumn>
+            <SeriesNameColumn>Player</SeriesNameColumn>
+            <SeriesDataColumns>
+                <SeriesDataColumn>Count</SeriesDataColumn>
+            </SeriesDataColumns>
+        </Chart>
         <Columns>
             <Column>
                 <Header>Position</Header>
@@ -144,7 +162,7 @@
         <Table>SettlersOfCatan_GamePlayer</Table>
         <Name>Winning Starting Positions (5-player)</Name>
         <Title>Winning Starting Positions (5-player)</Title>
-        <Filter>
+        <SourceFilter>
             <Expression type="And">
                 <Children>
                     <Expression type="Equals">
@@ -165,8 +183,17 @@
                     </Expression>
                 </Children>
             </Expression>
-        </Filter>
+        </SourceFilter>
         <Group>true</Group>
+        <Chart>
+            <Type>stackedcolumn</Type>
+            <Title>Winning Starting Positions (5-player)</Title>
+            <CategoryColumn>Position</CategoryColumn>
+            <SeriesNameColumn>Player</SeriesNameColumn>
+            <SeriesDataColumns>
+                <SeriesDataColumn>Count</SeriesDataColumn>
+            </SeriesDataColumns>
+        </Chart>
         <Columns>
             <Column>
                 <Header>Position</Header>
@@ -214,7 +241,7 @@
         <Table>SettlersOfCatan_GamePlayer</Table>
         <Name>Winning Starting Positions (6-player)</Name>
         <Title>Winning Starting Positions (6-player)</Title>
-        <Filter>
+        <SourceFilter>
             <Expression type="And">
                 <Children>
                     <Expression type="Equals">
@@ -235,8 +262,17 @@
                     </Expression>
                 </Children>
             </Expression>
-        </Filter>
+        </SourceFilter>
         <Group>true</Group>
+        <Chart>
+            <Type>stackedcolumn</Type>
+            <Title>Winning Starting Positions (6-player)</Title>
+            <CategoryColumn>Position</CategoryColumn>
+            <SeriesNameColumn>Player</SeriesNameColumn>
+            <SeriesDataColumns>
+                <SeriesDataColumn>Count</SeriesDataColumn>
+            </SeriesDataColumns>
+        </Chart>
         <Columns>
             <Column>
                 <Header>Position</Header>
@@ -284,11 +320,11 @@
 		<Table>SettlersOfCatan_GamePlayer</Table>
 		<Name>Settlers Winners</Name>
         <Title>Settlers Winners</Title>
-		<Filter>
+		<SourceFilter>
 			<Expression type="Field">
 				<FieldPath>Winner</FieldPath>
 			</Expression>
-		</Filter>
+		</SourceFilter>
 		<Group>false</Group>
 		<Columns>
 			<Column>
@@ -349,7 +385,6 @@
         <Table>SettlersOfCatan_GamePlayer</Table>
         <Name>Settlers Players</Name>
         <Title>Settlers Players</Title>
-        <Filter />
 		<ResultFilter>
 			<Expression type="GreaterThanOrEqual">
 				<Left>
@@ -497,7 +532,6 @@
 		<Table>GamePlayer</Table>
 		<Name>Players Game Played</Name>
 		<Title>Players Game Played</Title>
-		<Filter />
 		<Group>true</Group>
 		<Columns>
 			<Column>
@@ -559,8 +593,6 @@
 		<Table>GameInstance</Table>
 		<Name>Games Played</Name>
 		<Title>Games Played</Title>
-		<Filter />
-		<Group>false</Group>
 		<Columns>
 			<Column>
 				<Header>Game</Header>
@@ -603,4 +635,156 @@
 			</Column>
 		</Columns>
 	</Report>
+    <Report type="Table">
+        <Table>TwilightImperium_Technology</Table>
+        <Name>TI_Tech</Name>
+        <Title>Technologies</Title>
+        <Columns>
+            <Column>
+                <Header>Name</Header>
+                <Width>300</Width>
+                <Name>Name</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+            <Column>
+                <Header>Color</Header>
+                <Width>300</Width>
+                <Name>Color</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Type.Color</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Table">
+        <Table>TwilightImperium_TechnologyPrerequisite</Table>
+        <Name>TI_TechRequirements</Name>
+        <Title>Technologies</Title>
+        <Columns>
+            <Column>
+                <Header>Tech</Header>
+                <Width>300</Width>
+                <Name>Tech</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Technology.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+            <Column>
+                <Header>Requirement</Header>
+                <Width>300</Width>
+                <Name>Requirement</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Requirement.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+            <Column>
+                <Header>Requirement Combination</Header>
+                <Width>300</Width>
+                <Name>Requirement_Combination</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>RequirementCombination.Value</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Join">
+        <SourceQueries>
+            <SourceQuery>TI_Tech</SourceQuery>
+            <SourceQuery>TI_TechRequirements</SourceQuery>
+        </SourceQueries>
+        <JoinRules>
+            <Sources>
+                <SourceNames>
+                    <SourceName>Name</SourceName>
+                </SourceNames>
+                <SourceNames>
+                    <SourceName>Tech</SourceName>
+                </SourceNames>
+            </Sources>
+            <Type>Left</Type>
+        </JoinRules>
+        <Name>TI_TechTree</Name>
+        <Title>Technologies Tree</Title>
+        <Columns>
+            <Column>
+                <Header>Name</Header>
+                <Width>300</Width>
+                <Name>Name</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Column">
+                        <Name>TI_Tech.Name</Name>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+            <Column>
+                <Header>Color</Header>
+                <Width>300</Width>
+                <Name>Color</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Column">
+                        <Name>TI_Tech.Color</Name>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+            <Column>
+                <Header>Requirement</Header>
+                <Width>300</Width>
+                <Name>Requirement</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Column">
+                        <Name>TI_TechRequirements.Requirement</Name>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+            <Column>
+                <Header>Rule</Header>
+                <Width>300</Width>
+                <Name>Rule</Name>
+                <GroupRule>By</GroupRule>
+                <SortRule>Ascending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Column">
+                        <Name>TI_TechRequirements.Requirement_Combination</Name>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+        </Columns>
+    </Report>
 </Reports>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema>
+	<DataTables>
+        <!--Shadowrun Tables-->
+        <DataTable name="Shadowrun_CartridgeType" reportField="Name">
+            <KeyFields>
+                <StringField name="Name" />
+            </KeyFields>
+        </DataTable>
+        <DataTable name="Shadowrun_Cartridge" reportField="Name">
+            <KeyFields>
+                <StringField name="Name" />
+            </KeyFields>
+            <DataFields>
+                <ReferenceField name="Type" relatedTable="Shadowrun_CartridgeType" />
+                <NumberField name="SectionalDensity" />
+                <NumberField name="Shape" />
+                <NumberField name="BallisticCoefficient" />
+            </DataFields>
+        </DataTable>
+        <DataTable name="Shadowrun_Caliber">
+            <KeyFields>
+                <ReferenceField name="Cartridge" relatedTable="Shadowrun_Cartridge" />
+                <NumberField name="Diameter" />
+            </KeyFields>
+            <DataFields>
+                <NumberField name="Weight" />
+                <NumberField name="RecoilImpulse" />
+            </DataFields>
+        </DataTable>
+        <DataTable name="Shadowrun_Recoil">
+            <KeyFields>
+                <ReferenceField name="Cartridge" relatedTable="Shadowrun_Cartridge" />
+                <NumberField name="Caliber" />
+            </KeyFields>
+            <DataFields>
+                <NumberField name="Weight" />
+                <NumberField name="Recoil" />
+            </DataFields>
+        </DataTable>
+        <DataTable name="Shadowrun_ArmorPiercing">
+            <KeyFields>
+                <ReferenceField name="Cartridge" relatedTable="Shadowrun_Cartridge" />
+                <NumberField name="MuzzleVelocity" />
+                <NumberField name="Distance" />
+            </KeyFields>
+            <DataFields>
+                <NumberField name="ArmorPiercing" />
+            </DataFields>
+        </DataTable>
+        <DataTable name="Shadowrun_Time">
+            <KeyFields>
+                <ReferenceField name="Cartridge" relatedTable="Shadowrun_Cartridge" />
+                <NumberField name="MuzzleVelocity" />
+                <NumberField name="Distance" />
+            </KeyFields>
+            <DataFields>
+                <NumberField name="Time" />
+            </DataFields>
+        </DataTable>
+        <DataTable name="Shadowrun_WindShift">
+            <KeyFields>
+                <ReferenceField name="Cartridge" relatedTable="Shadowrun_Cartridge" />
+                <NumberField name="MuzzleVelocity" />
+                <NumberField name="Distance" />
+            </KeyFields>
+            <DataFields>
+                <NumberField name="WindShift" />
+            </DataFields>
+        </DataTable>
+	</DataTables>
+</Schema>

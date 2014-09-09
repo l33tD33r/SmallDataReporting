@@ -32,6 +32,6 @@ public class TableReport extends Report {
 			columnsExpression[i] = column.getExpression();
 			columnsDataType[i] = column.getDataType();
 		}
-		return QueryManager.createTableQuery(tableName, getSourceFilterExpression(), getGroup(), columnsName, columnsGroupRule, columnsSortRule, columnsExpression, columnsDataType, getResultFilterExpression());
+		return QueryManager.createTableQuery(tableName, getName(), getSourceFilterExpression(), getGroup(), columnsName, columnsGroupRule, columnsSortRule, columnsExpression, columnsDataType, getResultFilterExpression());
 	}
 }

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Graph View</title>
+</head>
+<body>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <div id="container" style="width:100%; height:400px;"></div>
+    <script>
+        var chartData = undefined;
+
+        function convertToArray(javaPseudoArray) {
+            alert("pseudo array length:" + javaPseudoArray.length);
+            var array = [];
+            for (i=0; i<javaPseudoArray.length; i++) {
+                //alert("pseudo array item:"+javaPseudoArray[i]);
+                array.push(javaPseudoArray[i]);
+            }
+            return array
+        }
+
+        function clearChart() {
+            if (typeof chartData == "undefined") {
+                return;
+            }
+            chartData.destroy();
+        }
+
+        function getSeriesData(chartSeries, itemIndex, itemValueIndex) {
+            var valueType = chartSeries.getSeriesDataType(itemIndex, itemValueIndex);
+            switch (valueType) {
+                case "string":
+                    return chartSeries.getSeriesStringData(itemIndex, itemValueIndex);
+                    break;
+                case "boolean":
+                    return chartSeries.getSeriesBooleanData(itemIndex, itemValueIndex);
+                    break;
+                case "integer":
+                    return chartSeries.getSeriesIntegerData(itemIndex, itemValueIndex);
+                    break;
+                case "number":
+                    return chartSeries.getSeriesNumberData(itemIndex, itemValueIndex);
+                    break;
+                case "date":
+                    return chartSeries.getSeriesDateData(itemIndex, itemValueIndex);
+                    break;
+                case "time":
+                    return chartSeries.getSeriesTimeData(itemIndex, itemValueIndex);
+                    break;
+                case "datetime":
+                    return chartSeries.getSeriesDateTimeData(itemIndex, itemValueIndex);
+                    break;
+            }
+        }
+
+        function loadData() {
+            var chartType = chartBridge.getType();
+
+            var chartTitle = chartBridge.getTitle()
+
+            var xAxisTitle = chartBridge.getXAxisTitle();
+            var yAxisTitle = chartBridge.getYAxisTitle();
+
+            var jChartCategories = chartBridge.getCategories();
+
+            var jChartSeries = chartBridge.getSeries();
+
+            try {
+                var chartCategories;
+                if (jChartCategories) {
+                    var chartCategories = convertToArray(jChartCategories);
+                }
+
+                var chartSeries = [];
+                for (seriesIndex=0; seriesIndex < jChartSeries.length; seriesIndex++) {
+
+                    var s = jChartSeries[seriesIndex];
+
+                    var sName = s.getName();
+
+                    var sData = [];
+                    for (seriesItemIndex=0; seriesItemIndex < s.getSeriesCount(); seriesItemIndex++) {
+                        var seriesSize = s.getSeriesSize();
+
+                        if (seriesSize == 1) {
+                            sData.push(getSeriesData(s, seriesItemIndex, 0));
+                        } else {
+                            sItemData = [];
+                            for (seriesItemValueIndex=0; seriesItemValueIndex < seriesSize; seriesItemValueIndex++) {
+                                sItemData.push(getSeriesData(s, seriesItemIndex, seriesItemValueIndex));
+                            }
+                            sData.push(sItemData);
+                        }
+                    }
+
+                    series = {
+                        "name": sName,
+                        "data": sData
+                    };
+
+                    alert("Series:" + series);
+
+                    chartSeries.push(series);
+                }
+            } catch(e) {
+                alert("Error on processing bridge data:" + e);
+            }
+
+            clearChart();
+
+            switch (chartType) {
+                case 'stackedcolumn':
+                    loadStackedColumnChart(chartTitle, xAxisTitle, yAxisTitle, chartCategories, chartSeries);
+                    break;
+                case 'areaspline':
+                    loadAreaSplineChart(chartTitle, xAxisTitle, yAxisTitle, chartCategories, chartSeries);
+                    break;
+            }
+        }
+
+        function loadStackedColumnChart(chartTitle, xAxisTitle, yAxisTitle, dataCategories, dataSeries) {
+            try {
+                chartData = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'container',
+                    type: 'column'
+                },
+                title: {
+                    text: chartTitle
+                },
+                xAxis: {
+                    title: xAxisTitle,
+                    categories: dataCategories
+                },
+                yAxis: {
+                    title: {
+                        text: yAxisTitle
+                    },
+                    stackLabels: {
+                        enabled: true,
+                        style: {
+                            fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        }
+                    }
+                },
+                legend: {
+                    align: 'right',
+                    x: -70,
+                    verticalAlign: 'top',
+                    y: 20,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                    borderColor: '#CCC',
+                    borderWidth: 1,
+                    shadow: false
+                },
+                tooltip: {
+                    formatter: function () {
+                        return  this.series.name + ': ' + this.y + '<br/>' +
+                                'Total: ' + this.point.stackTotal;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                            style: {
+                                textShadow: '0 0 3px black, 0 0 3px black'
+                            }
+                        }
+                    }
+                },
+                series: dataSeries
+            });
+            } catch (e) {
+                alert("Error on applying data to chart:" + e);
+            }
+        }
+
+        function loadAreaSplineChart(chartTitle, xAxisTitle, yAxisTitle, dataCategories, dataSeries) {
+            try {
+                chartData = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'container',
+                    type: 'areaspline'
+                },
+                title: {
+                    text: chartTitle
+                },
+                xAxis: {
+                    title: xAxisTitle,
+                    categories: dataCategories
+                },
+                yAxis: {
+                    title: {
+                        text: yAxisTitle
+                    },
+                    stackLabels: {
+                        enabled: true,
+                        style: {
+                            fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        }
+                    }
+                },
+                legend: {
+                    align: 'right',
+                    x: -70,
+                    verticalAlign: 'top',
+                    y: 20,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                    borderColor: '#CCC',
+                    borderWidth: 1,
+                    shadow: false
+                },
+                tooltip: {
+                    formatter: function () {
+                        return
+                            '<b>' + this.series.name + '</b><br/>' +
+                            this.x + ': ' + this.y + '<br/>';
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                            style: {
+                                textShadow: '0 0 3px black, 0 0 3px black'
+                            }
+                        }
+                    }
+                },
+                series: dataSeries
+            });
+            } catch (e) {
+                alert("Error on applying data to chart:" + e);
+            }
+        }
+
+        $(document).ready(function() {
+            // Do nothing
+        });
+    </script>
+</body>
+</html>

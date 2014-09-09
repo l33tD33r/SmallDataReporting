@@ -10,14 +10,14 @@ import l33tD33r.app.database.Time;
 public class GroupedResults {
 
 	private Query query;
-	private HashMap<GroupKey,ArrayList<Row>> groupedRowsMap;
+	private HashMap<KeySet,ArrayList<ResultRow>> groupedRowsMap;
 	private GroupRule[] groupRules;
 	private DataType[] dataTypes;
 	
 	protected GroupedResults(Query query) {
 		this.query = query;
 		
-		groupedRowsMap = new HashMap<GroupKey, ArrayList<Row>>();
+		groupedRowsMap = new HashMap<KeySet, ArrayList<ResultRow>>();
 		
 		groupRules = new GroupRule[this.query.getColumnCount()];
 		dataTypes = new DataType[this.query.getColumnCount()];
@@ -27,39 +27,39 @@ public class GroupedResults {
 		}
 	}
 	
-	protected void addRow(Row row) {
-		GroupKey groupKey = createGroupKey(row);
-		ArrayList<Row> groupRowList = groupedRowsMap.get(groupKey);
+	protected void addRow(ResultRow row) {
+		KeySet keySet = createGroupKey(row);
+		ArrayList<ResultRow> groupRowList = groupedRowsMap.get(keySet);
 		if (groupRowList == null) {
-			groupRowList = new ArrayList<Row>();
-			groupedRowsMap.put(groupKey, groupRowList);
+			groupRowList = new ArrayList<ResultRow>();
+			groupedRowsMap.put(keySet, groupRowList);
 		}
 		groupRowList.add(row);
 	}
 	
-	private GroupKey createGroupKey(Row row) {
-		ArrayList<Object> groupedValueList = new ArrayList<Object>();
+	private KeySet createGroupKey(ResultRow row) {
+		ArrayList<Object> groupedValueList = new ArrayList<>();
 		for (int i=0; i < groupRules.length; i++) {
 			if (groupRules[i] == GroupRule.By) {
 				groupedValueList.add(row.getValue(i));
 			}
 		}
 		Object[] groupedValues = groupedValueList.toArray(new Object[groupedValueList.size()]);
-		return new GroupKey(groupedValues);
+		return new KeySet(groupedValues);
 	}
 	
-	protected ArrayList<Row> getGroupedRows() {
-		ArrayList<Row> groupedRows = new ArrayList<Row>();
-		for (ArrayList<Row> groupRows : groupedRowsMap.values()) {
-			Row groupedRow = createGroupedRow(groupRows);
+	protected ArrayList<ResultRow> getGroupedRows() {
+		ArrayList<ResultRow> groupedRows = new ArrayList<>();
+		for (ArrayList<ResultRow> groupRows : groupedRowsMap.values()) {
+            ResultRow groupedRow = createGroupedRow(groupRows);
 			groupedRows.add(groupedRow);
 		}
 		return groupedRows;
 	}
 	
-	private Row createGroupedRow(ArrayList<Row> groupRows) {
+	private ResultRow createGroupedRow(ArrayList<ResultRow> groupRows) {
 		Object[] values = new Object[groupRules.length];
-		for (Row groupRow : groupRows) {
+		for (ResultRow groupRow : groupRows) {
 			for (int i=0; i < groupRules.length; i++) {
 				values[i] = applyGroupRule(values[i], groupRow.getValue(i), groupRules[i], dataTypes[i]);
 			}
@@ -67,7 +67,7 @@ public class GroupedResults {
 		for (int i=0; i < groupRules.length; i++) {
             values[i] = summarizeGroupRule(values[i], groupRows.size(), groupRules[i], dataTypes[i]);
 		}
-		return new Row(values);
+		return new ResultRow(values, query);
 	}
 	
 	private Object applyGroupRule(Object currentValue, Object newValue, GroupRule groupRule, DataType dataType) {

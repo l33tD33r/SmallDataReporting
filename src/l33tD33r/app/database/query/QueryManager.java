@@ -12,16 +12,23 @@ import l33tD33r.app.database.data.DataRecordExistsException;
 
 public class QueryManager {
 
-	public static TableQuery createTableQuery(String tableName, ExpressionNode sourceFilterExpression, boolean group, String[] columnNames, GroupRule[] columnGroupRules, SortRule[] columnSortRules, ExpressionNode[] columnExpressions, DataType[] columnDataTypes, ExpressionNode resultFilterExpression) {
-		if (columnNames.length != columnExpressions.length) {
-			throw new RuntimeException("columnsName.length != columnsExpressionXml.length");
-		}
-		Column[] columns = new Column[columnNames.length];
-		for (int i=0; i < columns.length; i++) {
-			columns[i] = new Column(columnNames[i], columnGroupRules[i], columnSortRules[i], columnExpressions[i], columnDataTypes[i]);
-		}
-		return new TableQuery(tableName, sourceFilterExpression, group, columns, resultFilterExpression);
+    public static JoinQuery createJoinQuery(Query leftSide, Query rightSide, JoinRules rules, String name, ExpressionNode sourceFilterExpression, boolean group, String[] columnNames, GroupRule[] columnGroupRules, SortRule[] columnSortRules, ExpressionNode[] columnExpressions, DataType[] columnDataTypes, ExpressionNode resultFilterExpression) {
+        Column[] columns = createColumns(columnNames, columnGroupRules, columnSortRules, columnExpressions, columnDataTypes);
+        return new JoinQuery(leftSide, rightSide, rules, name, sourceFilterExpression, group, columns, resultFilterExpression);
+    }
+
+	public static TableQuery createTableQuery(String tableName, String name, ExpressionNode sourceFilterExpression, boolean group, String[] columnNames, GroupRule[] columnGroupRules, SortRule[] columnSortRules, ExpressionNode[] columnExpressions, DataType[] columnDataTypes, ExpressionNode resultFilterExpression) {
+		Column[] columns = createColumns(columnNames, columnGroupRules, columnSortRules, columnExpressions, columnDataTypes);
+		return new TableQuery(tableName, name, sourceFilterExpression, group, columns, resultFilterExpression);
 	}
+
+    private static Column[] createColumns(String[] names, GroupRule[] groupRules, SortRule[] sortRules, ExpressionNode[] expressions, DataType[] dataTypes) {
+        Column[] columns = new Column[names.length];
+        for (int i=0; i < columns.length; i++) {
+            columns[i] = new Column(names[i], groupRules[i], sortRules[i], expressions[i], dataTypes[i]);
+        }
+        return columns;
+    }
 	
 	public static void insertDataTableRecord(String tableName, Map<String,String> recordValues) {
 		DataManager dataManager = DataManager.getSingleton();

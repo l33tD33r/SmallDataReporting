@@ -40,14 +40,23 @@ public class ExpressionManager {
             case "Column": {
                 return createColumnNode(expressionNodeElement);
             }
-            case "Equals": {
-                return createEqualsNode(expressionNodeElement);
-            }
-            case "GreaterThanOrEqual": {
-                return createGreatorThanOrEqualsNode(expressionNodeElement);
+            case "Parameter": {
+                return createParameterNode(expressionNodeElement);
             }
             case "Value": {
                 return createValueNode(expressionNodeElement);
+            }
+            case "Equals": {
+                return createEqualsNode(expressionNodeElement);
+            }
+            case "Not":{
+                return createNotNode(expressionNodeElement);
+            }
+            case "GreaterThanOrEqual": {
+                return createGreaterThanOrEqualNode(expressionNodeElement);
+            }
+            case "LessThanOrEqual": {
+                return createLessThanOrEqualNode(expressionNodeElement);
             }
             case "If": {
                 return createIfNode(expressionNodeElement);
@@ -100,6 +109,11 @@ public class ExpressionManager {
 				throw new RuntimeException("Unknown data type: " + dataType.name());
 		}
 	}
+
+    private static ParameterNode createParameterNode(Element parameterElement) {
+        String name = XmlUtils.getElementStringValue(parameterElement, "Name");
+        return new ParameterNode(name);
+    }
 	
 	private static EqualsNode createEqualsNode(Element equalsNodeElement) {
 		Element leftElement = XmlUtils.getChildElement(equalsNodeElement, "Left");
@@ -108,11 +122,23 @@ public class ExpressionManager {
 		return new EqualsNode(createExpressionNode(XmlUtils.getChildElement(leftElement, "Expression")), createExpressionNode(XmlUtils.getChildElement(rightElement, "Expression")));
 	}
 
-    private static GreaterThanOrEqualNode createGreatorThanOrEqualsNode(Element greaterThanOrEqualsNodeElement) {
+    private static  NotNode createNotNode(Element notNodeElement) {
+        Element childElement = XmlUtils.getChildElement(notNodeElement, "Child");
+        return new NotNode(createExpressionNode(XmlUtils.getChildElement(childElement, "Expression")));
+    }
+
+    private static GreaterThanOrEqualNode createGreaterThanOrEqualNode(Element greaterThanOrEqualsNodeElement) {
         Element leftElement = XmlUtils.getChildElement(greaterThanOrEqualsNodeElement, "Left");
         Element rightElement = XmlUtils.getChildElement(greaterThanOrEqualsNodeElement, "Right");
 
         return new GreaterThanOrEqualNode(createExpressionNode(XmlUtils.getChildElement(leftElement, "Expression")), createExpressionNode(XmlUtils.getChildElement(rightElement, "Expression")));
+    }
+
+    private static LessThanOrEqualNode createLessThanOrEqualNode(Element lessThanOrEqualNodeElement) {
+        Element leftElement = XmlUtils.getChildElement(lessThanOrEqualNodeElement, "Left");
+        Element rightElement = XmlUtils.getChildElement(lessThanOrEqualNodeElement, "Right");
+
+        return new LessThanOrEqualNode(createExpressionNode(XmlUtils.getChildElement(leftElement, "Expression")), createExpressionNode(XmlUtils.getChildElement(rightElement, "Expression")));
     }
 
     private static IfNode createIfNode(Element ifNodeElement) {
