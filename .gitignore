@@ -7,3 +7,9 @@ out/production/SmallDataReporting/l33tD33r/app/ui/workspace.fxml
 /out/production/SmallDataReporting/gaming/transaction.data.xml
 /out/production/SmallDataReporting/gaming/transaction.report.xml
 /out/production/SmallDataReporting/gaming/transaction.schema.xml
+data/shadowrun/transaction.data.xml
+data/shadowrun/transaction.report.xml
+data/shadowrun/transaction.schema.xml
+out/production/SmallDataReporting/shadowrun/transaction.data.xml
+out/production/SmallDataReporting/shadowrun/transaction.report.xml
+out/production/SmallDataReporting/shadowrun/transaction.schema.xml
