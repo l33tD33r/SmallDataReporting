@@ -5,9 +5,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import l33tD33r.app.database.data.DataManager;
 import l33tD33r.app.database.data.storage.DataProvider;
 import l33tD33r.app.database.data.storage.FileDataProvider;
+import l33tD33r.app.database.form.FormManager;
+import l33tD33r.app.database.form.storage.FileFormProvider;
+import l33tD33r.app.database.form.storage.FormProvider;
 import l33tD33r.app.database.report.ReportManager;
 import l33tD33r.app.database.report.storage.FileReportProvider;
 import l33tD33r.app.database.report.storage.ReportProvider;
@@ -42,6 +46,10 @@ public class Main extends Application {
 
     public ReportProvider getReportProvider() { return reportProvider; }
 
+    private FileFormProvider formProvider;
+
+    public FormProvider getFormProvider() { return formProvider; }
+
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -59,6 +67,9 @@ public class Main extends Application {
 
         stage.setTitle("SmallData Reporting");
         stage.setScene(scene);
+        stage.initStyle(StageStyle.UNIFIED);
+        stage.sizeToScene();
+
         stage.show();
     }
 
@@ -86,6 +97,15 @@ public class Main extends Application {
 
         ReportManager.createSingleton(reportProvider);
 
+        File existingFormFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\" + FORM_FILE_NAME);
+        File transactionFormFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\transaction." + FORM_FILE_NAME);
+
+        FileUtils.copyFile(existingFormFile, transactionFormFile);
+
+        formProvider = new FileFormProvider(transactionFormFile.getAbsolutePath());
+
+        FormManager.createSingleton(formProvider);
+
         File existingDataFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\" + DATA_FILE_NAME);
         File transactionDataFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\transaction." + DATA_FILE_NAME);
 
@@ -102,11 +122,13 @@ public class Main extends Application {
 
     public static final String SHADOWRUN_RESOURCE_DIRECTORY_PATH = ROOT_RESOURCE_DIRECTORY_PATH + "\\shadowrun";
 
-    public static final String DATA_RESOURCE_DIRECTORY_PATH = SHADOWRUN_RESOURCE_DIRECTORY_PATH;
+    public static final String DATA_RESOURCE_DIRECTORY_PATH = GAMING_RESOURCE_DIRECTORY_PATH;
 
     public static final String SCHEMA_FILE_NAME = "schema.xml";
 
     public static final String REPORT_FILE_NAME = "report.xml";
+
+    public static final String FORM_FILE_NAME = "form.xml";
 
     public static final String DATA_FILE_NAME = "data.xml";
 }

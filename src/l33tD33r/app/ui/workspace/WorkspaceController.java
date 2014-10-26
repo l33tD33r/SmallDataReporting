@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import l33tD33r.app.database.data.DataTable;
+import l33tD33r.app.database.form.FormManager;
 import l33tD33r.app.database.utility.FileUtils;
 import l33tD33r.app.ui.workspace.data.CreateRecordStage;
 import l33tD33r.app.ui.workspace.visualization.html.WebChartView;
@@ -44,7 +45,7 @@ public class WorkspaceController {
 
     @FXML private Pane webReportChartPane;
 
-    private TreeItem<ContentItem> tableRootItem, reportsRootItem;
+    private TreeItem<ContentItem> tableRootItem, reportsRootItem, formsRootItem;
 
     private Main mainApplication;
 
@@ -64,6 +65,8 @@ public class WorkspaceController {
         loadTables();
 
         loadReports();
+
+        loadForms();
     }
 
     private void loadTreeRoot() {
@@ -78,8 +81,9 @@ public class WorkspaceController {
 
         tableRootItem = new TreeItem<>(new FolderItem("Tables"));
         reportsRootItem = new TreeItem<>(new FolderItem("Reports"));
+        formsRootItem = new TreeItem<>(new FormItem("Forms"));
 
-        root.getChildren().addAll(tableRootItem, reportsRootItem);
+        root.getChildren().addAll(tableRootItem, reportsRootItem, formsRootItem);
 
         contentTreeView.setRoot(root);
         contentTreeView.setShowRoot(false);
@@ -104,6 +108,10 @@ public class WorkspaceController {
                         chartView.loadChart(reportItem.getName());
 
                         webChartView.loadChart(reportItem.getName());
+                    } else if (clickedItem instanceof FormItem) {
+                        FormItem formItem = (FormItem)clickedItem;
+
+                        // Do something with the form
                     }
                 }
             }
@@ -150,6 +158,11 @@ public class WorkspaceController {
             ReportManager.getSingleton().reloadReports();
             loadReports();
             return;
+        }
+
+        if ("Forms".equals(XmlUtils.getElementName(document.getDocumentElement()))) {
+            mainApplication.getFormProvider().setFormsDocument(document);
+            FormManager.getSingleton().reloadForms();
         }
     }
 
@@ -271,15 +284,28 @@ public class WorkspaceController {
             allReports.add(new ReportItem(reportName));
         }
 
-        allReports.sort(new Comparator<ReportItem>() {
-            @Override
-            public int compare(ReportItem a, ReportItem b) {
-                return a.compareTo(b);
-            }
-        });
+        allReports.sort((a, b) -> a.compareTo(b));
 
         for (ReportItem reportItem : allReports) {
-            reportsRootItem.getChildren().add(new TreeItem<ContentItem>(reportItem));
+            reportsRootItem.getChildren().add(new TreeItem<>(reportItem));
+        }
+
+        reportsRootItem.setExpanded(true);
+    }
+
+    private void loadForms() {
+        formsRootItem.getChildren().clear();
+
+        ArrayList<FormItem> allForms = new ArrayList<>();
+
+        for (String formName : FormManager.getSingleton().getReportNames()) {
+            allForms.add(new FormItem(formName));
+        }
+
+        allForms.sort((a, b) -> a.compareTo(b));
+
+        for (FormItem formItem : allForms) {
+            formsRootItem.getChildren().add(new TreeItem<>(formItem));
         }
 
         reportsRootItem.setExpanded(true);

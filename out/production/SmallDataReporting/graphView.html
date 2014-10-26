@@ -12,10 +12,8 @@
         var chartData = undefined;
 
         function convertToArray(javaPseudoArray) {
-            alert("pseudo array length:" + javaPseudoArray.length);
             var array = [];
             for (i=0; i<javaPseudoArray.length; i++) {
-                //alert("pseudo array item:"+javaPseudoArray[i]);
                 array.push(javaPseudoArray[i]);
             }
             return array
@@ -99,8 +97,6 @@
                         "name": sName,
                         "data": sData
                     };
-
-                    alert("Series:" + series);
 
                     chartSeries.push(series);
                 }
@@ -220,11 +216,8 @@
                     shadow: false
                 },
                 tooltip: {
-                    formatter: function () {
-                        return
-                            '<b>' + this.series.name + '</b><br/>' +
-                            this.x + ': ' + this.y + '<br/>';
-                    }
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: '{point.x} : {point.y}'
                 },
                 plotOptions: {
                     column: {

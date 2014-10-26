@@ -18,7 +18,7 @@
                 <NumberField name="BallisticCoefficient" />
             </DataFields>
         </DataTable>
-        <DataTable name="Shadowrun_Caliber">
+        <DataTable name="Shadowrun_Caliber" reportField="Cartridge|Diameter">
             <KeyFields>
                 <ReferenceField name="Cartridge" relatedTable="Shadowrun_Cartridge" />
                 <NumberField name="Diameter" />
@@ -28,7 +28,7 @@
                 <NumberField name="RecoilImpulse" />
             </DataFields>
         </DataTable>
-        <DataTable name="Shadowrun_Recoil">
+        <DataTable name="Shadowrun_Recoil" reportField="Cartridge|Caliber">
             <KeyFields>
                 <ReferenceField name="Cartridge" relatedTable="Shadowrun_Cartridge" />
                 <NumberField name="Caliber" />
@@ -58,11 +58,17 @@
                 <NumberField name="Time" />
             </DataFields>
         </DataTable>
+        <DataTable name="Shadowrun_WindShiftStrength" reportField="Name">
+            <KeyFields>
+                <StringField name="Name" />
+            </KeyFields>
+        </DataTable>
         <DataTable name="Shadowrun_WindShift">
             <KeyFields>
                 <ReferenceField name="Cartridge" relatedTable="Shadowrun_Cartridge" />
                 <NumberField name="MuzzleVelocity" />
                 <NumberField name="Distance" />
+                <ReferenceField name="WindStrength" relatedTable="Shadowrun_WindShiftStrength" />
             </KeyFields>
             <DataFields>
                 <NumberField name="WindShift" />

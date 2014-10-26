@@ -2,228 +2,6 @@
 <Reports>
     <Report type="Table">
         <Table>Shadowrun_ArmorPiercing</Table>
-        <Name>PistolAP</Name>
-        <Title>Pistol AP</Title>
-        <SourceFilter>
-            <Expression type="And">
-                <Children>
-                    <Expression type="Equals">
-                        <Left>
-                            <Expression type="Field">
-                                <FieldPath>Cartridge.Type.Name</FieldPath>
-                            </Expression>
-                        </Left>
-                        <Right>
-                            <Expression type="Value">
-                                <Type>String</Type>
-                                <Value>Pistol</Value>
-                            </Expression>
-                        </Right>
-                    </Expression>
-                    <Expression type="LessThanOrEqual">
-                        <Left>
-                            <Expression type="Field">
-                                <FieldPath>ArmorPiercing</FieldPath>
-                            </Expression>
-                        </Left>
-                        <Right>
-                            <Expression type="Value">
-                                <Type>Number</Type>
-                                <Value>6</Value>
-                            </Expression>
-                        </Right>
-                    </Expression>
-                </Children>
-            </Expression>
-        </SourceFilter>
-        <ResultFilter>
-            <Expression type="Not">
-                <Child>
-                    <Expression type="Equals">
-                        <Left>
-                            <Expression type="Column">
-                                <Name>Cartridge</Name>
-                            </Expression>
-                        </Left>
-                        <Right>
-                            <Expression type="Value">
-                                <Type>String</Type>
-                                <Value>Buckshot</Value>
-                            </Expression>
-                        </Right>
-                    </Expression>
-                </Child>
-            </Expression>
-        </ResultFilter>
-        <Chart>
-            <Type>areaspline</Type>
-            <Title>Pistol AP</Title>
-            <SeriesNameColumn>Cartridge</SeriesNameColumn>
-            <SeriesDataColumns>
-                <SeriesDataColumn>Distance</SeriesDataColumn>
-                <SeriesDataColumn>AP</SeriesDataColumn>
-            </SeriesDataColumns>
-        </Chart>
-        <Columns>
-            <Column>
-                <Header>Cartridge</Header>
-                <Width>300</Width>
-                <Name>Cartridge</Name>
-                <ColumnExpression>
-                    <Expression type="Field">
-                        <FieldPath>Cartridge.Name</FieldPath>
-                    </Expression>
-                </ColumnExpression>
-                <DataType>String</DataType>
-            </Column>
-            <Column>
-                <Header>Muzzle Velocity</Header>
-                <Width>300</Width>
-                <Name>MV</Name>
-                <ColumnExpression>
-                    <Expression type="Field">
-                        <FieldPath>MuzzleVelocity</FieldPath>
-                    </Expression>
-                </ColumnExpression>
-                <DataType>Number</DataType>
-            </Column>
-            <Column>
-                <Header>Distance</Header>
-                <Width>100</Width>
-                <Name>Distance</Name>
-                <ColumnExpression>
-                    <Expression type="Field">
-                        <FieldPath>Distance</FieldPath>
-                    </Expression>
-                </ColumnExpression>
-                <DataType>Number</DataType>
-            </Column>
-            <Column>
-                <Header>Armor Piercing</Header>
-                <Width>100</Width>
-                <Name>AP</Name>
-                <ColumnExpression>
-                    <Expression type="Field">
-                        <FieldPath>ArmorPiercing</FieldPath>
-                    </Expression>
-                </ColumnExpression>
-                <DataType>Number</DataType>
-            </Column>
-        </Columns>
-    </Report>
-    <Report type="Table">
-        <Table>Shadowrun_ArmorPiercing</Table>
-        <Name>RifleAp</Name>
-        <Title>Rifle AP</Title>
-        <SourceFilter>
-            <Expression type="And">
-                <Children>
-                    <Expression type="Equals">
-                        <Left>
-                            <Expression type="Field">
-                                <FieldPath>Cartridge.Type.Name</FieldPath>
-                            </Expression>
-                        </Left>
-                        <Right>
-                            <Expression type="Value">
-                                <Type>String</Type>
-                                <Value>Rifle</Value>
-                            </Expression>
-                        </Right>
-                    </Expression>
-                    <Expression type="LessThanOrEqual">
-                        <Left>
-                            <Expression type="Field">
-                                <FieldPath>ArmorPiercing</FieldPath>
-                            </Expression>
-                        </Left>
-                        <Right>
-                            <Expression type="Value">
-                                <Type>Number</Type>
-                                <Value>6</Value>
-                            </Expression>
-                        </Right>
-                    </Expression>
-                </Children>
-            </Expression>
-        </SourceFilter>
-        <ResultFilter>
-            <Expression type="Not">
-                <Child>
-                    <Expression type="Equals">
-                        <Left>
-                            <Expression type="Column">
-                                <Name>Cartridge</Name>
-                            </Expression>
-                        </Left>
-                        <Right>
-                            <Expression type="Value">
-                                <Type>String</Type>
-                                <Value>Buckshot</Value>
-                            </Expression>
-                        </Right>
-                    </Expression>
-                </Child>
-            </Expression>
-        </ResultFilter>
-        <Chart>
-            <Type>areaspline</Type>
-            <Title>Rifle AP</Title>
-            <SeriesNameColumn>Cartridge</SeriesNameColumn>
-            <SeriesDataColumns>
-                <SeriesDataColumn>Distance</SeriesDataColumn>
-                <SeriesDataColumn>AP</SeriesDataColumn>
-            </SeriesDataColumns>
-        </Chart>
-        <Columns>
-            <Column>
-                <Header>Cartridge</Header>
-                <Width>300</Width>
-                <Name>Cartridge</Name>
-                <ColumnExpression>
-                    <Expression type="Field">
-                        <FieldPath>Cartridge.Name</FieldPath>
-                    </Expression>
-                </ColumnExpression>
-                <DataType>String</DataType>
-            </Column>
-            <Column>
-                <Header>Muzzle Velocity</Header>
-                <Width>300</Width>
-                <Name>MV</Name>
-                <ColumnExpression>
-                    <Expression type="Field">
-                        <FieldPath>MuzzleVelocity</FieldPath>
-                    </Expression>
-                </ColumnExpression>
-                <DataType>Number</DataType>
-            </Column>
-            <Column>
-                <Header>Distance</Header>
-                <Width>100</Width>
-                <Name>Distance</Name>
-                <ColumnExpression>
-                    <Expression type="Field">
-                        <FieldPath>Distance</FieldPath>
-                    </Expression>
-                </ColumnExpression>
-                <DataType>Number</DataType>
-            </Column>
-            <Column>
-                <Header>Armor Piercing</Header>
-                <Width>100</Width>
-                <Name>AP</Name>
-                <ColumnExpression>
-                    <Expression type="Field">
-                        <FieldPath>ArmorPiercing</FieldPath>
-                    </Expression>
-                </ColumnExpression>
-                <DataType>Number</DataType>
-            </Column>
-        </Columns>
-    </Report>
-    <Report type="Table">
-        <Table>Shadowrun_ArmorPiercing</Table>
         <Name>WeaponAp</Name>
         <Title>Weapon AP</Title>
         <SourceFilter>
@@ -310,6 +88,385 @@
                 <ColumnExpression>
                     <Expression type="Field">
                         <FieldPath>ArmorPiercing</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Table">
+        <Table>Shadowrun_Time</Table>
+        <Name>Time</Name>
+        <Title>Time</Title>
+        <ResultFilter>
+            <Expression type="Not">
+                <Child>
+                    <Expression type="Equals">
+                        <Left>
+                            <Expression type="Column">
+                                <Name>Cartridge</Name>
+                            </Expression>
+                        </Left>
+                        <Right>
+                            <Expression type="Value">
+                                <Type>String</Type>
+                                <Value>Buckshot</Value>
+                            </Expression>
+                        </Right>
+                    </Expression>
+                </Child>
+            </Expression>
+        </ResultFilter>
+        <Chart>
+            <Type>areaspline</Type>
+            <Title>Time</Title>
+            <SeriesNameColumn>Cartridge</SeriesNameColumn>
+            <SeriesDataColumns>
+                <SeriesDataColumn>Distance</SeriesDataColumn>
+                <SeriesDataColumn>Time</SeriesDataColumn>
+            </SeriesDataColumns>
+        </Chart>
+        <Columns>
+            <Column>
+                <Header>Cartridge</Header>
+                <Width>300</Width>
+                <Name>Cartridge</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Cartridge.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+            <Column>
+                <Header>Muzzle Velocity</Header>
+                <Width>300</Width>
+                <Name>MV</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>MuzzleVelocity</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+            <Column>
+                <Header>Distance</Header>
+                <Width>100</Width>
+                <Name>Distance</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Distance</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+            <Column>
+                <Header>Time</Header>
+                <Width>100</Width>
+                <Name>Time</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Time</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Table">
+        <Table>Shadowrun_WindShift</Table>
+        <Name>WindShiftNoWind</Name>
+        <Title>Wind Shift - No Wind</Title>
+        <SourceFilter>
+            <Expression type="Equals">
+                <Left>
+                    <Expression type="Field">
+                        <FieldPath>WindStrength.Name</FieldPath>
+                    </Expression>
+                </Left>
+                <Right>
+                    <Expression type="Value">
+                        <Type>String</Type>
+                        <Value>NoWind</Value>
+                    </Expression>
+                </Right>
+            </Expression>
+        </SourceFilter>
+        <Chart>
+            <Type>areaspline</Type>
+            <Title>Wind Shift - No Wind</Title>
+            <SeriesNameColumn>Cartridge</SeriesNameColumn>
+            <SeriesDataColumns>
+                <SeriesDataColumn>Distance</SeriesDataColumn>
+                <SeriesDataColumn>WindShift</SeriesDataColumn>
+            </SeriesDataColumns>
+        </Chart>
+        <Columns>
+            <Column>
+                <Header>Cartridge</Header>
+                <Width>300</Width>
+                <Name>Cartridge</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Cartridge.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+            <Column>
+                <Header>Muzzle Velocity</Header>
+                <Width>300</Width>
+                <Name>MV</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>MuzzleVelocity</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+            <Column>
+                <Header>Distance</Header>
+                <Width>100</Width>
+                <Name>Distance</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Distance</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+            <Column>
+                <Header>Wind Shift</Header>
+                <Width>100</Width>
+                <Name>WindShift</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>WindShift</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Table">
+        <Table>Shadowrun_WindShift</Table>
+        <Name>WindShiftLightWind</Name>
+        <Title>Wind Shift - Light Wind</Title>
+        <SourceFilter>
+            <Expression type="Equals">
+                <Left>
+                    <Expression type="Field">
+                        <FieldPath>WindStrength.Name</FieldPath>
+                    </Expression>
+                </Left>
+                <Right>
+                    <Expression type="Value">
+                        <Type>String</Type>
+                        <Value>LightWind</Value>
+                    </Expression>
+                </Right>
+            </Expression>
+        </SourceFilter>
+        <Chart>
+            <Type>areaspline</Type>
+            <Title>Wind Shift - Light Wind</Title>
+            <SeriesNameColumn>Cartridge</SeriesNameColumn>
+            <SeriesDataColumns>
+                <SeriesDataColumn>Distance</SeriesDataColumn>
+                <SeriesDataColumn>WindShift</SeriesDataColumn>
+            </SeriesDataColumns>
+        </Chart>
+        <Columns>
+            <Column>
+                <Header>Cartridge</Header>
+                <Width>300</Width>
+                <Name>Cartridge</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Cartridge.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+            <Column>
+                <Header>Muzzle Velocity</Header>
+                <Width>300</Width>
+                <Name>MV</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>MuzzleVelocity</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+            <Column>
+                <Header>Distance</Header>
+                <Width>100</Width>
+                <Name>Distance</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Distance</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+            <Column>
+                <Header>Wind Shift</Header>
+                <Width>100</Width>
+                <Name>WindShift</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>WindShift</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Table">
+        <Table>Shadowrun_WindShift</Table>
+        <Name>WindShiftModerateWind</Name>
+        <Title>Wind Shift - Moderate Wind</Title>
+        <SourceFilter>
+            <Expression type="Equals">
+                <Left>
+                    <Expression type="Field">
+                        <FieldPath>WindStrength.Name</FieldPath>
+                    </Expression>
+                </Left>
+                <Right>
+                    <Expression type="Value">
+                        <Type>String</Type>
+                        <Value>ModerateWind</Value>
+                    </Expression>
+                </Right>
+            </Expression>
+        </SourceFilter>
+        <Chart>
+            <Type>areaspline</Type>
+            <Title>Wind Shift - Moderate Wind</Title>
+            <SeriesNameColumn>Cartridge</SeriesNameColumn>
+            <SeriesDataColumns>
+                <SeriesDataColumn>Distance</SeriesDataColumn>
+                <SeriesDataColumn>WindShift</SeriesDataColumn>
+            </SeriesDataColumns>
+        </Chart>
+        <Columns>
+            <Column>
+                <Header>Cartridge</Header>
+                <Width>300</Width>
+                <Name>Cartridge</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Cartridge.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+            <Column>
+                <Header>Muzzle Velocity</Header>
+                <Width>300</Width>
+                <Name>MV</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>MuzzleVelocity</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+            <Column>
+                <Header>Distance</Header>
+                <Width>100</Width>
+                <Name>Distance</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Distance</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+            <Column>
+                <Header>Wind Shift</Header>
+                <Width>100</Width>
+                <Name>WindShift</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>WindShift</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Table">
+        <Table>Shadowrun_WindShift</Table>
+        <Name>WindShiftHeavyWind</Name>
+        <Title>Wind Shift - Heavy Wind</Title>
+        <SourceFilter>
+            <Expression type="Equals">
+                <Left>
+                    <Expression type="Field">
+                        <FieldPath>WindStrength.Name</FieldPath>
+                    </Expression>
+                </Left>
+                <Right>
+                    <Expression type="Value">
+                        <Type>String</Type>
+                        <Value>HeavyWind</Value>
+                    </Expression>
+                </Right>
+            </Expression>
+        </SourceFilter>
+        <Chart>
+            <Type>areaspline</Type>
+            <Title>Wind Shift - Heavy Wind</Title>
+            <SeriesNameColumn>Cartridge</SeriesNameColumn>
+            <SeriesDataColumns>
+                <SeriesDataColumn>Distance</SeriesDataColumn>
+                <SeriesDataColumn>WindShift</SeriesDataColumn>
+            </SeriesDataColumns>
+        </Chart>
+        <Columns>
+            <Column>
+                <Header>Cartridge</Header>
+                <Width>300</Width>
+                <Name>Cartridge</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Cartridge.Name</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+            <Column>
+                <Header>Muzzle Velocity</Header>
+                <Width>300</Width>
+                <Name>MV</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>MuzzleVelocity</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+            <Column>
+                <Header>Distance</Header>
+                <Width>100</Width>
+                <Name>Distance</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Distance</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Number</DataType>
+            </Column>
+            <Column>
+                <Header>Wind Shift</Header>
+                <Width>100</Width>
+                <Name>WindShift</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>WindShift</FieldPath>
                     </Expression>
                 </ColumnExpression>
                 <DataType>Number</DataType>

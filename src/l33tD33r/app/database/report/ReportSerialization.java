@@ -15,7 +15,7 @@ public class ReportSerialization {
 	public static List<Report> deserializeReports(Document reportsDocument) {
 		Element reportsElement = reportsDocument.getDocumentElement();
 		
-		ArrayList<Report> reports = new ArrayList<Report>();
+		ArrayList<Report> reports = new ArrayList<>();
 		
 		for (Element reportElement : XmlUtils.getChildElements(reportsElement, "Report")) {
 			reports.add(createReport(reportElement));

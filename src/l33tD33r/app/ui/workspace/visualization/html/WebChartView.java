@@ -177,10 +177,8 @@ public class WebChartView {
                 "        var chartData = undefined;\n" +
                 "\n" +
                 "        function convertToArray(javaPseudoArray) {\n" +
-                "            alert(\"pseudo array length:\" + javaPseudoArray.length);\n" +
                 "            var array = [];\n" +
                 "            for (i=0; i<javaPseudoArray.length; i++) {\n" +
-                "                //alert(\"pseudo array item:\"+javaPseudoArray[i]);\n" +
                 "                array.push(javaPseudoArray[i]);\n" +
                 "            }\n" +
                 "            return array\n" +
@@ -264,8 +262,6 @@ public class WebChartView {
                 "                        \"name\": sName,\n" +
                 "                        \"data\": sData\n" +
                 "                    };\n" +
-                "\n" +
-                "                    alert(\"Series:\" + series);\n" +
                 "\n" +
                 "                    chartSeries.push(series);\n" +
                 "                }\n" +
@@ -385,11 +381,8 @@ public class WebChartView {
                 "                    shadow: false\n" +
                 "                },\n" +
                 "                tooltip: {\n" +
-                "                    formatter: function () {\n" +
-                "                        return\n" +
-                "                            '<b>' + this.series.name + '</b><br/>' +\n" +
-                "                            this.x + ': ' + this.y + '<br/>';\n" +
-                "                    }\n" +
+                "                    headerFormat: '<b>{series.name}</b><br>',\n" +
+                "                    pointFormat: '{point.x} : {point.y}'\n" +
                 "                },\n" +
                 "                plotOptions: {\n" +
                 "                    column: {\n" +
