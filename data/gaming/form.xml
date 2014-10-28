@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Forms>
     <Form>
-        <Name>CreateGame</Name>
-        <Title>Create Game</Title>
+        <Name>SelectGame</Name>
+        <Title>Select Game</Title>
         <Items>
             <Item id="Game" type="Reference" table="Game"/>
         </Items>
         <Views>
-            <View item="Game" label="Game" type="DropDown" source="Table" table="Game" />
+            <View model="Item" item="Game" label="Game" type="DropDown" source="Table" table="Game" />
         </Views>
         <Validations>
 
         </Validations>
-        <Commits>
-
-        </Commits>
+        <Actions>
+        </Actions>
         <Outputs>
             <Output type="Console">
                 <WriteLine source="Item" item="Game"/>
             </Output>
         </Outputs>
+    </Form>
+    <Form>
+        <Name>CreateLocation</Name>
+        <Title>Create Location</Title>
+        <Items>
+            <Item id="Name" type="String" />
+            <Item id="Description" type="String" />
+            <Item id="Latitude" type="Number" />
+            <Item id="Longitude" type="Number" />
+        </Items>
+        <Views>
+            <View model="Item" item="Name" type="TextField" />
+            <View model="Item" item="Description" type="TextArea" />
+        </Views>
     </Form>
 </Forms>

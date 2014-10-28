@@ -34,6 +34,7 @@ public class FormManager {
     public FormManager(FormProvider formProvider) {
         this.formProvider = formProvider;
         formsMap = new LinkedHashMap<>();
+        loadForms();
     }
 
     private void loadForms() {
@@ -55,8 +56,8 @@ public class FormManager {
         loadForms();
     }
 
-    public Form getForm(String reportName) {
-        return formsMap.get(reportName);
+    public Form getForm(String formName) {
+        return formsMap.get(formName);
     }
 
     public ArrayList<String> getReportNames() {

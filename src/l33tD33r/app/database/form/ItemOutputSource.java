@@ -16,4 +16,11 @@ public class ItemOutputSource extends OutputSource {
     public void setItemId(String itemId) {
         this.itemId = itemId;
     }
+
+    @Override
+    public String getOutput(Form form) {
+        Item item = form.getItem(getItemId());
+
+        return item.getValue().toString();
+    }
 }

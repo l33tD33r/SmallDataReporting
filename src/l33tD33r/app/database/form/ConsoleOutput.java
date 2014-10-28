@@ -24,4 +24,16 @@ public class ConsoleOutput extends Output {
     public void addWriteLine(WriteLine writeLine) {
         writeLines.add(writeLine);
     }
+
+    @Override
+    public String generateOutput(Form form) {
+        StringBuffer outputBuffer = new StringBuffer();
+
+        for (WriteLine writeLine : getWriteLines()) {
+            outputBuffer.append(writeLine.getSource().getOutput(form));
+            outputBuffer.append("\n");
+        }
+
+        return outputBuffer.toString();
+    }
 }

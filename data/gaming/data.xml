@@ -8810,7 +8810,7 @@
             <DataField name="Points">10</DataField>
             <DataField name="StartingPosition">5</DataField>
             <DataField name="Winner">false</DataField>
-            <DataField name="Color">Gray</DataField>
+            <DataField name="Color">Grey</DataField>
           </DataFields>
         </DataRecord>
         <DataRecord id="02e8c1e7-859d-4c29-8e79-192483efa9bb">

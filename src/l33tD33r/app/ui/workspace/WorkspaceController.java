@@ -12,6 +12,7 @@ import l33tD33r.app.database.data.DataTable;
 import l33tD33r.app.database.form.FormManager;
 import l33tD33r.app.database.utility.FileUtils;
 import l33tD33r.app.ui.workspace.data.CreateRecordStage;
+import l33tD33r.app.ui.workspace.form.FormStage;
 import l33tD33r.app.ui.workspace.visualization.html.WebChartView;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -111,7 +112,8 @@ public class WorkspaceController {
                     } else if (clickedItem instanceof FormItem) {
                         FormItem formItem = (FormItem)clickedItem;
 
-                        // Do something with the form
+                        FormStage formStage = new FormStage(FormManager.getSingleton().getForm(formItem.getName()));
+                        formStage.show();
                     }
                 }
             }

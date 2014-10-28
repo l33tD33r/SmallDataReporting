@@ -6,4 +6,6 @@ package l33tD33r.app.database.form;
 public abstract class OutputSource {
 
     public abstract OutputSourceType getType();
+
+    public abstract String getOutput(Form form);
 }
