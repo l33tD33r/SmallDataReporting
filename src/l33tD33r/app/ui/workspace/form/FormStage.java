@@ -12,8 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import l33tD33r.app.database.form.Form;
-import l33tD33r.app.database.form.Output;
-import l33tD33r.app.database.form.View;
+import l33tD33r.app.database.form.view.View;
 import l33tD33r.app.ui.workspace.control.ControlFactory;
 import l33tD33r.app.ui.workspace.control.ControlWrapper;
 
@@ -58,10 +57,10 @@ public class FormStage extends Stage {
 
             Control control = controlWrapper.getControl();
 
-            fieldsPanel.add(label, 0, row);
-            fieldsPanel.add(control, 1, row);
+            fieldsPanel.add(label, 0, row++);
+            fieldsPanel.add(control, 0, row++);
 
-            row++;
+            //row++;
         }
 
         HBox buttonPanel = new HBox();
@@ -70,6 +69,8 @@ public class FormStage extends Stage {
         Button runButton = new Button("Run");
         runButton.setOnAction(e -> {
             run();
+
+            close();
         });
         runButton.setAlignment(Pos.CENTER_LEFT);
 

@@ -1,9 +1,11 @@
-package l33tD33r.app.database.form;
+package l33tD33r.app.database.form.view;
+
+import l33tD33r.app.database.form.FormComponent;
 
 /**
  * Created by Simon on 10/24/2014.
  */
-public abstract class View {
+public abstract class View extends FormComponent {
 
     private String itemId;
 

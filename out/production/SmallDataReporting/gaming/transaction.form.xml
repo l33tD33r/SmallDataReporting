@@ -1,24 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Forms>
     <Form>
-        <Name>CreateGame</Name>
-        <Title>Create Game</Title>
+        <Name>SelectGame</Name>
+        <Title>Select Game</Title>
         <Items>
             <Item id="Game" type="Reference" table="Game"/>
         </Items>
         <Views>
-            <View item="Game" label="Game" type="DropDown" source="Table" table="Game" />
+            <View model="Item" item="Game" label="Game" type="DropDown" source="Table" table="Game" />
         </Views>
         <Validations>
 
         </Validations>
-        <Commits>
-
-        </Commits>
+        <Actions>
+        </Actions>
         <Outputs>
             <Output type="Console">
                 <WriteLine source="Item" item="Game"/>
             </Output>
         </Outputs>
+    </Form>
+    <Form>
+        <Name>CreateLocation</Name>
+        <Title>Create Location</Title>
+        <Items>
+            <Item id="Name" type="String" />
+            <Item id="Description" type="String" />
+        </Items>
+        <Views>
+            <View model="Item" item="Name" type="TextField" label="Name" />
+            <View model="Item" item="Description" type="TextArea" label="Description" />
+        </Views>
+        <Validations>
+
+        </Validations>
+        <Actions>
+            <Action type="Insert" table="Location">
+                <Fields>
+                    <Field name="Name" source="Item" item="Name"/>
+                    <Field name="Description" source="Item" item="Description"/>
+                    <Field name="Latitude" source="Value" value="45" type="Number"/>
+                    <Field name="Longitude" source="Value" value="90" type="Number"/>
+                </Fields>
+            </Action>
+        </Actions>
+    </Form>
+    <Form>
+        <Name>NewSettlersGame</Name>
+        <Title>New Settlers of Catan Game</Title>
+        <Items>
+            <Item id="Location" type="Reference" table="Location"/>
+            <Item id="Player" type="Reference" table="Player"/>
+            <Item id="Color" type="Reference" table="SettlersOfCatan_Color"/>
+            <Item id="GameInstance" type="Reference" table="GameInstance"/>
+            <Item id="GamePlayer" type="Reference" table="GamePlayer"/>
+            <Item id="SettlersGameInstance" type="Reference" table="SettlersOfCatan_GameInstance"/>
+            <Item id="SettlersGamePlayer" type="Reference" table="SettlersOfCatan_GamePlayer"/>
+        </Items>
+        <Views>
+            <View model="Item" item="Location" label="Location" type="DropDown" source="Table" table="Location" />
+            <View model="Item" item="Player" label="Player" type="DropDown" source="Table" table="Player" />
+            <View model="Item" item="Color" label="Color" type="DropDown" source="Table" table="SettlersOfCatan_Color" />
+        </Views>
+        <Validations>
+
+        </Validations>
+        <Actions>
+            <Action type="Insert" table="GameInstance" updateItem="GameInstance">
+                <Fields>
+                    <Field name="Game" source="Value" type="Reference" value="SettlersOfCatan"/>
+                    <Field name="Location" source="Item" item="Location" />
+                    <Field name="DatePlayed" source="Value" type="Date" value="2015-01-01"/>
+                </Fields>
+            </Action>
+            <Action type="Insert" table="GamePlayer" updateItem="GamePlayer">
+                <Fields>
+                    <Field name="Player" source="Item" item="Player"/>
+                    <Field name="GameInstance" source="Item" item="GameInstance"/>
+                    <Field name="WinningRank" source="Value" type="Integer" value="1"/>
+                </Fields>
+            </Action>
+            <Action type="Insert" table="SettlersOfCatan_GameInstance" updateItem="SettlersGameInstance">
+                <Fields>
+                    <Field name="GameInstance" source="Item" item="GameInstance"/>
+                    <Field name="CitiesAndKnights" source="Value" type="Boolean" value="True"/>
+                    <Field name="Seafarers" source="Value" type="Boolean" value="False"/>
+                </Fields>
+            </Action>
+            <Action type="Insert" table="SettlersOfCatan_GamePlayer">
+                <Fields>
+                    <Field name="GamePlayer" source="Item" item="GamePlayer"/>
+                    <Field name="GameInstance" source="Item" item="SettlersGameInstance"/>
+                    <Field name="Color" source="Item" item="Color"/>
+                    <Field name="StartingPosition" source="Value" type="Integer" value="1"/>
+                    <Field name="Points" source="Value" type="Integer" value="13"/>
+                    <Field name="Winner" source="Value" type="Boolean" value="True"/>
+                </Fields>
+            </Action>
+        </Actions>
     </Form>
 </Forms>

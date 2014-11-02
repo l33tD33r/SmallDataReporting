@@ -310,7 +310,7 @@ public class WorkspaceController {
             formsRootItem.getChildren().add(new TreeItem<>(formItem));
         }
 
-        reportsRootItem.setExpanded(true);
+        formsRootItem.setExpanded(true);
     }
 
     public void handleAddRecord(ActionEvent event) {

@@ -3,12 +3,14 @@ package l33tD33r.app.ui.workspace.control;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import l33tD33r.app.database.data.DataManager;
 import l33tD33r.app.database.data.DataTable;
-import l33tD33r.app.database.form.DropDownView;
+import l33tD33r.app.database.form.view.DropDownView;
 import l33tD33r.app.database.form.Form;
-import l33tD33r.app.database.form.TableDropDownView;
-import l33tD33r.app.database.form.View;
+import l33tD33r.app.database.form.view.TableDropDownView;
+import l33tD33r.app.database.form.view.View;
 import l33tD33r.app.ui.workspace.data.DataRecordReference;
 
 import java.util.ArrayList;
@@ -29,6 +31,12 @@ public class ControlFactory {
         switch (view.getType()) {
             case DropDown:
                 control = createDropDown(form, (DropDownView)view);
+                break;
+            case TextField:
+                control = createTextField();
+                break;
+            case TextArea:
+                control = createTextArea();
                 break;
             default:
                 throw new RuntimeException("Unknown view type:" + view.getType().name());
@@ -73,5 +81,17 @@ public class ControlFactory {
         ObservableList<DataRecordReference> referenceRecordObservableList = FXCollections.observableList(referenceRecordList);
         ComboBox<DataRecordReference> comboBox = new ComboBox<>(referenceRecordObservableList);
         return comboBox;
+    }
+
+    public StringTextControlWrapper createTextField() {
+        StringTextControlWrapper stringTextControlWrapper = new StringTextControlWrapper();
+        stringTextControlWrapper.setControl(new TextField());
+        return stringTextControlWrapper;
+    }
+
+    public StringTextControlWrapper createTextArea() {
+        StringTextControlWrapper stringTextControlWrapper = new StringTextControlWrapper();
+        stringTextControlWrapper.setControl(new TextArea());
+        return stringTextControlWrapper;
     }
 }

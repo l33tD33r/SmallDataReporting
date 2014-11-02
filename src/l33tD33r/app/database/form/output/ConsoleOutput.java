@@ -1,4 +1,4 @@
-package l33tD33r.app.database.form;
+package l33tD33r.app.database.form.output;
 
 import java.util.ArrayList;
 
@@ -26,11 +26,11 @@ public class ConsoleOutput extends Output {
     }
 
     @Override
-    public String generateOutput(Form form) {
+    public String generateOutput() {
         StringBuffer outputBuffer = new StringBuffer();
 
         for (WriteLine writeLine : getWriteLines()) {
-            outputBuffer.append(writeLine.getSource().getOutput(form));
+            outputBuffer.append(writeLine.getValueSource().getValue().toString());
             outputBuffer.append("\n");
         }
 
