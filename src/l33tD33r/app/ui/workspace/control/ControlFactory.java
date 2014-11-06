@@ -9,6 +9,7 @@ import l33tD33r.app.database.data.DataManager;
 import l33tD33r.app.database.data.DataTable;
 import l33tD33r.app.database.form.view.DropDownView;
 import l33tD33r.app.database.form.Form;
+import l33tD33r.app.database.form.view.Table;
 import l33tD33r.app.database.form.view.TableDropDownView;
 import l33tD33r.app.database.form.view.View;
 import l33tD33r.app.ui.workspace.data.DataRecordReference;
@@ -38,12 +39,17 @@ public class ControlFactory {
             case TextArea:
                 control = createTextArea();
                 break;
+            case Table:
+                control = createTable((Table)view);
+                break;
             default:
                 throw new RuntimeException("Unknown view type:" + view.getType().name());
         }
 
         control.setForm(form);
         control.setView(view);
+
+        control.setupControl();
 
         return control;
     }
@@ -66,7 +72,7 @@ public class ControlFactory {
     public DropDownWrapper<DataRecordReference, String> createTableDropDown(TableDropDownView tableDropDownView) {
         DropDownWrapper<DataRecordReference, String> dropDown = new DropDownWrapper<>();
         dropDown.setComboBox(createTableComboBox(tableDropDownView.getTable()));
-        dropDown.setValueConverter(reference -> reference.getId());
+        dropDown.setValueConverter(reference -> reference == null ? null : reference.getId());
         return dropDown;
     }
 
@@ -93,5 +99,11 @@ public class ControlFactory {
         StringTextControlWrapper stringTextControlWrapper = new StringTextControlWrapper();
         stringTextControlWrapper.setControl(new TextArea());
         return stringTextControlWrapper;
+    }
+
+    public TableWrapper createTable(Table table) {
+        TableWrapper tableWrapper = new TableWrapper();
+        tableWrapper.setTable(table);
+        return tableWrapper;
     }
 }

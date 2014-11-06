@@ -159,7 +159,7 @@ public class FormSerialization {
         }
 
         String label = viewElement.getAttribute("label");
-        if (label != null && label.isEmpty()) {
+        if (label != null && !label.isEmpty()) {
             view.setLabel(label);
         }
 

@@ -5,7 +5,7 @@ import javafx.scene.control.TextInputControl;
 /**
  * Created by Simon on 2014-10-31.
  */
-public class TextControlWrapper<TData> extends ControlWrapper<TData> {
+public class TextControlWrapper<TData> extends ItemControlWrapper<TData> {
 
     private DataConverter<String, TData> valueConverter;
 

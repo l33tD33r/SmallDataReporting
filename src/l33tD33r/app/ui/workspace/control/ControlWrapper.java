@@ -41,5 +41,7 @@ public abstract class ControlWrapper {
         this.control = control;
     }
 
+    public abstract void updateValue();
 
+    public abstract void setupControl();
 }

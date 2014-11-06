@@ -1,14 +1,11 @@
 package l33tD33r.app.ui.workspace.control;
 
 import javafx.scene.control.ComboBox;
-import l33tD33r.app.database.Time;
-
-import java.util.Comparator;
 
 /**
  * Created by Simon on 10/26/2014.
  */
-public class DropDownWrapper<TItem, TData> extends ControlWrapper<TData> {
+public class DropDownWrapper<TItem, TData> extends ItemControlWrapper<TData> {
 
     private DataConverter<TItem, TData> valueConverter;
 
