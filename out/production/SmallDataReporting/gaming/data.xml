@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Data>
   <DataTables>
     <DataTable name="Game">
@@ -752,6 +752,14 @@
             <DataField name="Game">SettlersOfCatan</DataField>
             <DataField name="Location">Location_0</DataField>
             <DataField name="DatePlayed">2014-10-19</DataField>
+            <DataField name="Notes"></DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="c65ea07b-7b9f-4a74-9763-af2e06196b15">
+          <DataFields>
+            <DataField name="Game">SettlersOfCatan</DataField>
+            <DataField name="Location">Location_0</DataField>
+            <DataField name="DatePlayed">2014-10-26</DataField>
             <DataField name="Notes"></DataField>
           </DataFields>
         </DataRecord>
@@ -3741,6 +3749,48 @@
             <DataField name="WinningRank">1</DataField>
           </DataFields>
         </DataRecord>
+        <DataRecord id="6bd5b8fd-3956-436e-b6b4-6e9fb0f035f1">
+          <DataFields>
+            <DataField name="Player">Player_2</DataField>
+            <DataField name="GameInstance">c65ea07b-7b9f-4a74-9763-af2e06196b15</DataField>
+            <DataField name="WinningRank">2</DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="52f082df-95f5-4a1a-84dd-60b6ee28e05a">
+          <DataFields>
+            <DataField name="Player">Player_3</DataField>
+            <DataField name="GameInstance">c65ea07b-7b9f-4a74-9763-af2e06196b15</DataField>
+            <DataField name="WinningRank">5</DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="07edc12e-5e5a-49cd-805c-d6a4ca131d9a">
+          <DataFields>
+            <DataField name="Player">Player_0</DataField>
+            <DataField name="GameInstance">c65ea07b-7b9f-4a74-9763-af2e06196b15</DataField>
+            <DataField name="WinningRank">5</DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="6cb78449-ec23-4fca-af5e-73d95f90d8fb">
+          <DataFields>
+            <DataField name="Player">a0cd9eaa-5421-4d88-8060-83f1ee6055d8</DataField>
+            <DataField name="GameInstance">c65ea07b-7b9f-4a74-9763-af2e06196b15</DataField>
+            <DataField name="WinningRank">1</DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="096d3c5c-5301-4fc5-ab91-1d6ff4a98df9">
+          <DataFields>
+            <DataField name="Player">Player_1</DataField>
+            <DataField name="GameInstance">c65ea07b-7b9f-4a74-9763-af2e06196b15</DataField>
+            <DataField name="WinningRank">2</DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="742a4eb4-34e4-4e24-9acc-49aa4b8ebb19">
+          <DataFields>
+            <DataField name="Player">59ca2a03-ee10-444f-bacd-ff46dec96211</DataField>
+            <DataField name="GameInstance">c65ea07b-7b9f-4a74-9763-af2e06196b15</DataField>
+            <DataField name="WinningRank">4</DataField>
+          </DataFields>
+        </DataRecord>
       </DataRecords>
     </DataTable>
     <DataTable name="Location">
@@ -4655,6 +4705,13 @@
         <DataRecord id="d10089ff-9f60-46d3-9207-b6331f21990e">
           <DataFields>
             <DataField name="GameInstance">2eed7edf-98a9-45df-8987-1565faf1c69c</DataField>
+            <DataField name="CitiesAndKnights">true</DataField>
+            <DataField name="Seafarers">false</DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="7edccbf2-c231-4b45-b267-d6d10383d3e6">
+          <DataFields>
+            <DataField name="GameInstance">c65ea07b-7b9f-4a74-9763-af2e06196b15</DataField>
             <DataField name="CitiesAndKnights">true</DataField>
             <DataField name="Seafarers">false</DataField>
           </DataFields>
@@ -8920,6 +8977,66 @@
             <DataField name="Points">13</DataField>
             <DataField name="StartingPosition">3</DataField>
             <DataField name="Winner">True</DataField>
+            <DataField name="Color">Orange</DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="82268da3-3e25-494f-94f2-6701bc3aeba6">
+          <DataFields>
+            <DataField name="GamePlayer">6bd5b8fd-3956-436e-b6b4-6e9fb0f035f1</DataField>
+            <DataField name="GameInstance">7edccbf2-c231-4b45-b267-d6d10383d3e6</DataField>
+            <DataField name="Points">9</DataField>
+            <DataField name="StartingPosition">1</DataField>
+            <DataField name="Winner">false</DataField>
+            <DataField name="Color">Black</DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="61de3c14-417e-40f6-ae86-a6a46f1b4345">
+          <DataFields>
+            <DataField name="GamePlayer">52f082df-95f5-4a1a-84dd-60b6ee28e05a</DataField>
+            <DataField name="GameInstance">7edccbf2-c231-4b45-b267-d6d10383d3e6</DataField>
+            <DataField name="Points">5</DataField>
+            <DataField name="StartingPosition">2</DataField>
+            <DataField name="Winner">false</DataField>
+            <DataField name="Color">Green</DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="9b99eedc-902e-46f8-be25-a8c2d6db1ec4">
+          <DataFields>
+            <DataField name="GamePlayer">07edc12e-5e5a-49cd-805c-d6a4ca131d9a</DataField>
+            <DataField name="GameInstance">7edccbf2-c231-4b45-b267-d6d10383d3e6</DataField>
+            <DataField name="Points">5</DataField>
+            <DataField name="StartingPosition">3</DataField>
+            <DataField name="Winner">false</DataField>
+            <DataField name="Color">Coral</DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="322797ef-7cd7-469a-a935-d5cfe073f77d">
+          <DataFields>
+            <DataField name="GamePlayer">6cb78449-ec23-4fca-af5e-73d95f90d8fb</DataField>
+            <DataField name="GameInstance">7edccbf2-c231-4b45-b267-d6d10383d3e6</DataField>
+            <DataField name="Points">13</DataField>
+            <DataField name="StartingPosition">4</DataField>
+            <DataField name="Winner">True</DataField>
+            <DataField name="Color">Grey</DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="9e7621d4-90ef-4ee1-87be-290d73139631">
+          <DataFields>
+            <DataField name="GamePlayer">096d3c5c-5301-4fc5-ab91-1d6ff4a98df9</DataField>
+            <DataField name="GameInstance">7edccbf2-c231-4b45-b267-d6d10383d3e6</DataField>
+            <DataField name="Points">9</DataField>
+            <DataField name="StartingPosition">5</DataField>
+            <DataField name="Winner">false</DataField>
+            <DataField name="Color">White</DataField>
+          </DataFields>
+        </DataRecord>
+        <DataRecord id="a6fdda0e-ba07-49e6-b68f-bf633631ff52">
+          <DataFields>
+            <DataField name="GamePlayer">742a4eb4-34e4-4e24-9acc-49aa4b8ebb19</DataField>
+            <DataField name="GameInstance">7edccbf2-c231-4b45-b267-d6d10383d3e6</DataField>
+            <DataField name="Points">8</DataField>
+            <DataField name="StartingPosition">6</DataField>
+            <DataField name="Winner">false</DataField>
             <DataField name="Color">Orange</DataField>
           </DataFields>
         </DataRecord>

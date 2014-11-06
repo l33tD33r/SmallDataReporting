@@ -13,3 +13,8 @@ data/shadowrun/transaction.schema.xml
 out/production/SmallDataReporting/shadowrun/transaction.data.xml
 out/production/SmallDataReporting/shadowrun/transaction.report.xml
 out/production/SmallDataReporting/shadowrun/transaction.schema.xml
+data/gaming/transaction.form.xml
+data/gaming/transaction.form.xml
+out/production/SmallDataReporting/gaming/data.xml
+out/production/SmallDataReporting/gaming/form.xml
+out/production/SmallDataReporting/gaming/transaction.form.xml
