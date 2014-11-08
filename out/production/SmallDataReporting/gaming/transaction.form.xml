@@ -182,21 +182,21 @@
 
             <Action type="Insert" table="GamePlayer" updateItem="GamePlayer_0">
                 <Fields>
-                    <Field name="Player" source="Item" property="Player_0"/>
+                    <Field name="Player" source="Item" item="Player_0"/>
                     <Field name="GameInstance" source="Item" item="GameInstance"/>
                     <Field name="WinningRank" source="Value" type="Integer" value="0"/>
                 </Fields>
             </Action>
             <Action type="Insert" table="GamePlayer" updateItem="GamePlayer_1">
                 <Fields>
-                    <Field name="Player" source="Item" property="Player_1"/>
+                    <Field name="Player" source="Item" item="Player_1"/>
                     <Field name="GameInstance" source="Item" item="GameInstance"/>
                     <Field name="WinningRank" source="Value" type="Integer" value="0"/>
                 </Fields>
             </Action>
             <Action type="Insert" table="GamePlayer" updateItem="GamePlayer_2">
                 <Fields>
-                    <Field name="Player" source="Item" property="Player_2"/>
+                    <Field name="Player" source="Item" item="Player_2"/>
                     <Field name="GameInstance" source="Item" item="GameInstance"/>
                     <Field name="WinningRank" source="Value" type="Integer" value="0"/>
                 </Fields>
