@@ -46,6 +46,12 @@
         </Actions>
     </Form>
     <Form>
+        <Name>TestInteger</Name>
+        <Title>Test Integer</Title>
+        <Items id="Int" type="Integer"/>
+
+    </Form>
+    <Form>
         <Name>NewSettlersGame</Name>
         <Title>New Settlers of Catan Game</Title>
         <Items>
