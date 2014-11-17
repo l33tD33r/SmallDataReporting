@@ -1,25 +1,22 @@
 package l33tD33r.app.ui.workspace.control;
 
-import javafx.beans.Observable;
-import javafx.beans.binding.ObjectExpression;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.util.Callback;
 import l33tD33r.app.database.form.Form;
 import l33tD33r.app.database.form.data.Collection;
 import l33tD33r.app.database.form.data.Element;
 import l33tD33r.app.database.form.view.Column;
 import l33tD33r.app.database.form.view.Table;
+import l33tD33r.app.ui.workspace.data.DataRecordReference;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * Created by Simon on 2014-10-31.
@@ -75,7 +72,7 @@ public class TableWrapper extends CollectionControlWrapper {
 
         private Column column;
 
-        private TableColumn<Element,Object> tableColumn;
+        private TableColumn<Element,DataRecordReference> tableColumn;
 
         public ColumnWrapper(Form form, Column column) {
             this.form = form;
@@ -88,17 +85,19 @@ public class TableWrapper extends CollectionControlWrapper {
             tableColumn.setPrefWidth(100);
             tableColumn.setEditable(true);
 
-            tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Element, Object>, ObservableValue<Object>>() {
+            tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Element, DataRecordReference>, ObservableValue<DataRecordReference>>() {
                 @Override
-                public ObservableValue<Object> call(TableColumn.CellDataFeatures<Element, Object> param) {
-                    return new SimpleObjectProperty<Object>();
+                public ObservableValue<DataRecordReference> call(TableColumn.CellDataFeatures<Element, DataRecordReference> param) {
+                    return new SimpleObjectProperty<DataRecordReference>();
                 }
             });
 
-            tableColumn.setCellFactory(new Callback<TableColumn<Element, Object>, TableCell<Element, Object>>() {
+            tableColumn.setCellFactory(new Callback<TableColumn<Element, DataRecordReference>, TableCell<Element, DataRecordReference>>() {
                 @Override
-                public TableCell<Element, Object> call(TableColumn<Element, Object> param) {
-                    return new PropertyTableCell(form, ColumnWrapper.this);
+                public TableCell<Element, DataRecordReference> call(TableColumn<Element, DataRecordReference> param) {
+//                    return new PropertyTableCell(form, ColumnWrapper.this);
+                    ComboBoxTableCellWrapper cellWrapper = new ComboBoxTableCellWrapper(form, ColumnWrapper.this);
+                    return cellWrapper.getComboBoxTableCell();
                 }
             });
         }
@@ -107,7 +106,7 @@ public class TableWrapper extends CollectionControlWrapper {
             return column;
         }
 
-        public TableColumn<Element,Object> getTableColumn() {
+        public TableColumn<Element,DataRecordReference> getTableColumn() {
             return tableColumn;
         }
     }
@@ -136,15 +135,15 @@ public class TableWrapper extends CollectionControlWrapper {
         }
 
         @Override
+        public void commitEdit(Object newValue) {
+            super.commitEdit(newValue);
+        }
+
+        @Override
         public void cancelEdit() {
             super.cancelEdit();
 
             setGraphic(null);
-        }
-
-        @Override
-        public void commitEdit(Object newValue) {
-            super.commitEdit(newValue);
         }
 
         @Override
@@ -156,6 +155,31 @@ public class TableWrapper extends CollectionControlWrapper {
             if (value != null) {
                 setText(value.toString());
             }
+        }
+    }
+
+    private static class ComboBoxTableCellWrapper {
+
+        private Form form;
+
+        private ColumnWrapper columnWrapper;
+
+        private DropDownWrapper<DataRecordReference, String> dropDownWrapper;
+
+        private ComboBoxTableCell<Element,DataRecordReference> tableCell;
+
+        public ComboBoxTableCellWrapper(Form form, ColumnWrapper columnWrapper) {
+            super();
+            this.form = form;
+            this.columnWrapper = columnWrapper;
+
+            dropDownWrapper = (DropDownWrapper<DataRecordReference, String>)ControlFactory.getSingleton().createControl(form, columnWrapper.getColumn().getCellView());
+
+            tableCell = new ComboBoxTableCell<>(dropDownWrapper.getComboBox().getItems());
+        }
+
+        public ComboBoxTableCell<Element,DataRecordReference> getComboBoxTableCell() {
+            return tableCell;
         }
     }
 }

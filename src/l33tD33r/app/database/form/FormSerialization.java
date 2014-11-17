@@ -9,6 +9,7 @@ import l33tD33r.app.database.form.view.*;
 import l33tD33r.app.database.utility.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import sun.plugin2.message.Message;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -318,6 +319,8 @@ public class FormSerialization {
                 return createItemRefSource(sourceElement);
             case "Value":
                 return createFixedValueSource(sourceElement);
+            case "Collection":
+                return createCollectionSource(sourceElement);
             default:
                 throw new RuntimeException("Unknown source type:" + sourceType);
         }
@@ -345,5 +348,33 @@ public class FormSerialization {
         }
         DataType type = DataType.valueOf(typeName);
         return new FixedValueSource(type, type.parse(stringValue));
+    }
+
+    private CollectionRefSource createCollectionSource(Element sourceElement) {
+        String collectionId = sourceElement.getAttribute("collection");
+
+        Collection collection = form.getCollection(collectionId);
+
+        if (collection == null) {
+            throw new RuntimeException(MessageFormat.format("Form '{0}' does not contain a collection '{1}'", form.getName(), collectionId));
+        }
+
+        List<ItemRefSource> properties = new ArrayList<>();
+
+        Element propertiesElement = XmlUtils.getChildElement(sourceElement, "Properties");
+        if (propertiesElement == null) {
+            throw new RuntimeException("CollectionSource must include a Properties element");
+        }
+
+        for (Element propertyElement : XmlUtils.getChildElements(propertiesElement, "Property")) {
+            String propertyId = propertyElement.getAttribute("id");
+
+            ItemTemplate propertyTemplate = collection.getPropertyTemplate(propertyId);
+            if (propertyTemplate == null) {
+                throw new RuntimeException(MessageFormat.format("Collection '{0}' does not contain a property '{1}'", collectionId, propertyId));
+            }
+
+            properties.add(new ItemRefSource(propertyTemplate));
+        }
     }
 }

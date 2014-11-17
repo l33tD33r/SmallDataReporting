@@ -1,6 +1,7 @@
 package l33tD33r.app.database.form.data;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Created by Simon on 2014-10-31.
@@ -28,6 +29,17 @@ public class Collection {
 
     public void addPropertyTemplate(ItemTemplate propertyTemplate) {
         propertyTemplates.add(propertyTemplate);
+    }
+
+    public ItemTemplate getPropertyTemplate(String id) {
+        ItemTemplate propertyTemplate = null;
+        for (ItemTemplate p : propertyTemplates) {
+            if (p.getId().equalsIgnoreCase(id)) {
+                propertyTemplate = p;
+                break;
+            }
+        }
+        return propertyTemplate;
     }
 
     public ArrayList<Element> getElements() {
