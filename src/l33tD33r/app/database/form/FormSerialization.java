@@ -146,6 +146,9 @@ public class FormSerialization {
             case "TextArea":
                 view = createTextAreaView();
                 break;
+            case "IntegerField":
+                view = createIntegerFieldView();
+                break;
             case "Table":
                 view = createTableView(viewElement);
                 break;
@@ -196,6 +199,10 @@ public class FormSerialization {
 
     private TextAreaView createTextAreaView() {
         return new TextAreaView();
+    }
+
+    private IntegerFieldView createIntegerFieldView() {
+        return new IntegerFieldView();
     }
 
     private Table createTableView(Element viewElement) {

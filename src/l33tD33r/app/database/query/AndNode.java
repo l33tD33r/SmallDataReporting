@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class AndNode extends ExpressionNode {
 
-    List<ExpressionNode> expressionChildren;
+    private List<ExpressionNode> expressionChildren;
 
     public AndNode(List<ExpressionNode> expressionChildren) {
         this.expressionChildren = expressionChildren;

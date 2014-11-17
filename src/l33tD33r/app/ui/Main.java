@@ -122,7 +122,7 @@ public class Main extends Application {
 
     public static final String SHADOWRUN_RESOURCE_DIRECTORY_PATH = ROOT_RESOURCE_DIRECTORY_PATH + "\\shadowrun";
 
-    public static final String DATA_RESOURCE_DIRECTORY_PATH = GAMING_RESOURCE_DIRECTORY_PATH;
+    public static final String DATA_RESOURCE_DIRECTORY_PATH = SHADOWRUN_RESOURCE_DIRECTORY_PATH;
 
     public static final String SCHEMA_FILE_NAME = "schema.xml";
 

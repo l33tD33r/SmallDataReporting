@@ -39,6 +39,9 @@ public class ControlFactory {
             case TextArea:
                 control = createTextArea();
                 break;
+            case IntegerField:
+                control = createIntegerField();
+                break;
             case Table:
                 control = createTable((Table)view);
                 break;
@@ -99,6 +102,12 @@ public class ControlFactory {
         StringTextControlWrapper stringTextControlWrapper = new StringTextControlWrapper();
         stringTextControlWrapper.setControl(new TextArea());
         return stringTextControlWrapper;
+    }
+
+    public IntegerTextControlWrapper createIntegerField() {
+        IntegerTextControlWrapper integerTextControlWrapper = new IntegerTextControlWrapper();
+        integerTextControlWrapper.setControl(new TextField());
+        return integerTextControlWrapper;
     }
 
     public TableWrapper createTable(Table table) {

@@ -48,8 +48,17 @@
     <Form>
         <Name>TestInteger</Name>
         <Title>Test Integer</Title>
-        <Items id="Int" type="Integer"/>
-
+        <Items>
+            <Item id="Int" type="Integer"/>
+        </Items>
+        <Views>
+            <View model="Item" item="Int" type="IntegerField" label="Integer"/>
+        </Views>
+        <Outputs>
+            <Output type="Console">
+                <WriteLine source="Item" item="Int" />
+            </Output>
+        </Outputs>
     </Form>
     <Form>
         <Name>NewSettlersGame</Name>
