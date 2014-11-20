@@ -381,7 +381,9 @@ public class FormSerialization {
                 throw new RuntimeException(MessageFormat.format("Collection '{0}' does not contain a property '{1}'", collectionId, propertyId));
             }
 
-            properties.add(new ItemRefSource(propertyTemplate));
+
         }
+
+        return new CollectionRefSource();
     }
 }

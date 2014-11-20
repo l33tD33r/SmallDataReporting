@@ -71,14 +71,6 @@
                 <DataType>Number</DataType>
             </Column>
             <Column>
-                <Header>Key</Header>
-                <Width>200</Width>
-                <Name>Key</Name>
-                <ColumnExpression>
-
-                </ColumnExpression>
-            </Column>
-            <Column>
                 <Header>Distance</Header>
                 <Width>100</Width>
                 <Name>Distance</Name>

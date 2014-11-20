@@ -48,6 +48,16 @@
                 <NumberField name="ArmorPiercing" />
             </DataFields>
         </DataTable>
+        <DataTable name="Shadowrun_Velocity">
+            <KeyFields>
+                <ReferenceField name="Cartridge" relatedTable="Shadowrun_Cartridge" />
+                <NumberField name="MuzzleVelocity" />
+                <NumberField name="Distance" />
+            </KeyFields>
+            <DataFields>
+                <NumberField name="Velocity" />
+            </DataFields>
+        </DataTable>
         <DataTable name="Shadowrun_Time">
             <KeyFields>
                 <ReferenceField name="Cartridge" relatedTable="Shadowrun_Cartridge" />
