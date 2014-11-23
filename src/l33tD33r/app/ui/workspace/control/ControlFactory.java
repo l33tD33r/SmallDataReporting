@@ -80,16 +80,23 @@ public class ControlFactory {
     }
 
     public ComboBox<DataRecordReference> createTableComboBox(String table) {
+        ObservableList<DataRecordReference> referenceRecordObservableList = FXCollections.observableList(createReferenceRecordObservableList(table));
+        ComboBox<DataRecordReference> comboBox = new ComboBox<>(referenceRecordObservableList);
+        return comboBox;
+    }
+
+    public ObservableList<DataRecordReference> createReferenceRecordObservableList(String table) {
+        return FXCollections.observableList(createReferenceRecordList(table));
+    }
+
+    public ArrayList<DataRecordReference> createReferenceRecordList(String table) {
         ArrayList<DataRecordReference> referenceRecordList = new ArrayList<>();
         DataTable relatedDataTable = DataManager.getSingleton().getTable(table);
         String reportFieldName = relatedDataTable.getSchema().getReportFieldName();
         relatedDataTable.getAllRecords().forEach(
                 r -> referenceRecordList.add(new DataRecordReference(r.getId(), r.getFieldValueString(reportFieldName)))
         );
-
-        ObservableList<DataRecordReference> referenceRecordObservableList = FXCollections.observableList(referenceRecordList);
-        ComboBox<DataRecordReference> comboBox = new ComboBox<>(referenceRecordObservableList);
-        return comboBox;
+        return referenceRecordList;
     }
 
     public StringTextControlWrapper createTextField() {

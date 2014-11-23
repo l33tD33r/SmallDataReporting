@@ -12,10 +12,10 @@ import javafx.util.Callback;
 import l33tD33r.app.database.form.Form;
 import l33tD33r.app.database.form.data.Collection;
 import l33tD33r.app.database.form.data.Element;
-import l33tD33r.app.database.form.view.Column;
-import l33tD33r.app.database.form.view.Table;
+import l33tD33r.app.database.form.view.*;
 import l33tD33r.app.ui.workspace.data.DataRecordReference;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 
 /**
@@ -72,7 +72,7 @@ public class TableWrapper extends CollectionControlWrapper {
 
         private Column column;
 
-        private TableColumn<Element,DataRecordReference> tableColumn;
+        private TableColumn<Element,Object> tableColumn;
 
         public ColumnWrapper(Form form, Column column) {
             this.form = form;
@@ -85,19 +85,19 @@ public class TableWrapper extends CollectionControlWrapper {
             tableColumn.setPrefWidth(100);
             tableColumn.setEditable(true);
 
-            tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Element, DataRecordReference>, ObservableValue<DataRecordReference>>() {
+            tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Element, Object>, ObservableValue<Object>>() {
                 @Override
-                public ObservableValue<DataRecordReference> call(TableColumn.CellDataFeatures<Element, DataRecordReference> param) {
-                    return new SimpleObjectProperty<DataRecordReference>();
+                public ObservableValue<Object> call(TableColumn.CellDataFeatures<Element, Object> param) {
+                    return new SimpleObjectProperty<Object>();
                 }
             });
 
-            tableColumn.setCellFactory(new Callback<TableColumn<Element, DataRecordReference>, TableCell<Element, DataRecordReference>>() {
+            tableColumn.setCellFactory(new Callback<TableColumn<Element, Object>, TableCell<Element, Object>>() {
                 @Override
-                public TableCell<Element, DataRecordReference> call(TableColumn<Element, DataRecordReference> param) {
+                public TableCell<Element, Object> call(TableColumn<Element, Object> param) {
 //                    return new PropertyTableCell(form, ColumnWrapper.this);
-                    ComboBoxTableCellWrapper cellWrapper = new ComboBoxTableCellWrapper(form, ColumnWrapper.this);
-                    return cellWrapper.getComboBoxTableCell();
+                    TableCellWrapper cellWrapper = new TableCellWrapper(form, ColumnWrapper.this);
+                    return cellWrapper.getTableCell();
                 }
             });
         }
@@ -106,7 +106,7 @@ public class TableWrapper extends CollectionControlWrapper {
             return column;
         }
 
-        public TableColumn<Element,DataRecordReference> getTableColumn() {
+        public TableColumn<Element,Object> getTableColumn() {
             return tableColumn;
         }
     }
@@ -179,6 +179,47 @@ public class TableWrapper extends CollectionControlWrapper {
         }
 
         public ComboBoxTableCell<Element,DataRecordReference> getComboBoxTableCell() {
+            return tableCell;
+        }
+    }
+
+    private static class TableCellWrapper {
+        private Form form;
+        private ColumnWrapper columnWrapper;
+
+        private TableCell<Element, Object> tableCell;
+
+        public TableCellWrapper(Form form, ColumnWrapper columnWrapper) {
+            this.form = form;
+            this.columnWrapper = columnWrapper;
+        }
+
+        public TableCell<Element,Object> getTableCell() {
+            if (tableCell == null) {
+                tableCell = createTableCell();
+            }
+            return tableCell;
+        }
+
+        private TableCell<Element,Object> createTableCell() {
+            TableCell<Element,Object> tableCell = null;
+
+            View view = columnWrapper.getColumn().getCellView();
+            switch (view.getType()) {
+                case DropDown:
+                    TableDropDownView dropDownView = (TableDropDownView)view;
+                    ArrayList<DataRecordReference> dataRecordReferences = ControlFactory.getSingleton().createReferenceRecordList(dropDownView.getTable());
+                    ArrayList<Object> objects = new ArrayList<>();
+
+                    ComboBoxTableCell<Element,Object> comboBoxTableCell = new ComboBoxTableCell<>();
+                    for (DataRecordReference reference : dataRecordReferences) {
+                        comboBoxTableCell.getItems().add(reference);
+                    }
+                    tableCell = comboBoxTableCell;
+                    break;
+                default:
+                    throw new RuntimeException(MessageFormat.format("Unknown table cell view type {0}", columnWrapper.getColumn().getCellView().getType().name()));
+            }
             return tableCell;
         }
     }
