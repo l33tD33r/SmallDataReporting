@@ -1,6 +1,7 @@
 package l33tD33r.app.ui.workspace.control;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +13,7 @@ import javafx.util.Callback;
 import l33tD33r.app.database.form.Form;
 import l33tD33r.app.database.form.data.Collection;
 import l33tD33r.app.database.form.data.Element;
+import l33tD33r.app.database.form.data.ItemSource;
 import l33tD33r.app.database.form.view.*;
 import l33tD33r.app.ui.workspace.data.DataRecordReference;
 
@@ -66,6 +68,29 @@ public class TableWrapper extends CollectionControlWrapper {
 
         setControl(tableView);
     }
+
+    @Override
+    public void updateValue() {
+        Collection collection = getForm().getCollection(getTable().getCollectionId());
+
+        for (int i=0; i < rows.size(); i++) {
+            Element element = rows.get(i);
+
+            for (ColumnWrapper columnWrapper : columnWrappers) {
+
+                Column column = columnWrapper.getColumn();
+
+                ItemSource property = element.getProperty(column.getPropertyId());
+
+                Object value = columnWrapper.getTableColumn().getCellData(element);
+
+                //ObservableValue<Object> observableValue = columnWrapper.getTableColumn().getCellObservableValue(element);
+
+                property.setValue(value);
+            }
+        }
+    }
+
     private static class ColumnWrapper {
 
         private Form form;
@@ -220,6 +245,16 @@ public class TableWrapper extends CollectionControlWrapper {
                 default:
                     throw new RuntimeException(MessageFormat.format("Unknown table cell view type {0}", columnWrapper.getColumn().getCellView().getType().name()));
             }
+
+//            tableCell.itemProperty().addListener(new ChangeListener<Object>() {
+//                @Override
+//                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+//                    String propertyId = columnWrapper.getColumn().getPropertyId();
+//
+//                    columnWrapper.get
+//                }
+//            });
+
             return tableCell;
         }
     }

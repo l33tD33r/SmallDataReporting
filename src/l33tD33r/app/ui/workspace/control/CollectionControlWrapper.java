@@ -5,8 +5,8 @@ package l33tD33r.app.ui.workspace.control;
  */
 public abstract class CollectionControlWrapper extends ControlWrapper {
 
-    @Override
-    public void updateValue() {
-        // TBD
-    }
+//    @Override
+//    public void updateValue() {
+//        // TBD
+//    }
 }
