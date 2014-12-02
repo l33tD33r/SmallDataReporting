@@ -1,6 +1,8 @@
 package l33tD33r.app.database.form.data;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -50,9 +52,21 @@ public class Collection {
         return elements.get(index);
     }
 
-    public void addElement() {
+    public Element addElement() {
         Element element = new Element();
         propertyTemplates.forEach(t -> element.addProperty(new ItemSource(t)));
         elements.add(element);
+        return element;
+    }
+
+    public void setupInitialElements(List<Map<String,String>> elementsInitialValues) {
+        for (Map<String,String> initialValues : elementsInitialValues) {
+            Element element = addElement();
+
+            for (String propertyId : initialValues.keySet()) {
+                ItemSource property = element.getProperty(propertyId);
+                property.setValue(initialValues.get(propertyId));
+            }
+        }
     }
 }

@@ -13,7 +13,9 @@ import sun.plugin2.message.Message;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Simon on 10/25/2014.
@@ -129,6 +131,22 @@ public class FormSerialization {
             collection.addPropertyTemplate(createItemTemplate(propertyElement));
         }
 
+        Element elementsElement = XmlUtils.getChildElement(collectionElement, "Elements");
+        if (elementsElement != null) {
+            ArrayList<Map<String,String>> elementsInitialValues = new ArrayList<>();
+            for (Element elementElement : XmlUtils.getChildElements(elementsElement, "Element")) {
+                Map<String,String> initialValues = new HashMap<>();
+                for (Element valueElement : XmlUtils.getChildElements(elementElement)) {
+                    String key = valueElement.getTagName();
+                    String propertyValue = XmlUtils.getStringValue(valueElement);
+                    initialValues.put(key, propertyValue);
+                }
+                elementsInitialValues.add(initialValues);
+            }
+
+            collection.setupInitialElements(elementsInitialValues);
+        }
+
         return collection;
     }
 
@@ -221,7 +239,12 @@ public class FormSerialization {
 
             String header = columnElement.getAttribute("header");
 
-            View cellView = createView(columnElement);
+            Element cellEditorElement = XmlUtils.getChildElement(columnElement, "CellEditor");
+
+            View cellView = null;
+            if (cellEditorElement != null) {
+                cellView = createView(cellEditorElement);
+            }
 
             Column column = new Column(property, header, cellView);
             table.addColumn(column);
@@ -380,8 +403,6 @@ public class FormSerialization {
             if (propertyTemplate == null) {
                 throw new RuntimeException(MessageFormat.format("Collection '{0}' does not contain a property '{1}'", collectionId, propertyId));
             }
-
-
         }
 
         return new CollectionRefSource();

@@ -71,18 +71,44 @@
         <Collections>
             <Collection id="SettlersGamePlayers">
                 <Properties>
+                    <Property id="StartPosition" type="Integer" />
                     <Property id="Player" type="Reference" table="Player"/>
                     <Property id="Color" type="Reference" table="SettlersOfCatan_Color"/>
                     <Property id="GamePlayer" type="Reference" table="GamePlayer"/>
                 </Properties>
+                <Elements>
+                    <Element>
+                        <StartPosition>1</StartPosition>
+                    </Element>
+                    <Element>
+                        <StartPosition>2</StartPosition>
+                    </Element>
+                    <Element>
+                        <StartPosition>3</StartPosition>
+                    </Element>
+                    <Element>
+                        <StartPosition>4</StartPosition>
+                    </Element>
+                    <Element>
+                        <StartPosition>5</StartPosition>
+                    </Element>
+                    <Element>
+                        <StartPosition>6</StartPosition>
+                    </Element>
+                </Elements>
             </Collection>
         </Collections>
         <Views>
             <View model="Item" item="Location" label="Location" type="DropDown" source="Table" table="Location" />
             <View model="Collection" collection="SettlersGamePlayers" label="Players" type="Table">
                 <Columns>
-                    <Column model="Property" property="Player" header="Player" type="DropDown" source="Table" table="Player"/>
-                    <Column model="Property" property="Color" header="Color" type="DropDown" source="Table" table="SettlersOfCatan_Color"/>
+                    <Column model="Property" property="StartPosition" header="Start Position"/>
+                    <Column model="Property" property="Player" header="Player">
+                        <CellEditor type="DropDown" source="Table" table="Player"/>
+                    </Column>
+                    <Column model="Property" property="Color" header="Color">
+                        <CellEditor type="DropDown" source="Table" table="SettlersOfCatan_Color"/>
+                    </Column>
                 </Columns>
             </View>
         </Views>

@@ -19,6 +19,7 @@ import l33tD33r.app.ui.workspace.data.DataRecordReference;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Simon on 2014-10-31.
@@ -51,7 +52,7 @@ public class TableWrapper extends CollectionControlWrapper {
 
         for (Column column : getTable().getColumns()) {
 
-            ColumnWrapper columnWrapper = new ColumnWrapper(getForm(), column);
+            ColumnWrapper columnWrapper = new ColumnWrapper(getForm(), column, rows);
 
             columnWrappers.add(columnWrapper);
 
@@ -59,11 +60,6 @@ public class TableWrapper extends CollectionControlWrapper {
         }
 
         Collection collection = getForm().getCollection(getTable().getCollectionId());
-
-        for (int i=0; i<6; i++) {
-            collection.addElement();
-        }
-
         rows.addAll(collection.getElements());
 
         setControl(tableView);
@@ -71,24 +67,22 @@ public class TableWrapper extends CollectionControlWrapper {
 
     @Override
     public void updateValue() {
-        Collection collection = getForm().getCollection(getTable().getCollectionId());
-
-        for (int i=0; i < rows.size(); i++) {
-            Element element = rows.get(i);
-
-            for (ColumnWrapper columnWrapper : columnWrappers) {
-
-                Column column = columnWrapper.getColumn();
-
-                ItemSource property = element.getProperty(column.getPropertyId());
-
-                Object value = columnWrapper.getTableColumn().getCellData(element);
-
-                //ObservableValue<Object> observableValue = columnWrapper.getTableColumn().getCellObservableValue(element);
-
-                property.setValue(value);
-            }
-        }
+//        Collection collection = getForm().getCollection(getTable().getCollectionId());
+//
+//        for (int i=0; i < rows.size(); i++) {
+//            Element element = rows.get(i);
+//
+//            for (ColumnWrapper columnWrapper : columnWrappers) {
+//
+//                Column column = columnWrapper.getColumn();
+//
+//                ItemSource property = element.getProperty(column.getPropertyId());
+//
+//                Object value = columnWrapper.getTableColumn().getCellData(element);
+//
+//                //ObservableValue<Object> observableValue = columnWrapper.getTableColumn().getCellObservableValue(element);
+//            }
+//        }
     }
 
     private static class ColumnWrapper {
@@ -97,18 +91,21 @@ public class TableWrapper extends CollectionControlWrapper {
 
         private Column column;
 
+        private List<Element> rows;
+
         private TableColumn<Element,Object> tableColumn;
 
-        public ColumnWrapper(Form form, Column column) {
+        public ColumnWrapper(Form form, Column column, List<Element> rows) {
             this.form = form;
             this.column = column;
+            this.rows = rows;
 
             tableColumn = new TableColumn<>();
             tableColumn.setText(column.getHeader());
             tableColumn.setMinWidth(50);
             tableColumn.setMaxWidth(500);
             tableColumn.setPrefWidth(100);
-            tableColumn.setEditable(true);
+            tableColumn.setEditable(column.isEditable());
 
             tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Element, Object>, ObservableValue<Object>>() {
                 @Override
@@ -120,11 +117,18 @@ public class TableWrapper extends CollectionControlWrapper {
             tableColumn.setCellFactory(new Callback<TableColumn<Element, Object>, TableCell<Element, Object>>() {
                 @Override
                 public TableCell<Element, Object> call(TableColumn<Element, Object> param) {
-//                    return new PropertyTableCell(form, ColumnWrapper.this);
-                    TableCellWrapper cellWrapper = new TableCellWrapper(form, ColumnWrapper.this);
+                    TableCellWrapper cellWrapper = new TableCellWrapper(ColumnWrapper.this);
                     return cellWrapper.getTableCell();
                 }
             });
+        }
+
+        public Form getForm() {
+            return form;
+        }
+
+        public List<Element> getRows() {
+            return rows;
         }
 
         public Column getColumn() {
@@ -209,13 +213,11 @@ public class TableWrapper extends CollectionControlWrapper {
     }
 
     private static class TableCellWrapper {
-        private Form form;
         private ColumnWrapper columnWrapper;
 
         private TableCell<Element, Object> tableCell;
 
-        public TableCellWrapper(Form form, ColumnWrapper columnWrapper) {
-            this.form = form;
+        public TableCellWrapper(ColumnWrapper columnWrapper) {
             this.columnWrapper = columnWrapper;
         }
 
@@ -227,33 +229,40 @@ public class TableWrapper extends CollectionControlWrapper {
         }
 
         private TableCell<Element,Object> createTableCell() {
-            TableCell<Element,Object> tableCell = null;
+            final TableCell<Element,Object> tableCell;
 
             View view = columnWrapper.getColumn().getCellView();
-            switch (view.getType()) {
-                case DropDown:
-                    TableDropDownView dropDownView = (TableDropDownView)view;
-                    ArrayList<DataRecordReference> dataRecordReferences = ControlFactory.getSingleton().createReferenceRecordList(dropDownView.getTable());
-                    ArrayList<Object> objects = new ArrayList<>();
-
-                    ComboBoxTableCell<Element,Object> comboBoxTableCell = new ComboBoxTableCell<>();
-                    for (DataRecordReference reference : dataRecordReferences) {
-                        comboBoxTableCell.getItems().add(reference);
-                    }
-                    tableCell = comboBoxTableCell;
-                    break;
-                default:
-                    throw new RuntimeException(MessageFormat.format("Unknown table cell view type {0}", columnWrapper.getColumn().getCellView().getType().name()));
+            if (view == null) {
+//                throw new RuntimeException(MessageFormat.format("Cannot create a TableCell for Column {0} because it is not editable", columnWrapper.getColumn().getPropertyId()));
+                tableCell = new TableCell<>();
+            } else {
+                switch (view.getType()) {
+                    case DropDown:
+                        TableDropDownView dropDownView = (TableDropDownView) view;
+                        ArrayList<DataRecordReference> dataRecordReferences = ControlFactory.getSingleton().createReferenceRecordList(dropDownView.getTable());
+                        ComboBoxTableCell<Element, Object> comboBoxTableCell = new ComboBoxTableCell<>(dataRecordReferences.toArray());
+                        comboBoxTableCell.setItem(dataRecordReferences.get(0));
+                        tableCell = comboBoxTableCell;
+                        break;
+                    default:
+                        throw new RuntimeException(MessageFormat.format("Unknown table cell view type {0}", columnWrapper.getColumn().getCellView().getType().name()));
+                }
             }
+            tableCell.itemProperty().addListener(new ChangeListener<Object>() {
+                @Override
+                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+                    String propertyId = columnWrapper.getColumn().getPropertyId();
 
-//            tableCell.itemProperty().addListener(new ChangeListener<Object>() {
-//                @Override
-//                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
-//                    String propertyId = columnWrapper.getColumn().getPropertyId();
-//
-//                    columnWrapper.get
-//                }
-//            });
+                    int index = tableCell.getTableRow().getIndex();
+
+                    if (index >= columnWrapper.getRows().size()) {
+                        return;
+                    }
+                    Element element = columnWrapper.getRows().get(index);
+                    ItemSource property = element.getProperty(propertyId);
+                    property.setValue(newValue);
+                }
+            });
 
             return tableCell;
         }

@@ -1,16 +1,21 @@
 package l33tD33r.app.database.form.data;
 
+import java.util.ArrayList;
+
 /**
  * Created by Simon on 2014-11-16.
  */
-public class CollectionRefSource implements ValueSource {
-    @Override
-    public DataType getType() {
-        return DataType.String;
-    }
+public class CollectionRefSource {
 
-    @Override
-    public Object getValue() {
-        return null;
+    private Collection collection;
+
+    public ArrayList<ElementRefSource> getElementSources() {
+        ArrayList<ElementRefSource> elementSources = new ArrayList<>();
+
+        for (Element element : collection.getElements()) {
+
+        }
+
+        return elementSources;
     }
 }

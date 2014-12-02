@@ -39,4 +39,8 @@ public class Column extends CollectionComponent {
     private void setCellView(View cellView) {
         this.cellView = cellView;
     }
+
+    public boolean isEditable() {
+        return getCellView() != null;
+    }
 }
