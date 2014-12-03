@@ -349,8 +349,6 @@ public class FormSerialization {
                 return createItemRefSource(sourceElement);
             case "Value":
                 return createFixedValueSource(sourceElement);
-            case "Collection":
-                return createCollectionSource(sourceElement);
             default:
                 throw new RuntimeException("Unknown source type:" + sourceType);
         }
@@ -378,6 +376,33 @@ public class FormSerialization {
         }
         DataType type = DataType.valueOf(typeName);
         return new FixedValueSource(type, type.parse(stringValue));
+    }
+
+    private ValueSource createCollectionValueSource(Collection collection, Element sourceElement) {
+        String sourceType = sourceElement.getAttribute("source");
+
+        switch (sourceType) {
+            case "Property":
+                return createPropertyRefSource(collection, sourceElement);
+            case "Value":
+                return createFixedValueSource(sourceElement);
+            default:
+                throw new RuntimeException("Unknown collection source type:" + sourceType);
+        }
+    }
+
+    private PropertyRefSource createPropertyRefSource(Collection collection, Element sourceElement) {
+        String propertyId = sourceElement.getAttribute("property");
+
+        if (propertyId == null || propertyId.isEmpty()) {
+            throw new RuntimeException("PropertyRefSource - no property id specified");
+        }
+
+        ItemTemplate propertyTemplate = collection.getPropertyTemplate(propertyId);
+
+        PropertyRefSource propertySource = new PropertyRefSource();
+        propertySource.setPropertyTemplate(propertyTemplate);
+        return propertySource;
     }
 
     private CollectionRefSource createCollectionSource(Element sourceElement) {

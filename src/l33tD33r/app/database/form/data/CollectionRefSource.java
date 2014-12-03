@@ -9,11 +9,24 @@ public class CollectionRefSource {
 
     private Collection collection;
 
+    public CollectionRefSource() {
+
+    }
+
+    public Collection getCollection() {
+        return collection;
+    }
+    public void setCollection(Collection collection) {
+        this.collection = collection;
+    }
+
     public ArrayList<ElementRefSource> getElementSources() {
         ArrayList<ElementRefSource> elementSources = new ArrayList<>();
 
         for (Element element : collection.getElements()) {
+            ElementRefSource elementSource = new ElementRefSource(element);
 
+            elementSources.add(elementSource);
         }
 
         return elementSources;
