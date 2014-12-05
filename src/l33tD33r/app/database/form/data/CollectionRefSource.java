@@ -1,6 +1,9 @@
 package l33tD33r.app.database.form.data;
 
+import l33tD33r.app.database.form.action.Field;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Simon on 2014-11-16.
@@ -8,6 +11,10 @@ import java.util.ArrayList;
 public class CollectionRefSource {
 
     private Collection collection;
+
+    private ArrayList<PropertyRefSource> propertySources;
+
+    private ArrayList<Field> fields;
 
     public CollectionRefSource() {
 
@@ -20,6 +27,20 @@ public class CollectionRefSource {
         this.collection = collection;
     }
 
+    public ArrayList<PropertyRefSource> getPropertySources() {
+        return propertySources;
+    }
+    public void setPropertySources(List<PropertyRefSource> propertySources) {
+        this.propertySources = new ArrayList<>(propertySources);
+    }
+
+    public ArrayList<Field> getFields() {
+        return fields;
+    }
+    public void setFields(List<Field> fields) {
+        this.fields = new ArrayList<>(fields);
+    }
+
     public ArrayList<ElementRefSource> getElementSources() {
         ArrayList<ElementRefSource> elementSources = new ArrayList<>();
 
@@ -30,5 +51,9 @@ public class CollectionRefSource {
         }
 
         return elementSources;
+    }
+
+    public void updateCurrentElement(Element element) {
+        getPropertySources().forEach(s -> s.setCurrentElement(element));
     }
 }

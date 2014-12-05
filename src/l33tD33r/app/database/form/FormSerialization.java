@@ -1,6 +1,7 @@
 package l33tD33r.app.database.form;
 
 import l33tD33r.app.database.form.action.Action;
+import l33tD33r.app.database.form.action.BatchInsertAction;
 import l33tD33r.app.database.form.action.Field;
 import l33tD33r.app.database.form.action.InsertAction;
 import l33tD33r.app.database.form.data.*;
@@ -9,7 +10,6 @@ import l33tD33r.app.database.form.view.*;
 import l33tD33r.app.database.utility.XmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import sun.plugin2.message.Message;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -284,17 +284,61 @@ public class FormSerialization {
             throw new RuntimeException("InsertAction has no fields defined");
         }
         for (Element fieldElement : XmlUtils.getChildElements(fieldsElement, "Field")) {
-            Field field = new Field();
-
-            String name = fieldElement.getAttribute("name");
-            field.setName(name);
-
-            field.setValueSource(createValueSource(fieldElement));
+            Field field = createField(fieldElement);
 
             insertAction.addField(field);
         }
 
         return insertAction;
+    }
+
+    private BatchInsertAction createBatchInsertAction(Element actionElement) {
+        BatchInsertAction batchInsertAction = new BatchInsertAction();
+
+        String table = actionElement.getAttribute("table");
+        batchInsertAction.setTable(table);
+
+        String sourceCollectionId = actionElement.getAttribute("sourceCollection");
+        Collection sourceCollection = form.getCollection(sourceCollectionId);
+        batchInsertAction.setSourceCollection(sourceCollection);
+
+        String updatePropertyId = actionElement.getAttribute("updateProperty");
+        if (updatePropertyId != null && !updatePropertyId.isEmpty()) {
+            batchInsertAction.setUpdatePropertyId(updatePropertyId);
+        }
+
+        Element fieldsElement = XmlUtils.getChildElement(actionElement, "Fields");
+
+        for (Element fieldElement : XmlUtils.getChildElements(fieldsElement, "Field")) {
+            Field field = createBatchField(fieldElement, sourceCollection);
+
+            batchInsertAction.addFields(field);
+        }
+
+        return batchInsertAction;
+    }
+
+    private Field createField(Element fieldElement) {
+        return createFieldInner(fieldElement, null);
+    }
+    private Field createBatchField(Element fieldElement, Collection collection) {
+        return createFieldInner(fieldElement, collection);
+    }
+    private Field createFieldInner(Element fieldElement, Collection collection) {
+        Field field = new Field();
+
+        String name = fieldElement.getAttribute("name");
+        field.setName(name);
+
+        ValueSource valueSource = null;
+        if (collection != null) {
+            valueSource = createCollectionValueSource(collection, fieldElement);
+        } else {
+            valueSource = createValueSource(fieldElement);
+        }
+        field.setValueSource(valueSource);
+
+        return field;
     }
 
     private Output createOutput(Element outputElement) {
