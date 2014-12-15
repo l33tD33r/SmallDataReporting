@@ -25,20 +25,26 @@ public class FieldNode extends ExpressionNode {
 		}
 		Object value = null;
 		DataRecord currentRecord = ((TableDataRow)dataRow).getDataRecord();
-		for (int i=0; i < fieldPath.length; i++) {
-			String field = fieldPath[i];
-			DataField dataField = currentRecord.getField(field);
-			FieldType fieldType = dataField.getType();
-			if (i < fieldPath.length - 1) {
-				if (fieldType != FieldType.Reference) {
-					throw new RuntimeException("Field '" + field + "' must be a reference field");
+		if (currentRecord != null && fieldPath != null) {
+			for (int i = 0; i < fieldPath.length; i++) {
+				String field = fieldPath[i];
+				DataField dataField = currentRecord.getField(field);
+				FieldType fieldType = dataField.getType();
+				if (i < fieldPath.length - 1) {
+					if (fieldType != FieldType.Reference) {
+						throw new RuntimeException("Field '" + field + "' must be a reference field");
+					}
+					currentRecord = dataField.getReferenceDataRecord();
+
+					if (currentRecord == null) {
+						throw new RuntimeException("Reference field not found");
+					}
+				} else {
+					if (fieldType == FieldType.Reference) {
+						throw new RuntimeException("Field '" + field + "' cannot be a reference field");
+					}
+					value = dataField.getValue();
 				}
-				currentRecord = dataField.getReferenceDataRecord();
-			} else {
-				if (fieldType == FieldType.Reference) {
-					throw new RuntimeException("Field '" + field + "' cannot be a reference field");
-				}
-				value = dataField.getValue();
 			}
 		}
 		return value;

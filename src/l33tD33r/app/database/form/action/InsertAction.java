@@ -4,6 +4,7 @@ import l33tD33r.app.database.data.DataManager;
 import l33tD33r.app.database.data.DataRecord;
 import l33tD33r.app.database.data.DataRecordExistsException;
 import l33tD33r.app.database.form.data.ItemSource;
+import l33tD33r.app.ui.workspace.data.DataRecordReference;
 
 import java.util.ArrayList;
 
@@ -49,7 +50,11 @@ public class InsertAction extends Action {
         DataRecord newRecord = DataManager.getSingleton().createNewRecord(getTable());
 
         for (Field field : getFields()) {
-            newRecord.getField(field.getName()).setValue(field.getValueSource().getValue());
+            Object value = field.getValueSource().getValue();
+            if (value instanceof DataRecordReference) {
+                value = ((DataRecordReference)value).getId();
+            }
+            newRecord.getField(field.getName()).setValue(value);
         }
 
         try {

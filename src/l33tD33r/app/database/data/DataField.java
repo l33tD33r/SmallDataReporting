@@ -52,6 +52,11 @@ public class DataField {
 			case String:
 			case Reference:
 				return (String)value;
+//			case Reference:
+//				if (referenceDataRecord == null) {
+//					return null;
+//				}
+//				return referenceDataRecord.getId();
 			case Integer:
 				return ((Integer)value).toString();
 			case Number:
@@ -119,6 +124,9 @@ public class DataField {
 	
 	@Override
 	public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		}
 		if (o instanceof DataField) {
 			return equals((DataField)o);
 		}
@@ -126,6 +134,12 @@ public class DataField {
 	}
 	
 	private boolean equals(DataField field) {
+		if (field == null) {
+			return false;
+		}
+		if (getValue() == null) {
+			return false;
+		}
 		return getName().equalsIgnoreCase(field.getName()) && getValue().equals(field.getValue());
 	}
 	

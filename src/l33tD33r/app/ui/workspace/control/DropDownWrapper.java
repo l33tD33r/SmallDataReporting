@@ -25,4 +25,9 @@ public class DropDownWrapper<TItem, TData> extends ItemControlWrapper<TData> {
     public TData getValue() {
         return valueConverter.convertData(getComboBox().getValue());
     }
+
+    @Override
+    protected void setValue(TData value) {
+        getComboBox().setValue(value == null ? null : valueConverter.invertData(value));
+    }
 }

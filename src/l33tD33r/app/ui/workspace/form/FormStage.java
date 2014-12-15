@@ -4,11 +4,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import l33tD33r.app.database.form.Form;
@@ -39,11 +37,9 @@ public class FormStage extends Stage {
 
     private Scene createScene() {
         BorderPane rootNode = new BorderPane();
-        GridPane fieldsPanel = new GridPane();
-
+        VBox fieldsPanel = new VBox();
         fieldsPanel.setPadding(new Insets(5, 5, 5, 5));
-        fieldsPanel.setHgap(5);
-        fieldsPanel.setVgap(5);
+        fieldsPanel.setSpacing(10);
         rootNode.setCenter(fieldsPanel);
 
         int row = 0;
@@ -53,18 +49,14 @@ public class FormStage extends Stage {
             ControlWrapper controlWrapper = ControlFactory.getSingleton().createControl(form, view);
             controls.add(controlWrapper);
 
-            Label label = new Label(controlWrapper.getLabel() + ":");
-
-            Control control = controlWrapper.getControl();
-
-            fieldsPanel.add(label, 0, row++);
-            fieldsPanel.add(control, 0, row++);
+            fieldsPanel.getChildren().add(controlWrapper.getRegion());
 
             //row++;
         }
 
         HBox buttonPanel = new HBox();
         buttonPanel.setPadding(new Insets(5, 5, 5, 5));
+        buttonPanel.setSpacing(10);
 
         Button runButton = new Button("Run");
         runButton.setOnAction(e -> {
@@ -89,7 +81,7 @@ public class FormStage extends Stage {
 
     private void run() {
         for (ControlWrapper control : controls) {
-            control.updateValue();
+            control.applyControlValue();
         }
 
         FormController formController = new FormController();

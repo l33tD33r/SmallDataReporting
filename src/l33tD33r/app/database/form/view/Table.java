@@ -9,6 +9,10 @@ public class Table extends View {
 
     private String collectionId;
 
+    private boolean allowAdd = false;
+    private boolean allowRemove = false;
+    private boolean allowMove = false;
+
     private ArrayList<Column> columns;
 
     public Table() {
@@ -25,6 +29,27 @@ public class Table extends View {
     }
     public void setCollectionId(String collectionId) {
         this.collectionId = collectionId;
+    }
+
+    public boolean isAllowAdd() {
+        return allowAdd;
+    }
+    public void setAllowAdd(boolean allowAdd) {
+        this.allowAdd = allowAdd;
+    }
+
+    public boolean isAllowRemove() {
+        return allowRemove;
+    }
+    public void setAllowRemove(boolean allowRemove) {
+        this.allowRemove = allowRemove;
+    }
+
+    public boolean isAllowMove() {
+        return allowMove;
+    }
+    public void setAllowMove(boolean allowMove) {
+        this.allowMove = allowMove;
     }
 
     public ArrayList<Column> getColumns() {

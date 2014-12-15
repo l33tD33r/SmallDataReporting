@@ -5,6 +5,16 @@ package l33tD33r.app.ui.workspace.control;
  */
 public class StringTextControlWrapper extends TextControlWrapper<String> {
     public StringTextControlWrapper() {
-        setValueConverter(s -> s);
+        setValueConverter(new DataConverter<String, String>() {
+            @Override
+            public String convertData(String s) {
+                return s;
+            }
+
+            @Override
+            public String invertData(String s) {
+                return s;
+            }
+        });
     }
 }

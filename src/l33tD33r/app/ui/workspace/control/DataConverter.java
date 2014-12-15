@@ -5,4 +5,6 @@ package l33tD33r.app.ui.workspace.control;
  */
 public interface DataConverter<TInput, TOutput> {
     TOutput convertData(TInput input);
+
+    TInput invertData(TOutput output);
 }

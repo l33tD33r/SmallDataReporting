@@ -10,6 +10,12 @@ public class Date extends DateTimeRoot implements Comparable<Date> {
 	
 	public static Date valueOf(String dateString) {
 		try {
+			switch (dateString.toLowerCase()) {
+				case "today":
+					return today();
+				case "past":
+					return past();
+			}
 			return new Date(dateFormater.parse(dateString));
 		} catch (ParseException e) {
 			throw new RuntimeException(e);

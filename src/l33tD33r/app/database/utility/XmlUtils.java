@@ -131,6 +131,15 @@ public class XmlUtils {
         element.appendChild(textNode);
     }
 
+    public static String getAttributeStringValue(Element element, String attributeName) {
+        return element.getAttribute(attributeName);
+    }
+
+    public static Boolean getAttributeBooleanValue(Element element, String attributeName) {
+        String stringValue = getAttributeStringValue(element, attributeName);
+        return Boolean.parseBoolean(stringValue);
+    }
+
     public static String serializeDocumentToXml(Document document) {
         StringBuilder sb = new StringBuilder();
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -187,6 +196,9 @@ public class XmlUtils {
     }
 
     private static String escapeInvalidCharacters(String textContent) {
+        if (textContent == null) {
+            return null;
+        }
         StringBuilder sb = new StringBuilder();
         for (int i=0; i < textContent.length(); i++) {
             char c = textContent.charAt(i);

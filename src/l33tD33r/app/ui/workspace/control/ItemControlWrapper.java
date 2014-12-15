@@ -9,8 +9,10 @@ public abstract class ItemControlWrapper<TData> extends ControlWrapper {
 
     public abstract TData getValue();
 
+    protected abstract void setValue(TData value);
+
     @Override
-    public void updateValue() {
+    public void applyControlValue() {
         updateItemValue(getView().getItemId(), getValue());
     }
 
@@ -22,6 +24,8 @@ public abstract class ItemControlWrapper<TData> extends ControlWrapper {
 
     @Override
     public void setupControl() {
+        ItemSource itemSource = getForm().getItem(getView().getItemId());
 
+        setValue((TData) itemSource.getValue());
     }
 }

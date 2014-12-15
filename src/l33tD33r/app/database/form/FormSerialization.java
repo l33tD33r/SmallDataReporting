@@ -111,6 +111,11 @@ public class FormSerialization {
 
         ItemSource itemSource = new ItemSource(template);
 
+        String value = itemElement.getAttribute("value");
+        if (value != null && !value.isEmpty()) {
+            itemSource.setStringValue(value);
+        }
+
         return itemSource;
     }
 
@@ -168,6 +173,12 @@ public class FormSerialization {
             case "IntegerField":
                 view = createIntegerFieldView();
                 break;
+            case "BooleanCheckBox":
+                view = createBooleanCheckBoxView();
+                break;
+            case "DatePicker":
+                view = createDatePickerView();
+                break;
             case "Table":
                 view = createTableView(viewElement);
                 break;
@@ -224,11 +235,28 @@ public class FormSerialization {
         return new IntegerFieldView();
     }
 
+    private BooleanCheckBoxView createBooleanCheckBoxView() {
+        return new BooleanCheckBoxView();
+    }
+
+    private DatePickerView createDatePickerView() {
+        return new DatePickerView();
+    }
+
     private Table createTableView(Element viewElement) {
         Table table = new Table();
 
         String collectionId = viewElement.getAttribute("collection");
         table.setCollectionId(collectionId);
+
+        Boolean allowAdd = XmlUtils.getAttributeBooleanValue(viewElement, "allowAdd");
+        table.setAllowAdd(allowAdd);
+
+        Boolean allowRemove = XmlUtils.getAttributeBooleanValue(viewElement, "allowRemove");
+        table.setAllowRemove(allowRemove);
+
+        Boolean allowMove = XmlUtils.getAttributeBooleanValue(viewElement, "allowMove");
+        table.setAllowMove(allowMove);
 
         Element columnsElement = XmlUtils.getChildElement(viewElement, "Columns");
         if (columnsElement == null) {
@@ -260,6 +288,9 @@ public class FormSerialization {
         switch (type) {
             case "Insert":
                 action = createInsertAction(actionElement);
+                break;
+            case "BatchInsert":
+                action = createBatchInsertAction(actionElement);
                 break;
             default:
                 throw new RuntimeException("Unknown action type:" + type);
@@ -300,6 +331,9 @@ public class FormSerialization {
 
         String sourceCollectionId = actionElement.getAttribute("sourceCollection");
         Collection sourceCollection = form.getCollection(sourceCollectionId);
+        if (sourceCollection == null) {
+            throw new RuntimeException(MessageFormat.format("Form does not contain a collection with id '{0}'", sourceCollectionId));
+        }
         batchInsertAction.setSourceCollection(sourceCollection);
 
         String updatePropertyId = actionElement.getAttribute("updateProperty");
@@ -430,6 +464,8 @@ public class FormSerialization {
                 return createPropertyRefSource(collection, sourceElement);
             case "Value":
                 return createFixedValueSource(sourceElement);
+            case "Item":
+                return createItemRefSource(sourceElement);
             default:
                 throw new RuntimeException("Unknown collection source type:" + sourceType);
         }
@@ -447,33 +483,5 @@ public class FormSerialization {
         PropertyRefSource propertySource = new PropertyRefSource();
         propertySource.setPropertyTemplate(propertyTemplate);
         return propertySource;
-    }
-
-    private CollectionRefSource createCollectionSource(Element sourceElement) {
-        String collectionId = sourceElement.getAttribute("collection");
-
-        Collection collection = form.getCollection(collectionId);
-
-        if (collection == null) {
-            throw new RuntimeException(MessageFormat.format("Form '{0}' does not contain a collection '{1}'", form.getName(), collectionId));
-        }
-
-        List<ItemRefSource> properties = new ArrayList<>();
-
-        Element propertiesElement = XmlUtils.getChildElement(sourceElement, "Properties");
-        if (propertiesElement == null) {
-            throw new RuntimeException("CollectionSource must include a Properties element");
-        }
-
-        for (Element propertyElement : XmlUtils.getChildElements(propertiesElement, "Property")) {
-            String propertyId = propertyElement.getAttribute("id");
-
-            ItemTemplate propertyTemplate = collection.getPropertyTemplate(propertyId);
-            if (propertyTemplate == null) {
-                throw new RuntimeException(MessageFormat.format("Collection '{0}' does not contain a property '{1}'", collectionId, propertyId));
-            }
-        }
-
-        return new CollectionRefSource();
     }
 }

@@ -2,19 +2,15 @@ package l33tD33r.app.ui.workspace.control;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import l33tD33r.app.database.data.DataManager;
 import l33tD33r.app.database.data.DataTable;
-import l33tD33r.app.database.form.view.DropDownView;
+import l33tD33r.app.database.form.view.*;
 import l33tD33r.app.database.form.Form;
-import l33tD33r.app.database.form.view.Table;
-import l33tD33r.app.database.form.view.TableDropDownView;
-import l33tD33r.app.database.form.view.View;
 import l33tD33r.app.ui.workspace.data.DataRecordReference;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by Simon on 10/26/2014.
@@ -41,6 +37,12 @@ public class ControlFactory {
                 break;
             case IntegerField:
                 control = createIntegerField();
+                break;
+            case BooleanCheckBox:
+                control = createBooleanCheckBox();
+                break;
+            case DatePicker:
+                control = createDatePicker();
                 break;
             case Table:
                 control = createTable((Table)view);
@@ -73,9 +75,24 @@ public class ControlFactory {
     }
 
     public DropDownWrapper<DataRecordReference, String> createTableDropDown(TableDropDownView tableDropDownView) {
-        DropDownWrapper<DataRecordReference, String> dropDown = new DropDownWrapper<>();
+        final DropDownWrapper<DataRecordReference, String> dropDown = new DropDownWrapper<>();
         dropDown.setComboBox(createTableComboBox(tableDropDownView.getTable()));
-        dropDown.setValueConverter(reference -> reference == null ? null : reference.getId());
+        dropDown.setValueConverter(new DataConverter<DataRecordReference, String>() {
+            @Override
+            public String convertData(DataRecordReference dataRecordReference) {
+                return dataRecordReference == null ? null : dataRecordReference.getId();
+            }
+
+            @Override
+            public DataRecordReference invertData(String s) {
+                for (DataRecordReference dataRecordReference : dropDown.getComboBox().getItems()) {
+                    if (dataRecordReference.getId().equalsIgnoreCase(s)) {
+                        return dataRecordReference;
+                    }
+                }
+                return null;
+            }
+        });
         return dropDown;
     }
 
@@ -96,25 +113,39 @@ public class ControlFactory {
         relatedDataTable.getAllRecords().forEach(
                 r -> referenceRecordList.add(new DataRecordReference(r.getId(), r.getFieldValueString(reportFieldName)))
         );
+        referenceRecordList.sort((a, b) -> a.getLabel().compareTo(b.getLabel()));
         return referenceRecordList;
     }
 
     public StringTextControlWrapper createTextField() {
         StringTextControlWrapper stringTextControlWrapper = new StringTextControlWrapper();
-        stringTextControlWrapper.setControl(new TextField());
+        stringTextControlWrapper.setTextControl(new TextField());
         return stringTextControlWrapper;
     }
 
     public StringTextControlWrapper createTextArea() {
         StringTextControlWrapper stringTextControlWrapper = new StringTextControlWrapper();
-        stringTextControlWrapper.setControl(new TextArea());
+        stringTextControlWrapper.setTextControl(new TextArea());
         return stringTextControlWrapper;
     }
 
     public IntegerTextControlWrapper createIntegerField() {
         IntegerTextControlWrapper integerTextControlWrapper = new IntegerTextControlWrapper();
-        integerTextControlWrapper.setControl(new TextField());
+        integerTextControlWrapper.setTextControl(new TextField());
         return integerTextControlWrapper;
+    }
+
+    public BooleanCheckBoxControlWrapper createBooleanCheckBox() {
+        BooleanCheckBoxControlWrapper booleanCheckBoxControlWrapper = new BooleanCheckBoxControlWrapper();
+        booleanCheckBoxControlWrapper.setCheckBoxControl(new CheckBox());
+        return booleanCheckBoxControlWrapper;
+    }
+
+    public DatePickerWrapper createDatePicker() {
+        DatePickerWrapper datePickerWrapper = new DatePickerWrapper();
+        DatePicker datePicker = new DatePicker();
+        datePickerWrapper.setDatePicker(datePicker);
+        return datePickerWrapper;
     }
 
     public TableWrapper createTable(Table table) {

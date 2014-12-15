@@ -87,7 +87,7 @@ public class ReportView {
             dataColumn.setMinWidth(50);
             dataColumn.setMaxWidth(200);
             dataColumn.setPrefWidth(100);
-            dataColumn.setCellValueFactory(new MapValueFactory<String>(field.getName()));
+            dataColumn.setCellValueFactory(new MapValueFactory<>(field.getName()));
             dataColumn.setCellFactory(cellFactoryForMap);
 
             tableView.getColumns().add(dataColumn);

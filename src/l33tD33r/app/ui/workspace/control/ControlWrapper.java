@@ -1,6 +1,10 @@
 package l33tD33r.app.ui.workspace.control;
 
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import l33tD33r.app.database.form.Form;
 import l33tD33r.app.database.form.data.ItemSource;
 import l33tD33r.app.database.form.view.View;
@@ -15,6 +19,8 @@ public abstract class ControlWrapper {
     private View view;
 
     private Control control;
+
+    private Region region;
 
     public Form getForm() {
         return form;
@@ -34,14 +40,31 @@ public abstract class ControlWrapper {
         return view.getLabel();
     }
 
-    public Control getControl() {
+    protected Control getControl() {
         return control;
     }
-    public void setControl(Control control) {
+    protected void setControl(Control control) {
         this.control = control;
     }
 
-    public abstract void updateValue();
+    public final Region getRegion() {
+        if (region == null) {
+            region = createRegion();
+        }
+        return region;
+    }
+
+    protected Region createRegion() {
+        VBox vBox = new VBox();
+        vBox.setSpacing(0);
+
+        Label label = new Label(getLabel() + ":");
+
+        vBox.getChildren().addAll(label, getControl());
+        return vBox;
+    }
+
+    public abstract void applyControlValue();
 
     public abstract void setupControl();
 }

@@ -1,9 +1,11 @@
 package l33tD33r.app.ui;
 
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.InputEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import l33tD33r.app.database.data.DataManager;
@@ -106,10 +108,18 @@ public class Main extends Application {
 
         FormManager.createSingleton(formProvider);
 
-        File existingDataFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\" + DATA_FILE_NAME);
-        File transactionDataFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\transaction." + DATA_FILE_NAME);
+        final File existingDataFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\" + DATA_FILE_NAME);
+        final File transactionDataFile = new File(DATA_RESOURCE_DIRECTORY_PATH + "\\transaction." + DATA_FILE_NAME);
 
         FileUtils.copyFile(existingDataFile, transactionDataFile);
+
+        saveAction = () -> {
+            try {
+                FileUtils.copyFile(transactionDataFile, existingDataFile);
+            } catch (IOException e) {
+                throw new RuntimeException("Error attempting to save data file", e);
+            }
+        };
 
         dataProvider = new FileDataProvider(transactionDataFile.getAbsolutePath());
 
@@ -131,4 +141,15 @@ public class Main extends Application {
     public static final String FORM_FILE_NAME = "form.xml";
 
     public static final String DATA_FILE_NAME = "data.xml";
+
+    private Runnable saveAction;
+
+    @FXML
+    private void handleSaveDataChanges(final InputEvent event) {
+        saveData();
+    }
+
+    private void saveData() {
+        saveAction.run();
+    }
 }

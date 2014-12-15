@@ -21,4 +21,9 @@ public class TextControlWrapper<TData> extends ItemControlWrapper<TData> {
     public TData getValue() {
         return valueConverter.convertData(getTextControl().getText());
     }
+
+    @Override
+    protected void setValue(TData value) {
+        getTextControl().setText(value == null ? null : value.toString());
+    }
 }

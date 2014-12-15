@@ -65,8 +65,12 @@ public class Collection {
 
             for (String propertyId : initialValues.keySet()) {
                 ItemSource property = element.getProperty(propertyId);
-                property.setValue(initialValues.get(propertyId));
+                property.setStringValue(initialValues.get(propertyId));
             }
         }
+    }
+
+    public void removeElement(int index) {
+        elements.remove(index);
     }
 }
