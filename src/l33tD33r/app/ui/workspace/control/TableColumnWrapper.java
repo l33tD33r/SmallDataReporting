@@ -1,5 +1,6 @@
 package l33tD33r.app.ui.workspace.control;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableCell;
@@ -49,7 +50,16 @@ public class TableColumnWrapper {
                 Element element = param.getValue();
                 ItemSource valueSource = element.getProperty(getColumn().getPropertyId());
                 Object value = valueSource.getValue();
-                ObservableValue<Object> observableValue = new SimpleObjectProperty<Object>(value);
+
+                ObservableValue observableValue;
+                switch (getPropertyTemplate().getType()) {
+                    case Boolean:
+                        observableValue= new SimpleBooleanProperty(value == null ? false : (Boolean)value);
+                        break;
+                    default:
+                        observableValue = new SimpleObjectProperty(value);
+                        break;
+                }
                 return observableValue;
             }
         });

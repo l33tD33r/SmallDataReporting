@@ -79,6 +79,9 @@ public abstract class Query implements IColumnMap, IContext {
 	}
 
     public String getColumnName(int columnIndex) {
+        if (columnIndex == -1) {
+            return "RowIndex";
+        }
         return getColumn(columnIndex).getName();
     }
 	
@@ -87,16 +90,20 @@ public abstract class Query implements IColumnMap, IContext {
 		ArrayList<ResultRow> groupedRows = group ? groupRows(generatedRows) : generatedRows;
         ArrayList<ResultRow> filteredRows = resultFilterExpression != null ? filterRows(groupedRows) : groupedRows;
 		ArrayList<ResultRow> sortedRows = sortRows(filteredRows);
+        for (int rowIndex=0; rowIndex<sortedRows.size();rowIndex++) {
+            sortedRows.get(rowIndex).setRowIndex(rowIndex);
+        }
 		return sortedRows.toArray(new ResultRow[sortedRows.size()]);
 	}
 	
 	private ArrayList<ResultRow> generateRows() {
 		IDataSource dataSource = getDataSource();
 		ArrayList<ResultRow> rowList = new ArrayList<ResultRow>();
+        int rowIndex = 0;
 		while (dataSource.hasMoreElements()) {
 			IDataRow dataRow = dataSource.nextElement();
 			if (includeDataRow(dataRow)) {
-				rowList.add(createRow(dataRow));
+				rowList.add(createRow(dataRow, rowIndex++));
 			}
 		}
 		return rowList;
@@ -145,7 +152,7 @@ public abstract class Query implements IColumnMap, IContext {
 		return sourceFilterExpression.evaluateBoolean(dataRow);
 	}
 
-	protected ResultRow createRow(IDataRow dataRow) {
+	protected ResultRow createRow(IDataRow dataRow, int rowIndex) {
 		ArrayList<Object> rowValues = new ArrayList<Object>();
 		for (Column column : columns) {
 			Object rowValue = column.getExpression().evaluate(dataRow);
@@ -251,11 +258,15 @@ public abstract class Query implements IColumnMap, IContext {
             this.row = row;
         }
 
+        @Override
         public IContext getContext() {
             return query;
         }
 
         private int getColumnIndex(String name) {
+            if ("RowIndex".equalsIgnoreCase(name)) {
+                return -1;
+            }
             return query.getColumnIndex(name);
         }
 

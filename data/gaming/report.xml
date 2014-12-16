@@ -787,4 +787,48 @@
             </Column>
         </Columns>
     </Report>
+    <Report type="Table">
+        <Table>SettlersOfCatan_GamePlayer</Table>
+        <Name>Settlers_GamePlayerWinnerPoints</Name>
+        <Title>Settlers Game Player Winner Points</Title>
+        <SourceFilter>
+            <Expression type="Equals">
+                <Left>
+                    <Expression type="Field">
+                        <FieldPath>GameInstance</FieldPath>
+                    </Expression>
+                </Left>
+                <Right>
+                    <Expression type="Parameter">
+                        <Name>GameInstance</Name>
+                    </Expression>
+                </Right>
+            </Expression>
+        </SourceFilter>
+        <Columns>
+            <Column>
+                <Header>Winner</Header>
+                <Width>200</Width>
+                <Name>Winner</Name>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Winner</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Boolean</DataType>
+            </Column>
+            <Column>
+                <Header>Points</Header>
+                <Width>200</Width>
+                <Name>Points</Name>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Points</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+            </Column>
+        </Columns>
+    </Report>
 </Reports>

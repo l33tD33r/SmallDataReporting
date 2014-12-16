@@ -22,5 +22,6 @@ public enum ExpressionNodeType {
 	Multiply,
 	Divide,
 	Modulo,
-	Power
+	Power,
+    RowIndex
 }

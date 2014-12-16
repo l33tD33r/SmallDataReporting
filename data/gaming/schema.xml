@@ -75,7 +75,7 @@
         </DataTable>
         <DataTable name="TwilightImperium_Option" reportField="Name">
             <KeyFields>
-                <ReferenceField name="Expansion" relatedTable="TwilightImperium_Expansion" />
+                <ReferenceField name="Expansion" relatedTable="TwilightImperium_Expansion" setFieldName="Options" />
                 <StringField name="Name" />
             </KeyFields>
         </DataTable>
@@ -89,7 +89,7 @@
                 <StringField name="Name" />
             </KeyFields>
             <DataFields>
-                <ReferenceField name="Type" relatedTable="TwilightImperium_TechnologyType" />
+                <ReferenceField name="Type" relatedTable="TwilightImperium_TechnologyType" setFieldName="Technologies"/>
             </DataFields>
         </DataTable>
         <DataTable name="TwilightImperium_ConditionOperation" reportField="Value">
@@ -99,9 +99,9 @@
         </DataTable>
         <DataTable name="TwilightImperium_TechnologyPrerequisite" reportField="Requirement">
             <DataFields>
-                <ReferenceField name="Technology" relatedTable="TwilightImperium_Technology" />
-                <ReferenceField name="Requirement" relatedTable="TwilightImperium_Technology" />
-                <ReferenceField name="RequirementCombination" relatedTable="TwilightImperium_ConditionOperation"/>
+                <ReferenceField name="Technology" relatedTable="TwilightImperium_Technology" setFieldName="TechnologiesPrerequisites"/>
+                <ReferenceField name="Requirement" relatedTable="TwilightImperium_Technology" setFieldName="TechnologiesPrerequisites"/>
+                <ReferenceField name="RequirementCombination" relatedTable="TwilightImperium_ConditionOperation" setFieldName="TechnologiesPrerequisites"/>
             </DataFields>
         </DataTable>
         <DataTable name="TwilightImperium_TechnologyType" reportField="Color">
@@ -114,8 +114,8 @@
         </DataTable>
         <DataTable name="TwilightImperium_StartingTechnology" reportField="Race|Technology">
             <DataFields>
-                <ReferenceField name="Race" relatedTable="TwilightImperium_Race" />
-                <ReferenceField name="Technology" relatedTable="TwilightImperium_Technology" />
+                <ReferenceField name="Race" relatedTable="TwilightImperium_Race" setFieldName="StartingTechnologies"/>
+                <ReferenceField name="Technology" relatedTable="TwilightImperium_Technology" setFieldName="StartingTechnologies"/>
             </DataFields>
         </DataTable>
         <DataTable name="TwilightImperium_WinType" reportField="Name">
@@ -125,16 +125,41 @@
         </DataTable>
         <DataTable name="TwilightImperium_GameInstance" reportField="GameInstance">
             <DataFields>
-                <ReferenceField name="GameInstance" relatedTable="GameInstance" />
-                <ReferenceField name="WinType" relatedTable="TwilightImperium_WinType" />
+                <ReferenceField name="GameInstance" relatedTable="GameInstance" setFieldName="TwilightImperium_GameInstances"/>
+                <ReferenceField name="WinType" relatedTable="TwilightImperium_WinType" setFieldName="GameInstances"/>
             </DataFields>
         </DataTable>
         <DataTable name="TwilightImperium_GamePlayer" reportField="Player|GameInstance">
             <DataFields>
-                <ReferenceField name="Player" relatedTable="GamePlayer" />
-                <ReferenceField name="GameInstance" relatedTable="TwilightImperium_GameInstance" />
+                <ReferenceField name="Player" relatedTable="GamePlayer" setFieldName="TwilightImperiem_GamePlayers"/>
+                <ReferenceField name="GameInstance" relatedTable="TwilightImperium_GameInstance" setFieldName="GamePlayers" />
                 <IntegerField name="Points" />
                 <BooleanField name="Winner" />
+            </DataFields>
+        </DataTable>
+        <!-- Cosmic Encounter Tables-->
+        <DataTable name="CosmicEncounter_Color" reportField="Name">
+            <KeyFields>
+                <StringField name="Name"/>
+            </KeyFields>
+        </DataTable>
+        <DataTable name="CosmicEncounter_Race" reportField="Name">
+            <KeyFields>
+                <StringField name="Name"/>
+            </KeyFields>
+        </DataTable>
+        <DataTable name="CosmicEncounter_GameInstance" reportField="GameInstance">
+            <DataFields>
+                <ReferenceField name="GameInstance" relatedTable="GameInstance" setFieldName="CosmicEncounter_GameInstances"/>
+            </DataFields>
+        </DataTable>
+        <DataTable name="CosmicEncounter_GamePlayer" reportField="GameInstance|GamePlayer">
+            <DataFields>
+                <ReferenceField name="GamePlayer" relatedTable="GamePlayer" setFieldName="CosmicEncounter_GamePlayers"/>
+                <ReferenceField name="GameInstance" relatedTable="CosmicEncounter_GameInstance" setFieldName="GamePlayers"/>
+                <ReferenceField name="Color" relatedTable="CosmicEncounter_Color" setFieldName="GamePlayers"/>
+                <ReferenceField name="Race" relatedTable="CosmicEncounter_Race" setFieldName="GamePlayers"/>
+                <IntegerField name="Points" />
             </DataFields>
         </DataTable>
 	</DataTables>

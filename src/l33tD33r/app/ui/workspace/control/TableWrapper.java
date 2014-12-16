@@ -76,10 +76,11 @@ public class TableWrapper extends CollectionControlWrapper {
             tableView.getColumns().add(columnWrapper.getTableColumn());
         }
 
-//        rows.addAll(collection.getElements())
-        if (getCollection().getElements().size() > 0) {
-            rows.add(getCollection().getElement(0));
+        Collection collection = getCollection();
+        if (collection.getElements().size() > 0) {
+            rows.add(collection.getElement(0));
         }
+        collection.setElementCountForInsert(rows.size());
 
         setControl(tableView);
     }
@@ -102,9 +103,11 @@ public class TableWrapper extends CollectionControlWrapper {
             if (getTable().isAllowAdd()) {
                 Button addButton = new Button("Add");
                 addButton.setOnAction( e-> {
-                    if (getCollection().getElements().size() > rows.size()) {
-                        rows.add(getCollection().getElement(rows.size()));
+                    Collection collection = getCollection();
+                    if (collection.getElements().size() > rows.size()) {
+                        rows.add(collection.getElement(rows.size()));
                     }
+                    collection.setElementCountForInsert(rows.size());
                 });
 
                 buttonBox.getChildren().add(addButton);
@@ -116,6 +119,7 @@ public class TableWrapper extends CollectionControlWrapper {
                     if (rows.size() > 0) {
                         rows.remove(rows.size()-1);
                     }
+                    collection.setElementCountForInsert(rows.size());
                 });
 
                 buttonBox.getChildren().add(removeButton);
@@ -133,7 +137,7 @@ public class TableWrapper extends CollectionControlWrapper {
 //        for (int i=0; i < rows.size(); i++) {
 //            Element element = rows.get(i);
 //
-//            for (ColumnWrapper columnWrapper : columnWrappers) {
+//            for (TableColumnWrapper columnWrapper : columnWrappers) {
 //
 //                Column column = columnWrapper.getColumn();
 //
@@ -141,8 +145,10 @@ public class TableWrapper extends CollectionControlWrapper {
 //
 //                Object value = columnWrapper.getTableColumn().getCellData(element);
 //
-//                //ObservableValue<Object> observableValue = columnWrapper.getTableColumn().getCellObservableValue(element);
+//                ObservableValue observableValue = columnWrapper.getTableColumn().getCellObservableValue(element);
+//
 //            }
+//
 //        }
     }
 

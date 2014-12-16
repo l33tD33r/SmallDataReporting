@@ -73,4 +73,24 @@ public class Collection {
     public void removeElement(int index) {
         elements.remove(index);
     }
+
+    private int elementCountForInsert = 0;
+
+    public int getElementCountForInsert() {
+        return elementCountForInsert;
+    }
+
+    public void setElementCountForInsert(int count) {
+        elementCountForInsert = count;
+    }
+
+    public ArrayList<Element> getInsertElements() {
+        ArrayList<Element> insertElements = new ArrayList<>();
+
+        for (int i=0; i < getElementCountForInsert(); i++) {
+            insertElements.add(getElement(i));
+        }
+
+        return insertElements;
+    }
 }

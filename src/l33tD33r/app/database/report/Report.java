@@ -4,6 +4,8 @@ import l33tD33r.app.database.query.ExpressionNode;
 import l33tD33r.app.database.query.Query;
 import l33tD33r.app.database.report.visualization.Chart;
 
+import java.util.Map;
+
 public abstract class Report {
 	
 	private String name;
@@ -17,6 +19,8 @@ public abstract class Report {
 	private Column[] columns;
 
     private ExpressionNode resultFilterExpression;
+
+    private Map<String,Object> parameters;
 
     private Chart chart;
 	
@@ -45,6 +49,7 @@ public abstract class Report {
 	public Query getQuery() {
 		if (query == null) {
 			query = createQuery();
+            query.setParameters(getParameters());
 		}
 		return query;
 	}
@@ -85,5 +90,12 @@ public abstract class Report {
 
     public void setChart(Chart chart) {
         this.chart = chart;
+    }
+
+    public Map<String,Object> getParameters() {
+        return parameters;
+    }
+    public void setParameters(Map<String,Object> parameters) {
+        this.parameters = parameters;
     }
 }

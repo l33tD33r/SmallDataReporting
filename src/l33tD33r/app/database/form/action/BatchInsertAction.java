@@ -67,7 +67,7 @@ public class BatchInsertAction extends Action {
 
     @Override
     public void execute() {
-        for (Element element : sourceCollection.getElements()) {
+        for (Element element : sourceCollection.getInsertElements()) {
             updateCurrentElement(element);
 
             DataRecord newRecord = DataManager.getSingleton().createNewRecord(getTable());

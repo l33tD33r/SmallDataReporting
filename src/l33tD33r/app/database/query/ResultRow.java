@@ -10,6 +10,9 @@ import java.text.MessageFormat;
  * Created by Simon on 8/21/2014.
  */
 public class ResultRow {
+
+    private int rowIndex = -1;
+
     private Object[] values;
 
     private IColumnMap columnMap;
@@ -19,7 +22,20 @@ public class ResultRow {
         this.columnMap = columnMap;
     }
 
+    public int getRowIndex() {
+        return rowIndex;
+    }
+    public void setRowIndex(int rowIndex) {
+        this.rowIndex = rowIndex;
+    }
+
     public Object getValue(int columnIndex) {
+        if (columnIndex == -1) {
+            if (rowIndex == -1) {
+                throw new RuntimeException("RowIndex value requested when it has an invalid value");
+            }
+            return rowIndex;
+        }
         return values[columnIndex];
     }
 

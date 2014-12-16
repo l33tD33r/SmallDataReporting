@@ -1,8 +1,13 @@
 package l33tD33r.app.database.report;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import l33tD33r.app.database.Date;
+import l33tD33r.app.database.Time;
+import l33tD33r.app.database.data.DataTable;
 import l33tD33r.app.database.query.*;
 import l33tD33r.app.database.report.visualization.Chart;
 import org.w3c.dom.Document;
@@ -176,6 +181,44 @@ public class ReportSerialization {
 		}
 		return columnList.toArray(new Column[columnList.size()]);
 	}
+
+    private Map<String,Object> createParameters(Element parametersElement) {
+        Map<String,Object> parameters = new HashMap<>();
+
+        for (Element parameterElement : XmlUtils.getChildElements(parametersElement, "Parameter")) {
+            String name = XmlUtils.getElementStringValue(parameterElement, "Name");
+            String value = XmlUtils.getElementStringValue(parameterElement, "Value");
+            String type = XmlUtils.getElementStringValue(parameterElement, "Type");
+            DataType dataType = DataType.valueOf(type);
+            Object parsedValue = null;
+            switch (dataType) {
+                case String:
+                    parsedValue = value;
+                    break;
+                case Integer:
+                    parsedValue = Integer.valueOf(value);
+                    break;
+                case Number:
+                    parsedValue = Double.valueOf(value);
+                    break;
+                case Boolean:
+                    parsedValue = Boolean.valueOf(value);
+                    break;
+                case Date:
+                    parsedValue = Date.valueOf(value);
+                    break;
+                case Time:
+                    parsedValue = Time.valueOf(value);
+                    break;
+                default:
+                    throw new RuntimeException("Unknown data type: " + dataType.name());
+            }
+
+            parameters.put(name, parsedValue);
+        }
+
+        return parameters;
+    }
 
     private static Chart createChart(Element chartElement) {
         String type = XmlUtils.getElementStringValue(chartElement, "Type");
