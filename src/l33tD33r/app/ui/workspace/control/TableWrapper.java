@@ -1,11 +1,15 @@
 package l33tD33r.app.ui.workspace.control;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
@@ -17,10 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import l33tD33r.app.database.form.Form;
-import l33tD33r.app.database.form.data.Collection;
-import l33tD33r.app.database.form.data.DataType;
-import l33tD33r.app.database.form.data.Element;
-import l33tD33r.app.database.form.data.ItemSource;
+import l33tD33r.app.database.form.data.*;
 import l33tD33r.app.database.form.view.*;
 import l33tD33r.app.ui.workspace.data.DataRecordReference;
 
@@ -37,7 +38,7 @@ public class TableWrapper extends CollectionControlWrapper {
 
     private ObservableList<Element> rows;
 
-    private ArrayList<ColumnWrapper> columnWrappers;
+    private ArrayList<TableColumnWrapper> columnWrappers;
 
     private Collection collection;
 
@@ -68,7 +69,7 @@ public class TableWrapper extends CollectionControlWrapper {
 
         for (Column column : getTable().getColumns()) {
 
-            ColumnWrapper columnWrapper = new ColumnWrapper(getForm(), column, rows);
+            TableColumnWrapper columnWrapper = new TableColumnWrapper(getForm(), getCollection(), column, rows);
 
             columnWrappers.add(columnWrapper);
 
@@ -149,14 +150,17 @@ public class TableWrapper extends CollectionControlWrapper {
 
         private Form form;
 
+        private Collection collection;
+
         private Column column;
 
         private List<Element> rows;
 
         private TableColumn<Element,Object> tableColumn;
 
-        public ColumnWrapper(Form form, Column column, List<Element> rows) {
+        public ColumnWrapper(Form form, Collection collection, Column column, List<Element> rows) {
             this.form = form;
+            this.collection = collection;
             this.column = column;
             this.rows = rows;
 
@@ -181,7 +185,12 @@ public class TableWrapper extends CollectionControlWrapper {
             tableColumn.setCellFactory(new Callback<TableColumn<Element, Object>, TableCell<Element, Object>>() {
                 @Override
                 public TableCell<Element, Object> call(TableColumn<Element, Object> param) {
-                    TableCellWrapper cellWrapper = new TableCellWrapper(ColumnWrapper.this);
+                    TableCellWrapper cellWrapper = null;
+                    switch (getPropertyTemplate().getType()) {
+                        case String:
+                            cellWrapper = new TableCellWrapper(ColumnWrapper.this);
+                            break;
+                    }
                     return cellWrapper.getTableCell();
                 }
             });
@@ -189,6 +198,10 @@ public class TableWrapper extends CollectionControlWrapper {
 
         public Form getForm() {
             return form;
+        }
+
+        public Collection getCollection() {
+            return collection;
         }
 
         public List<Element> getRows() {
@@ -202,77 +215,9 @@ public class TableWrapper extends CollectionControlWrapper {
         public TableColumn<Element,Object> getTableColumn() {
             return tableColumn;
         }
-    }
 
-    private static class PropertyTableCell extends TableCell<Element,Object> {
-
-        private Form form;
-
-        private ColumnWrapper columnWrapper;
-
-        private ItemControlWrapper controlWrapper;
-
-        public PropertyTableCell(Form form, ColumnWrapper columnWrapper) {
-            this.form = form;
-            this.columnWrapper = columnWrapper;
-
-            controlWrapper = (ItemControlWrapper)ControlFactory.getSingleton().createControl(form, columnWrapper.getColumn().getCellView());
-        }
-
-        @Override
-        public void startEdit() {
-            super.startEdit();
-
-            setText(null);
-            setGraphic(controlWrapper.getControl());
-        }
-
-        @Override
-        public void commitEdit(Object newValue) {
-            super.commitEdit(newValue);
-        }
-
-        @Override
-        public void cancelEdit() {
-            super.cancelEdit();
-
-            setGraphic(null);
-        }
-
-        @Override
-        protected void updateItem(Object item, boolean empty) {
-            super.updateItem(item, empty);
-
-            Object value = controlWrapper.getValue();
-
-            if (value != null) {
-                setText(value.toString());
-            }
-        }
-    }
-
-    private static class ComboBoxTableCellWrapper {
-
-        private Form form;
-
-        private ColumnWrapper columnWrapper;
-
-        private DropDownWrapper<DataRecordReference, String> dropDownWrapper;
-
-        private ComboBoxTableCell<Element,DataRecordReference> tableCell;
-
-        public ComboBoxTableCellWrapper(Form form, ColumnWrapper columnWrapper) {
-            super();
-            this.form = form;
-            this.columnWrapper = columnWrapper;
-
-            dropDownWrapper = (DropDownWrapper<DataRecordReference, String>)ControlFactory.getSingleton().createControl(form, columnWrapper.getColumn().getCellView());
-
-            tableCell = new ComboBoxTableCell<>(dropDownWrapper.getComboBox().getItems());
-        }
-
-        public ComboBoxTableCell<Element,DataRecordReference> getComboBoxTableCell() {
-            return tableCell;
+        private ItemTemplate getPropertyTemplate() {
+            return getCollection().getPropertyTemplate(getColumn().getPropertyId());
         }
     }
 
@@ -317,42 +262,132 @@ public class TableWrapper extends CollectionControlWrapper {
                         TableDropDownView dropDownView = (TableDropDownView) view;
                         ArrayList<DataRecordReference> dataRecordReferences = ControlFactory.getSingleton().createReferenceRecordList(dropDownView.getTable());
                         ComboBoxTableCell<Element, Object> comboBoxTableCell = new ComboBoxTableCell<>(new ReferenceStringConverter(dataRecordReferences), dataRecordReferences.toArray());
-                        //comboBoxTableCell.setItem(dataRecordReferences.get(0));
+                        comboBoxTableCell.itemProperty().addListener(new ItemPropertyListener(columnWrapper, comboBoxTableCell));
                         tableCell = comboBoxTableCell;
                         break;
                     case IntegerField:
                         IntegerFieldView integerFieldView = (IntegerFieldView)view;
                         TextFieldTableCell textFieldTableCell = new TextFieldTableCell(new DataStringConverter(DataType.Integer));
+                        textFieldTableCell.itemProperty().addListener(new ItemPropertyListener(columnWrapper, textFieldTableCell));
                         tableCell = textFieldTableCell;
                         break;
                     case BooleanCheckBox:
                         BooleanCheckBoxView booleanCheckBoxView = (BooleanCheckBoxView)view;
-                        CheckBoxTableCell checkBoxTableCell = new CheckBoxTableCell();
-                        checkBoxTableCell.setConverter(new DataStringConverter(DataType.Boolean));
+                        CheckBoxTableCell checkBoxTableCell = new CheckBoxTableCell(null, new DataStringConverter(DataType.Boolean)) {
+                            @Override
+                            public void updateItem(Object item, boolean empty) {
+                                super.updateItem(item, empty);
+
+                                Node graphic = getGraphic();
+                                if (graphic instanceof CheckBox) {
+                                    CheckBox checkBox = (CheckBox)graphic;
+
+                                    String propertyId = columnWrapper.getColumn().getPropertyId();
+
+                                    int index = getIndex();
+
+                                    if (index < 0 || index >= columnWrapper.getRows().size()) {
+                                        return;
+                                    }
+                                    Element element = columnWrapper.getRows().get(index);
+                                    ItemSource property = element.getProperty(propertyId);
+                                    property.setValue(checkBox.isSelected());
+                                }
+                            }
+                        };
+//                        checkBoxTableCell.itemProperty().addListener(new InvalidationListener() {
+//                            @Override
+//                            public void invalidated(Observable observable) {
+//                                System.out.print("CheckBox Invalided - Item Listener");
+//                            }
+//                        });
+                        checkBoxTableCell.selectedProperty().addListener(new InvalidationListener() {
+                            @Override
+                            public void invalidated(Observable observable) {
+                                System.out.print("CheckBox Invalided - Selected Listener");
+                            }
+                        });
+//                        checkBoxTableCell.itemProperty().addListener(new ItemPropertyListener(columnWrapper, checkBoxTableCell));
+                        checkBoxTableCell.selectedProperty().addListener(new BooleanPropertyListener(columnWrapper, checkBoxTableCell));
+
                         tableCell = checkBoxTableCell;
                         break;
                     default:
                         throw new RuntimeException(MessageFormat.format("Unknown table cell view type {0}", columnWrapper.getColumn().getCellView().getType().name()));
                 }
             }
-            tableCell.itemProperty().addListener(new ChangeListener<Object>() {
-                @Override
-                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
-                    String propertyId = columnWrapper.getColumn().getPropertyId();
-
-                    int index = tableCell.getTableRow().getIndex();
-
-                    if (index < 0 || index >= columnWrapper.getRows().size()) {
-                        return;
-                    }
-                    Element element = columnWrapper.getRows().get(index);
-                    ItemSource property = element.getProperty(propertyId);
-
-                    property.setValue(newValue);
-                }
-            });
+//            tableCell.itemProperty().addListener(new ChangeListener<Object>() {
+//                @Override
+//                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+//                    String propertyId = columnWrapper.getColumn().getPropertyId();
+//
+//                    int index = tableCell.getTableRow().getIndex();
+//
+//                    if (index < 0 || index >= columnWrapper.getRows().size()) {
+//                        return;
+//                    }
+//                    Element element = columnWrapper.getRows().get(index);
+//                    ItemSource property = element.getProperty(propertyId);
+//
+//                    property.setValue(newValue);
+//                }
+//            });
 
             return tableCell;
+        }
+    }
+
+    private static class ItemPropertyListener implements ChangeListener<Object> {
+
+        private ColumnWrapper columnWrapper;
+
+        private TableCell<Element,Object> tableCell;
+
+        public ItemPropertyListener(ColumnWrapper columnWrapper, TableCell<Element,Object> tableCell) {
+            this.columnWrapper = columnWrapper;
+            this.tableCell = tableCell;
+        }
+
+        @Override
+        public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+            String propertyId = columnWrapper.getColumn().getPropertyId();
+
+            int index = tableCell.getTableRow().getIndex();
+
+            if (index < 0 || index >= columnWrapper.getRows().size()) {
+                return;
+            }
+            Element element = columnWrapper.getRows().get(index);
+            ItemSource property = element.getProperty(propertyId);
+
+            property.setValue(newValue);
+        }
+    }
+
+    private static class BooleanPropertyListener implements ChangeListener<Boolean> {
+
+        private ColumnWrapper columnWrapper;
+
+        private TableCell<Element,Boolean> tableCell;
+
+        public BooleanPropertyListener(ColumnWrapper columnWrapper, TableCell<Element,Boolean> tableCell) {
+            this.columnWrapper = columnWrapper;
+            this.tableCell = tableCell;
+        }
+
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+            String propertyId = columnWrapper.getColumn().getPropertyId();
+
+            int index = tableCell.getTableRow().getIndex();
+
+            if (index < 0 || index >= columnWrapper.getRows().size()) {
+                return;
+            }
+            Element element = columnWrapper.getRows().get(index);
+            ItemSource property = element.getProperty(propertyId);
+
+            property.setValue(newValue);
         }
     }
 }

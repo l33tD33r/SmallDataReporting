@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by Simon on 12/9/2014.
  */
-public class ReferenceStringConverter extends StringConverter<Object> {
+public class ReferenceStringConverter extends StringConverter<DataRecordReference> {
 
     public ArrayList<DataRecordReference> dataRecordReferences;
 
@@ -17,7 +17,7 @@ public class ReferenceStringConverter extends StringConverter<Object> {
     }
 
     @Override
-    public String toString(Object object) {
+    public String toString(DataRecordReference object) {
         if (object == null) {
             return "";
         }
@@ -26,7 +26,7 @@ public class ReferenceStringConverter extends StringConverter<Object> {
     }
 
     @Override
-    public Object fromString(String label) {
+    public DataRecordReference fromString(String label) {
         if (label == null || label.isEmpty()) {
             return null;
         }
