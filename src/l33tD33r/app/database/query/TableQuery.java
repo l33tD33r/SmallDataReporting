@@ -43,7 +43,8 @@ public class TableQuery extends Query {
 			if (!hasMoreElements()) {
 				throw new RuntimeException("no more elements");
 			}
-			return new TableDataRow(TableQuery.this, dataRecords.get(currentIndex++));
+			int rowIndex = currentIndex++;
+			return new TableDataRow(TableQuery.this, dataRecords.get(rowIndex), rowIndex);
 		}
 	}
 	
@@ -51,10 +52,17 @@ public class TableQuery extends Query {
 
         private Query query;
 		private DataRecord dataRecord;
-		
-		public TableDataRow(Query query, DataRecord dataRecord) {
+
+		private int rowIndex;
+
+		public TableDataRow(Query query, DataRecord dataRecord, int rowIndex) {
             this.query = query;
 			this.dataRecord = dataRecord;
+			this.rowIndex = rowIndex;
+		}
+
+		public int getRowIndex() {
+			return rowIndex;
 		}
 
         public IContext getContext() {
@@ -87,6 +95,9 @@ public class TableQuery extends Query {
 
 		@Override
 		public Object getValue(String name) {
+			if ("RowIndex".equalsIgnoreCase(name)) {
+				return getRowIndex();
+			}
 			return dataRecord.getFieldValue(name);
 		}
 		

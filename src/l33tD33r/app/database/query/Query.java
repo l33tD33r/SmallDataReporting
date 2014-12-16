@@ -75,6 +75,9 @@ public abstract class Query implements IColumnMap, IContext {
 				columnNameIndexMap.put(column.getName(), Integer.valueOf(i));
 			}
 		}
+		if ("RowIndex".equalsIgnoreCase(columnName)) {
+			return -1;
+		}
 		return columnNameIndexMap.get(columnName);
 	}
 
@@ -98,12 +101,11 @@ public abstract class Query implements IColumnMap, IContext {
 	
 	private ArrayList<ResultRow> generateRows() {
 		IDataSource dataSource = getDataSource();
-		ArrayList<ResultRow> rowList = new ArrayList<ResultRow>();
-        int rowIndex = 0;
+		ArrayList<ResultRow> rowList = new ArrayList<>();
 		while (dataSource.hasMoreElements()) {
 			IDataRow dataRow = dataSource.nextElement();
 			if (includeDataRow(dataRow)) {
-				rowList.add(createRow(dataRow, rowIndex++));
+				rowList.add(createRow(dataRow));
 			}
 		}
 		return rowList;
@@ -152,7 +154,7 @@ public abstract class Query implements IColumnMap, IContext {
 		return sourceFilterExpression.evaluateBoolean(dataRow);
 	}
 
-	protected ResultRow createRow(IDataRow dataRow, int rowIndex) {
+	protected ResultRow createRow(IDataRow dataRow) {
 		ArrayList<Object> rowValues = new ArrayList<Object>();
 		for (Column column : columns) {
 			Object rowValue = column.getExpression().evaluate(dataRow);
@@ -253,6 +255,8 @@ public abstract class Query implements IColumnMap, IContext {
         private Query query;
         private ResultRow row;
 
+		private int rowIndex;
+
         public ResultDataRow(Query query, ResultRow row) {
             this.query = query;
             this.row = row;
@@ -264,9 +268,6 @@ public abstract class Query implements IColumnMap, IContext {
         }
 
         private int getColumnIndex(String name) {
-            if ("RowIndex".equalsIgnoreCase(name)) {
-                return -1;
-            }
             return query.getColumnIndex(name);
         }
 

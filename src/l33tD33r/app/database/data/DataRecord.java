@@ -1,5 +1,6 @@
 package l33tD33r.app.database.data;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -20,6 +21,12 @@ public class DataRecord implements Iterable<DataField> {
 	public DataRecord(String id) {
 		this.id = id;
 		this.fieldsMap = new LinkedHashMap<String, DataField>();
+
+		DataField idField = new DataField();
+		idField.setType(FieldType.String);
+		idField.setName("Id");
+		idField.setValue(id);
+		addField(idField);
 	}
 	
 	public String getId() {
@@ -27,10 +34,16 @@ public class DataRecord implements Iterable<DataField> {
 	}
 	
 	void addField(DataField field) {
+		if (this.fieldsMap.containsKey(field.getName())) {
+			throw new RuntimeException("");
+		}
 		this.fieldsMap.put(field.getName(), field);
 	}
 	
 	public DataField getField(String name) {
+		if (!fieldsMap.containsKey(name)) {
+			throw new RuntimeException(MessageFormat.format("Field ''{0}'' does not exist", name));
+		}
 		return this.fieldsMap.get(name);
 	}
 	

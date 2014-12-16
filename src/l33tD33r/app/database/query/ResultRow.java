@@ -31,10 +31,10 @@ public class ResultRow {
 
     public Object getValue(int columnIndex) {
         if (columnIndex == -1) {
-            if (rowIndex == -1) {
+            if (getRowIndex() == -1) {
                 throw new RuntimeException("RowIndex value requested when it has an invalid value");
             }
-            return rowIndex;
+            return getRowIndex();
         }
         return values[columnIndex];
     }

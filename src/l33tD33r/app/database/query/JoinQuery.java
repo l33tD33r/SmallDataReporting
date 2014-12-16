@@ -56,7 +56,10 @@ public class JoinQuery extends Query {
             if (!hasMoreElements()) {
                 throw new RuntimeException("no more elements");
             }
-            return joinRows.get(currentJoinRowIndex++);
+            JoinDataRow joinDataRow = joinRows.get(currentJoinRowIndex);
+            joinDataRow.setRowIndex(currentJoinRowIndex);
+            currentJoinRowIndex++;
+            return joinDataRow;
         }
 
         private Map<KeySet,List<ResultRow>> findKeyRows(Query source, String[] keyNames) {
@@ -155,12 +158,21 @@ public class JoinQuery extends Query {
         private String rightSideName;
         private ResultRow rightSideRow;
 
+        private int rowIndex;
+
         public JoinDataRow(Query query, String leftSideName, ResultRow leftSideRow, String rightSideName, ResultRow rightSideRow) {
             this.query = query;
             this.leftSideName = leftSideName;
             this.leftSideRow = leftSideRow;
             this.rightSideName = rightSideName;
             this.rightSideRow = rightSideRow;
+        }
+
+        public int getRowIndex() {
+            return rowIndex;
+        }
+        public void setRowIndex(int rowIndex) {
+            this.rowIndex = rowIndex;
         }
 
         public IContext getContext() {
@@ -174,6 +186,9 @@ public class JoinQuery extends Query {
 
         @Override
         public Object getValue(String name) {
+            if ("RowIndex".equalsIgnoreCase(name)) {
+                return getRowIndex();
+            }
             ResultRow sourceRow = getRow(name);
             if (sourceRow == null) {
                 return "";

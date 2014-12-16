@@ -1,14 +1,15 @@
 package l33tD33r.app.database.query;
 
 
+import java.util.ArrayList;
 
 public class UnionQuery extends Query {
 
-	private Query[] componentQueries;
+	private Query[] sourceQueries;
 	
-	protected UnionQuery(Query[] componentQueries,String name, ExpressionNode sourceFilterExpression, boolean group, Column[] columns, ExpressionNode resultFilterExpression) {
+	public UnionQuery(Query[] sourceQueries,String name, ExpressionNode sourceFilterExpression, boolean group, Column[] columns, ExpressionNode resultFilterExpression) {
 		super(name, sourceFilterExpression, group, columns, resultFilterExpression);
-		this.componentQueries = componentQueries;
+		this.sourceQueries = sourceQueries;
 	}
 
 	@Override
@@ -18,20 +19,17 @@ public class UnionQuery extends Query {
 	
 	private class UnionDataSource implements IDataSource {
 
-		private IDataSource[] dataSources; 
+		private ArrayList<UnionDataRow> unionDataRows;
 		private int currentIndex;
 		
 		public UnionDataSource() {
-			this.dataSources = new IDataSource[componentQueries.length];
-			for (int i=0; i < componentQueries.length; i++) {
-				this.dataSources[i] = componentQueries[i].getDataSource();
-			}
-			this.currentIndex = 0;
+			unionDataRows = createUnionRows();
+			currentIndex = 0;
 		}
 		
 		@Override
 		public boolean hasMoreElements() {
-			return currentIndex < dataSources.length && dataSources[currentIndex].hasMoreElements();
+			return currentIndex < unionDataRows.size();
 		}
 
 		@Override
@@ -39,12 +37,60 @@ public class UnionQuery extends Query {
 			if (!hasMoreElements()) {
 				throw new RuntimeException("no more elements");
 			}
-			IDataRow dataRow = dataSources[currentIndex].nextElement();
-			if (!dataSources[currentIndex].hasMoreElements()) {
-				currentIndex++;
-			}
-			return dataRow;
+
+			UnionDataRow unionDataRow = unionDataRows.get(currentIndex);
+			unionDataRow.setRowIndex(currentIndex);
+			currentIndex++;
+			return unionDataRow;
 		}
-		
+
+		private ArrayList<UnionDataRow> createUnionRows() {
+			ArrayList<UnionDataRow> unionDataRows = new ArrayList<>();
+
+
+			for (Query sourceQuery : sourceQueries) {
+				for (int sourceRowIndex = 0; sourceRowIndex < sourceQuery.getRowCount(); sourceRowIndex++) {
+					sourceQuery.setPosition(sourceRowIndex);
+
+					ResultRow currentRow = sourceQuery.getCurrentRow();
+
+					unionDataRows.add(new UnionDataRow(UnionQuery.this, currentRow));
+				}
+			}
+
+			return unionDataRows;
+		}
+	}
+
+	private static class UnionDataRow implements IDataRow {
+
+		private UnionQuery unionQuery;
+		private ResultRow sourceDataRow;
+		private int rowIndex;
+
+		public UnionDataRow(UnionQuery unionQuery, ResultRow sourceDataRow) {
+			this.unionQuery = unionQuery;
+			this.sourceDataRow = sourceDataRow;
+		}
+
+		public int getRowIndex() {
+			return rowIndex;
+		}
+		public void setRowIndex(int rowIndex) {
+			this.rowIndex = rowIndex;
+		}
+
+		@Override
+		public IContext getContext() {
+			return unionQuery;
+		}
+
+		@Override
+		public Object getValue(String name) {
+			if ("RowIndex".equalsIgnoreCase(name)) {
+				return getRowIndex();
+			}
+			return sourceDataRow.getValue(name.substring(1));
+		}
 	}
 }

@@ -40,6 +40,9 @@ public class ReportSerialization {
             case "Join":
                 report = createJoinView(reportElement);
                 break;
+            case "Union":
+                report = createUnionView(reportElement);
+                break;
             default:
                 throw new RuntimeException("Unknown view type: " + type);
         }
@@ -82,6 +85,47 @@ public class ReportSerialization {
 
 		return new TableReport(tableName, name, title, sourceFilterExpression, group, columns, resultFilterExpression);
 	}
+
+    private static UnionReport createUnionView(Element unionViewElement) {
+        Element sourceQueriesElement = XmlUtils.getChildElement(unionViewElement, "SourceQueries");
+        if (sourceQueriesElement == null) {
+            throw new RuntimeException("UnionQuery with no SourceQueries");
+        }
+
+        ArrayList<String> sourceQueries = new ArrayList<>();
+
+        for (Element sourceQueryElement : XmlUtils.getChildElements(sourceQueriesElement, "SourceQuery")) {
+            sourceQueries.add(XmlUtils.getStringValue(sourceQueryElement));
+        }
+        String[] sourceQueriesArray = new String[sourceQueries.size()];
+        sourceQueries.toArray(sourceQueriesArray);
+
+        String name = XmlUtils.getElementStringValue(unionViewElement, "Name");
+        String title = XmlUtils.getElementStringValue(unionViewElement, "Title");
+
+        Element sourceFilterElement = XmlUtils.getChildElement(unionViewElement, "SourceFilter");
+        ExpressionNode sourceFilterExpression = null;
+        if (sourceFilterElement != null) {
+            sourceFilterExpression = ExpressionManager.createExpressionNode(XmlUtils.getChildElement(sourceFilterElement, "Expression"));
+        }
+
+        Element resultFilterElement = XmlUtils.getChildElement(unionViewElement, "ResultFilter");
+        ExpressionNode resultFilterExpression = null;
+        if (resultFilterElement != null) {
+            resultFilterExpression = ExpressionManager.createExpressionNode(XmlUtils.getChildElement(resultFilterElement, "Expression"));
+        }
+
+        String groupString = XmlUtils.getElementStringValue(unionViewElement, "Group");
+        boolean group = false;
+        if (groupString != null){
+            group = Boolean.valueOf(groupString);
+        }
+
+        Element columnsElement = XmlUtils.getChildElement(unionViewElement, "Columns");
+        Column[] columns = createColumns(columnsElement);
+
+        return new UnionReport(sourceQueriesArray, name, title, sourceFilterExpression, group, columns, resultFilterExpression);
+    }
 
     private static JoinReport createJoinView(Element joinViewElement) {
         Element sourceQueriesElement = XmlUtils.getChildElement(joinViewElement, "SourceQueries");

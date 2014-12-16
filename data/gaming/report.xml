@@ -791,11 +791,12 @@
         <Table>SettlersOfCatan_GamePlayer</Table>
         <Name>Settlers_GamePlayerWinnerPoints</Name>
         <Title>Settlers Game Player Winner Points</Title>
+        <!--
         <SourceFilter>
             <Expression type="Equals">
                 <Left>
                     <Expression type="Field">
-                        <FieldPath>GameInstance</FieldPath>
+                        <FieldPath>GameInstance.Id</FieldPath>
                     </Expression>
                 </Left>
                 <Right>
@@ -805,6 +806,7 @@
                 </Right>
             </Expression>
         </SourceFilter>
+        -->
         <Columns>
             <Column>
                 <Header>Winner</Header>
@@ -828,6 +830,56 @@
                         <FieldPath>Points</FieldPath>
                     </Expression>
                 </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Game Player Id</Header>
+                <Width>100</Width>
+                <Name>GamePlayerId</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Id</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Union">
+        <SourceQueries>
+            <SourceQuery>Settlers_GamePlayerWinnerPoints</SourceQuery>
+        </SourceQueries>
+        <Name>Settlers_GamePlayerRank</Name>
+        <Title>Settlers Game Player Rank</Title>
+        <Columns>
+            <Column>
+                <Header>Rank</Header>
+                <Name>Rank</Name>
+                <ColumnExpression>
+                    <Expression type="Add">
+                        <ResultType>Integer</ResultType>
+                        <Children>
+                            <Expression type="Column">
+                                <Name>.RowIndex</Name>
+                            </Expression>
+                            <Expression type="Value">
+                                <Type>Integer</Type>
+                                <Value>1</Value>
+                            </Expression>
+                        </Children>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Game Player Id</Header>
+                <Name>GamePlayerId</Name>
+                <ColumnExpression>
+                    <Expression type="Column">
+                        <Name>.GamePlayerId</Name>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
             </Column>
         </Columns>
     </Report>

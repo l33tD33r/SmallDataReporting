@@ -64,6 +64,9 @@ public class ExpressionManager {
             case "And": {
                 return createAndNode(expressionNodeElement);
             }
+            case "Add": {
+                return createAddNode(expressionNodeElement);
+            }
             case "SetCount": {
                 return createSetCount(expressionNodeElement);
             }
@@ -163,6 +166,22 @@ public class ExpressionManager {
         }
 
         return new AndNode(andChildren);
+    }
+
+    private static AddNode createAddNode(Element addNodeElement) {
+        ArrayList<ExpressionNode> addChildren = new ArrayList<>();
+
+        String resultTypeString = XmlUtils.getElementStringValue(addNodeElement, "ResultType");
+
+        DataType resultType = DataType.valueOf(resultTypeString);
+
+        Element childrenElement = XmlUtils.getChildElement(addNodeElement, "Children");
+
+        for (Element andChildElement : XmlUtils.getChildElements(childrenElement, "Expression")) {
+            addChildren.add(createExpressionNode(andChildElement));
+        }
+
+        return new AddNode(resultType, addChildren);
     }
 
     private static SetCountNode createSetCount(Element setCountElement) {

@@ -49,7 +49,9 @@ public abstract class Report {
 	public Query getQuery() {
 		if (query == null) {
 			query = createQuery();
-            query.setParameters(getParameters());
+			if (getParameters() != null) {
+				query.setParameters(getParameters());
+			}
 		}
 		return query;
 	}

@@ -5,6 +5,8 @@ import l33tD33r.app.database.data.DataField;
 import l33tD33r.app.database.data.DataRecord;
 import l33tD33r.app.database.query.TableQuery.TableDataRow;
 
+import java.text.MessageFormat;
+
 public class FieldNode extends ExpressionNode {
 
 	private String[] fieldPath;
@@ -29,6 +31,9 @@ public class FieldNode extends ExpressionNode {
 			for (int i = 0; i < fieldPath.length; i++) {
 				String field = fieldPath[i];
 				DataField dataField = currentRecord.getField(field);
+				if (dataField == null) {
+					throw new RuntimeException(MessageFormat.format("Field ''{0}'' does not exist", field));
+				}
 				FieldType fieldType = dataField.getType();
 				if (i < fieldPath.length - 1) {
 					if (fieldType != FieldType.Reference) {

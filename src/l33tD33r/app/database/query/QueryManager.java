@@ -17,6 +17,11 @@ public class QueryManager {
         return new JoinQuery(leftSide, rightSide, rules, name, sourceFilterExpression, group, columns, resultFilterExpression);
     }
 
+	public static UnionQuery createUnionQuery(Query[] sourceQueries, String name, ExpressionNode sourceFileterExpression, boolean group, String[] columnNames, GroupRule[] columnGroupRules, SortRule[] columnSortRules, ExpressionNode[] columnExpressions, DataType[] columnDataTypes, ExpressionNode resultFilterExpression) {
+		Column[] columns = createColumns(columnNames, columnGroupRules, columnSortRules, columnExpressions, columnDataTypes);
+		return new UnionQuery(sourceQueries, name, sourceFileterExpression, group, columns, resultFilterExpression);
+	}
+
 	public static TableQuery createTableQuery(String tableName, String name, ExpressionNode sourceFilterExpression, boolean group, String[] columnNames, GroupRule[] columnGroupRules, SortRule[] columnSortRules, ExpressionNode[] columnExpressions, DataType[] columnDataTypes, ExpressionNode resultFilterExpression) {
 		Column[] columns = createColumns(columnNames, columnGroupRules, columnSortRules, columnExpressions, columnDataTypes);
 		return new TableQuery(tableName, name, sourceFilterExpression, group, columns, resultFilterExpression);
