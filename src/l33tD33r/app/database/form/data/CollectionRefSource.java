@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class CollectionRefSource {
 
-    private Collection collection;
+    private PropertyCollection collection;
 
     private ArrayList<PropertyRefSource> propertySources;
 
@@ -20,10 +20,10 @@ public class CollectionRefSource {
 
     }
 
-    public Collection getCollection() {
+    public PropertyCollection getCollection() {
         return collection;
     }
-    public void setCollection(Collection collection) {
+    public void setCollection(PropertyCollection collection) {
         this.collection = collection;
     }
 
@@ -44,7 +44,7 @@ public class CollectionRefSource {
     public ArrayList<ElementRefSource> getElementSources() {
         ArrayList<ElementRefSource> elementSources = new ArrayList<>();
 
-        for (Element element : collection.getElements()) {
+        for (PropertyElement element : collection.getElements()) {
             ElementRefSource elementSource = new ElementRefSource(element);
 
             elementSources.add(elementSource);
@@ -53,7 +53,7 @@ public class CollectionRefSource {
         return elementSources;
     }
 
-    public void updateCurrentElement(Element element) {
+    public void updateCurrentElement(PropertyElement element) {
         getPropertySources().forEach(s -> s.setCurrentElement(element));
     }
 }

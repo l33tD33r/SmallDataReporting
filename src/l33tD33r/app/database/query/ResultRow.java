@@ -39,6 +39,13 @@ public class ResultRow {
         return values[columnIndex];
     }
 
+    public void setValue(int columnIndex, Object value) {
+        if (columnIndex == -1) {
+            throw new RuntimeException("RowIndex cannot be set");
+        }
+        values[columnIndex] = value;
+    }
+
     public String getStringValue(int columnIndex) {
         return (String)getValue(columnIndex);
     }
@@ -67,12 +74,19 @@ public class ResultRow {
         return (Boolean)getValue(columnIndex);
     }
 
-    public Object getValue(String columnName) {
+    public Integer getColumnIndex(String columnName) {
         Integer columnIndex = columnMap.getColumnIndex(columnName);
         if (columnIndex == null) {
             throw new RuntimeException(MessageFormat.format("Unknown column name '{0}'", columnName));
         }
-        return getValue(columnIndex);
+        return columnIndex;
+    }
+
+    public Object getValue(String columnName) {
+        return getValue(getColumnIndex(columnName));
+    }
+    public void setValue(String columnName, Object value) {
+        setValue(getColumnIndex(columnName), value);
     }
 
     public String getStringValue(String columnName) {

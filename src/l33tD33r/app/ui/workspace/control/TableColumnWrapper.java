@@ -7,8 +7,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
 import l33tD33r.app.database.form.Form;
-import l33tD33r.app.database.form.data.Collection;
-import l33tD33r.app.database.form.data.Element;
+import l33tD33r.app.database.form.data.PropertyCollection;
+import l33tD33r.app.database.form.data.PropertyElement;
 import l33tD33r.app.database.form.data.ItemSource;
 import l33tD33r.app.database.form.data.ItemTemplate;
 import l33tD33r.app.database.form.view.Column;
@@ -23,15 +23,15 @@ public class TableColumnWrapper {
 
     private Form form;
 
-    private Collection collection;
+    private PropertyCollection collection;
 
     private Column column;
 
-    private List<Element> rows;
+    private List<PropertyElement> rows;
 
-    private TableColumn<Element,Object> tableColumn;
+    private TableColumn<PropertyElement,Object> tableColumn;
 
-    public TableColumnWrapper(Form form, Collection collection, Column column, List<Element> rows) {
+    public TableColumnWrapper(Form form, PropertyCollection collection, Column column, List<PropertyElement> rows) {
         this.form = form;
         this.collection = collection;
         this.column = column;
@@ -44,10 +44,10 @@ public class TableColumnWrapper {
         tableColumn.setPrefWidth(100);
         tableColumn.setEditable(column.isEditable());
 
-        tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Element, Object>, ObservableValue<Object>>() {
+        tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<PropertyElement, Object>, ObservableValue<Object>>() {
             @Override
-            public ObservableValue<Object> call(TableColumn.CellDataFeatures<Element, Object> param) {
-                Element element = param.getValue();
+            public ObservableValue<Object> call(TableColumn.CellDataFeatures<PropertyElement, Object> param) {
+                PropertyElement element = param.getValue();
                 ItemSource valueSource = element.getProperty(getColumn().getPropertyId());
                 Object value = valueSource.getValue();
 
@@ -64,9 +64,9 @@ public class TableColumnWrapper {
             }
         });
 
-        tableColumn.setCellFactory(new Callback<TableColumn<Element, Object>, TableCell<Element, Object>>() {
+        tableColumn.setCellFactory(new Callback<TableColumn<PropertyElement, Object>, TableCell<PropertyElement, Object>>() {
             @Override
-            public TableCell<Element, Object> call(TableColumn<Element, Object> param) {
+            public TableCell<PropertyElement, Object> call(TableColumn<PropertyElement, Object> param) {
                 TableCellWrapper cellWrapper = null;
                 View cellView = getColumn().getCellView();
                 if (cellView == null) {
@@ -93,11 +93,11 @@ public class TableColumnWrapper {
         return form;
     }
 
-    public Collection getCollection() {
+    public PropertyCollection getCollection() {
         return collection;
     }
 
-    public List<Element> getRows() {
+    public List<PropertyElement> getRows() {
         return rows;
     }
 
@@ -105,7 +105,7 @@ public class TableColumnWrapper {
         return column;
     }
 
-    public TableColumn<Element,Object> getTableColumn() {
+    public TableColumn<PropertyElement,Object> getTableColumn() {
         return tableColumn;
     }
 

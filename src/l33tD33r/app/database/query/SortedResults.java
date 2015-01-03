@@ -24,8 +24,8 @@ public class SortedResults {
 		
 		this.sortedRows = new ArrayList<>();
 	}
-	
-	protected void addRow(ResultRow newRow) {
+
+	public void addRow(ResultRow newRow) {
 		int newRowIndex = -1;
 		for (int i=0; i < sortedRows.size(); i++) {
 			int result = compareRow(sortedRows.get(i), newRow);

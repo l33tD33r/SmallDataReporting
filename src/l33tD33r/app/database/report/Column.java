@@ -1,9 +1,6 @@
 package l33tD33r.app.database.report;
 
-import l33tD33r.app.database.query.DataType;
-import l33tD33r.app.database.query.ExpressionNode;
-import l33tD33r.app.database.query.GroupRule;
-import l33tD33r.app.database.query.SortRule;
+import l33tD33r.app.database.query.*;
 
 public class Column {
 
@@ -14,8 +11,9 @@ public class Column {
 	private SortRule sortRule;
 	private ExpressionNode expression;
 	private DataType dataType;
+	private ColumnSummarization summarization;
 	
-	public Column(String header, int width, String name, GroupRule groupRule, SortRule sortRule, ExpressionNode expression, DataType dataType) {
+	public Column(String header, int width, String name, GroupRule groupRule, SortRule sortRule, ExpressionNode expression, DataType dataType, ColumnSummarization summarization) {
 		this.header = header;
 		this.width = width;
 		this.name = name;
@@ -23,6 +21,7 @@ public class Column {
 		this.sortRule = sortRule;
 		this.expression = expression;
 		this.dataType = dataType;
+		this.summarization = summarization;
 	}
 	
 	public String getHeader() {
@@ -51,5 +50,9 @@ public class Column {
 	
 	public DataType getDataType() {
 		return dataType;
+	}
+
+	public ColumnSummarization getSummarization() {
+		return summarization;
 	}
 }

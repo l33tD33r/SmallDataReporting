@@ -11,8 +11,6 @@ public class Field {
 
     private ValueSource valueSource;
 
-    private InsertAction parentAction;
-
     public String getName() {
         return name;
     }
@@ -26,12 +24,4 @@ public class Field {
     public void setValueSource(ValueSource valueSource) {
         this.valueSource = valueSource;
     }
-
-    public InsertAction getParentAction() {
-        return parentAction;
-    }
-    public void setParentAction(InsertAction parentAction) {
-        this.parentAction = parentAction;
-    }
-
 }

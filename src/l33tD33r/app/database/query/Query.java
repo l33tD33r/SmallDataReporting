@@ -2,6 +2,7 @@ package l33tD33r.app.database.query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import l33tD33r.app.database.Date;
@@ -45,7 +46,7 @@ public abstract class Query implements IColumnMap, IContext {
 		return columns.length;
 	}
 	
-	private Column getColumn(int columnIndex) {
+	public Column getColumn(int columnIndex) {
 		if (columnIndex < 0) {
 			throw new RuntimeException("Column index '" + columnIndex + "' <= 0");
 		}
@@ -64,10 +65,13 @@ public abstract class Query implements IColumnMap, IContext {
 	}
 	
 	public SortRule getSortRule(int columnIndex) {
-		return getColumn(currentPosition).getSortRule();
+		return getColumn(columnIndex).getSortRule();
 	}
 	
 	public int getColumnIndex(String columnName) {
+		if (columnName == null || columnName.isEmpty()) {
+			throw new RuntimeException("All columns must have a non-null, non-empty name");
+		}
 		if (columnNameIndexMap == null) {
             columnNameIndexMap = new HashMap<>();
 			for (int i=0; i < columns.length; i++) {
@@ -93,6 +97,13 @@ public abstract class Query implements IColumnMap, IContext {
 		ArrayList<ResultRow> groupedRows = group ? groupRows(generatedRows) : generatedRows;
         ArrayList<ResultRow> filteredRows = resultFilterExpression != null ? filterRows(groupedRows) : groupedRows;
 		ArrayList<ResultRow> sortedRows = sortRows(filteredRows);
+
+		ArrayList<ResultRow> finalRows;
+		if (hasColumnSummarizations()) {
+			finalRows = summarizeColumnRows(sortedRows);
+		} else {
+			finalRows = sortedRows;
+		}
         for (int rowIndex=0; rowIndex<sortedRows.size();rowIndex++) {
             sortedRows.get(rowIndex).setRowIndex(rowIndex);
         }
@@ -143,6 +154,21 @@ public abstract class Query implements IColumnMap, IContext {
 			sortedResults.addRow(filteredRow);
 		}
 		return sortedResults.getSortedRows();
+	}
+
+	private boolean hasColumnSummarizations() {
+		for (Column column : columns) {
+			if (column.hasSummarization()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private ArrayList<ResultRow> summarizeColumnRows(List<ResultRow> sortedRows) {
+		SummarizeColumnResults summarizeColumnResults = new SummarizeColumnResults(this);
+		sortedRows.forEach(r-> summarizeColumnResults.addRow(r));
+		return summarizeColumnResults.getSummarizedRows();
 	}
 	
 	public abstract IDataSource getDataSource();

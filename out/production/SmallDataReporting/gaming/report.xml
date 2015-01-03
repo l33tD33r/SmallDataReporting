@@ -787,4 +787,211 @@
             </Column>
         </Columns>
     </Report>
+    <Report type="Table">
+        <Table>SettlersOfCatan_GamePlayer</Table>
+        <Name>Settlers_GamePlayerWinnerPoints</Name>
+        <Title>Settlers Game Player Winner Points</Title>
+        <Group>true</Group>
+        <SourceFilter>
+            <Expression type="Equals">
+                <Left>
+                    <Expression type="Field">
+                        <FieldPath>GameInstance.Id</FieldPath>
+                    </Expression>
+                </Left>
+                <Right>
+                    <Expression type="Parameter">
+                        <Name>GameInstance</Name>
+                    </Expression>
+                </Right>
+            </Expression>
+        </SourceFilter>
+        <Parameters>
+            <Parameter>
+                <Name>GameInstance</Name>
+                <Type>String</Type>
+                <Value>2618a415-9bd2-4dc5-858e-00860546550c</Value>
+            </Parameter>
+        </Parameters>
+        <Columns>
+            <Column>
+                <Header>Winner</Header>
+                <Width>200</Width>
+                <Name>Winner</Name>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Winner</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Boolean</DataType>
+            </Column>
+            <Column>
+                <Header>Points</Header>
+                <Width>200</Width>
+                <Name>Points</Name>
+                <SortRule>Descending</SortRule>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Points</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Game Player Id</Header>
+                <Width>100</Width>
+                <Name>GamePlayerId</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Id</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Union">
+        <SourceQueries>
+            <SourceQuery>Settlers_GamePlayerWinnerPoints</SourceQuery>
+        </SourceQueries>
+        <Name>Settlers_GamePlayerRank</Name>
+        <Title>Settlers Game Player Rank</Title>
+        <Parameters>
+            <Parameter>
+                <Name>GameInstance</Name>
+                <Type>String</Type>
+                <Value>2618a415-9bd2-4dc5-858e-00860546550c</Value>
+            </Parameter>
+        </Parameters>
+        <Columns>
+            <Column>
+                <Header>Rank</Header>
+                <Name>Rank</Name>
+                <ColumnExpression>
+                    <Expression type="Add">
+                        <ResultType>Integer</ResultType>
+                        <Children>
+                            <Expression type="Column">
+                                <Name>.RowIndex</Name>
+                            </Expression>
+                            <Expression type="Value">
+                                <Type>Integer</Type>
+                                <Value>1</Value>
+                            </Expression>
+                        </Children>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+            </Column>
+            <Column>
+                <Header>Game Player Id</Header>
+                <Name>GamePlayerId</Name>
+                <ColumnExpression>
+                    <Expression type="Column">
+                        <Name>.GamePlayerId</Name>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Table">
+        <Table>SettlersOfCatan_GamePlayer</Table>
+        <Name>SettlersWinOrder_Base</Name>
+        <Title>Settlers Win Order Base</Title>
+        <Columns>
+            <Column>
+                <Header>GameInstance</Header>
+                <Name>GameInstance</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>GameInstance.Id</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+            </Column>
+            <Column>
+                <Header>Winner</Header>
+                <Name>Winner</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Winner</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Boolean</DataType>
+                <SortRule>Descending</SortRule>
+            </Column>
+            <Column>
+                <Header>Points</Header>
+                <Name>Points</Name>
+                <ColumnExpression>
+                    <Expression type="Field">
+                        <FieldPath>Points</FieldPath>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+                <SortRule>Descending</SortRule>
+            </Column>
+            <Column>
+                <Header>Rank</Header>
+                <Width>200</Width>
+                <Name>Rank</Name>
+                <ColumnExpression>
+                    <Expression type="Value">
+                        <Type>Integer</Type>
+                        <Value>1</Value>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+                <Summarization>
+                    <Rule>RunningBalance</Rule>
+                    <ResetColumn>GameInstance</ResetColumn>
+                </Summarization>
+            </Column>
+        </Columns>
+    </Report>
+    <Report type="Union">
+        <SourceQueries>
+            <SourceQuery>SettlersWinOrder_Base</SourceQuery>
+        </SourceQueries>
+        <Name>SettlersPointsRank_Base</Name>
+        <Title>Settlers Points Rank Base</Title>
+        <Group>true</Group>
+        <Columns>
+            <Column>
+                <Header>GameInstance</Header>
+                <Name>GameInstance</Name>
+                <ColumnExpression>
+                    <Expression type="Column">
+                        <Name>.GameInstance</Name>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>String</DataType>
+                <GroupRule>By</GroupRule>
+            </Column>
+            <Column>
+                <Header>Points</Header>
+                <Name>Points</Name>
+                <ColumnExpression>
+                    <Expression type="Column">
+                        <Name>.Points</Name>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+                <GroupRule>By</GroupRule>
+            </Column>
+            <Column>
+                <Header>Rank</Header>
+                <Name>Rank</Name>
+                <ColumnExpression>
+                    <Expression type="Column">
+                        <Name>.Rank</Name>
+                    </Expression>
+                </ColumnExpression>
+                <DataType>Integer</DataType>
+                <GroupRule>Min</GroupRule>
+            </Column>
+        </Columns>
+    </Report>
 </Reports>

@@ -87,6 +87,18 @@ public class XmlUtils {
         return getIntegerValue(childElement);
     }
 
+    public static Boolean getElementBooleanValue(Element parentElement, String childElementName) {
+        return getElementBooleanValue(parentElement, childElementName, false);
+    }
+
+    public static Boolean getElementBooleanValue(Element parentElement, String childElementName, boolean defaultValue) {
+        Element childElement = getChildElement(parentElement, childElementName);
+        if (childElement == null) {
+            return defaultValue;
+        }
+        return getBooleanValue(childElement);
+    }
+
     public static String getStringValue(Element stringElement) {
         return getTextContent(stringElement);
     }
@@ -94,6 +106,11 @@ public class XmlUtils {
     public static Integer getIntegerValue(Element integerElement) throws NumberFormatException {
         String elementValue = getTextContent(integerElement);
         return Integer.valueOf(elementValue);
+    }
+
+    public static boolean getBooleanValue(Element booleanElement) {
+        String elementValue = getTextContent(booleanElement);
+        return Boolean.valueOf(elementValue);
     }
 
     private static String getTextContent(Element element) {

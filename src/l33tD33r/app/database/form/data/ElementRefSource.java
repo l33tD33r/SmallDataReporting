@@ -10,19 +10,19 @@ import java.util.List;
  */
 public class ElementRefSource {
 
-    private Element element;
+    private PropertyElement element;
 
     private ArrayList<Field> fields;
 
-    public ElementRefSource(Element element){
+    public ElementRefSource(PropertyElement element){
         fields = new ArrayList<>();
         setElement(element);
     }
 
-    public Element getElement() {
+    public PropertyElement getElement() {
         return element;
     }
-    private void setElement(Element element) {
+    private void setElement(PropertyElement element) {
         this.element = element;
     }
 

@@ -7,9 +7,9 @@ import java.text.MessageFormat;
  */
 public class PropertyRefSource implements ValueSource {
 
-    private ItemTemplate propertyTemplate;
+private ItemTemplate propertyTemplate;
 
-    private Element currentElement;
+private PropertyElement currentElement;
 
     public PropertyRefSource() {
     }
@@ -21,10 +21,10 @@ public class PropertyRefSource implements ValueSource {
         this.propertyTemplate = propertyTemplate;
     }
 
-    public Element getCurrentElement() {
+    public PropertyElement getCurrentElement() {
         return currentElement;
     }
-    public void setCurrentElement(Element currentElement) {
+    public void setCurrentElement(PropertyElement currentElement) {
         this.currentElement = currentElement;
     }
 
@@ -35,7 +35,7 @@ public class PropertyRefSource implements ValueSource {
 
     @Override
     public Object getValue() {
-        Element currentElement = getCurrentElement();
+        PropertyElement currentElement = getCurrentElement();
         if (currentElement == null) {
             throw new RuntimeException(MessageFormat.format("Cannot get value for property '{0}' since there is no current element set", getPropertyTemplate().getId()));
         }

@@ -2,7 +2,6 @@ package l33tD33r.app.ui.workspace.control;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,7 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
-import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -34,13 +32,13 @@ import java.util.List;
  */
 public class TableWrapper extends CollectionControlWrapper {
 
-    private TableView<Element> tableView;
+    private TableView<PropertyElement> tableView;
 
-    private ObservableList<Element> rows;
+    private ObservableList<PropertyElement> rows;
 
     private ArrayList<TableColumnWrapper> columnWrappers;
 
-    private Collection collection;
+    private PropertyCollection collection;
 
     public TableWrapper() {
         tableView = new TableView<>();
@@ -57,7 +55,7 @@ public class TableWrapper extends CollectionControlWrapper {
         setView(table);
     }
 
-    public Collection getCollection() {
+    public PropertyCollection getCollection() {
         if (collection == null) {
             collection = getForm().getCollection(getTable().getCollectionId());
         }
@@ -76,7 +74,7 @@ public class TableWrapper extends CollectionControlWrapper {
             tableView.getColumns().add(columnWrapper.getTableColumn());
         }
 
-        Collection collection = getCollection();
+        PropertyCollection collection = getCollection();
         if (collection.getElements().size() > 0) {
             rows.add(collection.getElement(0));
         }
@@ -103,7 +101,7 @@ public class TableWrapper extends CollectionControlWrapper {
             if (getTable().isAllowAdd()) {
                 Button addButton = new Button("Add");
                 addButton.setOnAction( e-> {
-                    Collection collection = getCollection();
+                    PropertyCollection collection = getCollection();
                     if (collection.getElements().size() > rows.size()) {
                         rows.add(collection.getElement(rows.size()));
                     }
@@ -156,15 +154,15 @@ public class TableWrapper extends CollectionControlWrapper {
 
         private Form form;
 
-        private Collection collection;
+        private PropertyCollection collection;
 
         private Column column;
 
-        private List<Element> rows;
+        private List<PropertyElement> rows;
 
-        private TableColumn<Element,Object> tableColumn;
+        private TableColumn<PropertyElement,Object> tableColumn;
 
-        public ColumnWrapper(Form form, Collection collection, Column column, List<Element> rows) {
+        public ColumnWrapper(Form form, PropertyCollection collection, Column column, List<PropertyElement> rows) {
             this.form = form;
             this.collection = collection;
             this.column = column;
@@ -177,10 +175,10 @@ public class TableWrapper extends CollectionControlWrapper {
             tableColumn.setPrefWidth(100);
             tableColumn.setEditable(column.isEditable());
 
-            tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Element, Object>, ObservableValue<Object>>() {
+            tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<PropertyElement, Object>, ObservableValue<Object>>() {
                 @Override
-                public ObservableValue<Object> call(TableColumn.CellDataFeatures<Element, Object> param) {
-                    Element element = param.getValue();
+                public ObservableValue<Object> call(TableColumn.CellDataFeatures<PropertyElement, Object> param) {
+                    PropertyElement element = param.getValue();
                     ItemSource valueSource = element.getProperty(getColumn().getPropertyId());
                     Object value = valueSource.getValue();
                     ObservableValue<Object> observableValue = new SimpleObjectProperty<Object>(value);
@@ -188,9 +186,9 @@ public class TableWrapper extends CollectionControlWrapper {
                 }
             });
 
-            tableColumn.setCellFactory(new Callback<TableColumn<Element, Object>, TableCell<Element, Object>>() {
+            tableColumn.setCellFactory(new Callback<TableColumn<PropertyElement, Object>, TableCell<PropertyElement, Object>>() {
                 @Override
-                public TableCell<Element, Object> call(TableColumn<Element, Object> param) {
+                public TableCell<PropertyElement, Object> call(TableColumn<PropertyElement, Object> param) {
                     TableCellWrapper cellWrapper = null;
                     switch (getPropertyTemplate().getType()) {
                         case String:
@@ -206,11 +204,11 @@ public class TableWrapper extends CollectionControlWrapper {
             return form;
         }
 
-        public Collection getCollection() {
+        public PropertyCollection getCollection() {
             return collection;
         }
 
-        public List<Element> getRows() {
+        public List<PropertyElement> getRows() {
             return rows;
         }
 
@@ -218,7 +216,7 @@ public class TableWrapper extends CollectionControlWrapper {
             return column;
         }
 
-        public TableColumn<Element,Object> getTableColumn() {
+        public TableColumn<PropertyElement,Object> getTableColumn() {
             return tableColumn;
         }
 
@@ -230,21 +228,21 @@ public class TableWrapper extends CollectionControlWrapper {
     private static class TableCellWrapper {
         private ColumnWrapper columnWrapper;
 
-        private TableCell<Element, Object> tableCell;
+        private TableCell<PropertyElement, Object> tableCell;
 
         public TableCellWrapper(ColumnWrapper columnWrapper) {
             this.columnWrapper = columnWrapper;
         }
 
-        public TableCell<Element,Object> getTableCell() {
+        public TableCell<PropertyElement,Object> getTableCell() {
             if (tableCell == null) {
                 tableCell = createTableCell();
             }
             return tableCell;
         }
 
-        private TableCell<Element,Object> createTableCell() {
-            final TableCell<Element,Object> tableCell;
+        private TableCell<PropertyElement,Object> createTableCell() {
+            final TableCell<PropertyElement,Object> tableCell;
 
             StringConverter converter = new StringConverter() {
                 @Override
@@ -267,7 +265,7 @@ public class TableWrapper extends CollectionControlWrapper {
                     case DropDown:
                         TableDropDownView dropDownView = (TableDropDownView) view;
                         ArrayList<DataRecordReference> dataRecordReferences = ControlFactory.getSingleton().createReferenceRecordList(dropDownView.getTable());
-                        ComboBoxTableCell<Element, Object> comboBoxTableCell = new ComboBoxTableCell<>(new ReferenceStringConverter(dataRecordReferences), dataRecordReferences.toArray());
+                        ComboBoxTableCell<PropertyElement, Object> comboBoxTableCell = new ComboBoxTableCell<>(new ReferenceStringConverter(dataRecordReferences), dataRecordReferences.toArray());
                         comboBoxTableCell.itemProperty().addListener(new ItemPropertyListener(columnWrapper, comboBoxTableCell));
                         tableCell = comboBoxTableCell;
                         break;
@@ -295,7 +293,7 @@ public class TableWrapper extends CollectionControlWrapper {
                                     if (index < 0 || index >= columnWrapper.getRows().size()) {
                                         return;
                                     }
-                                    Element element = columnWrapper.getRows().get(index);
+                                    PropertyElement element = columnWrapper.getRows().get(index);
                                     ItemSource property = element.getProperty(propertyId);
                                     property.setValue(checkBox.isSelected());
                                 }
@@ -347,9 +345,9 @@ public class TableWrapper extends CollectionControlWrapper {
 
         private ColumnWrapper columnWrapper;
 
-        private TableCell<Element,Object> tableCell;
+        private TableCell<PropertyElement,Object> tableCell;
 
-        public ItemPropertyListener(ColumnWrapper columnWrapper, TableCell<Element,Object> tableCell) {
+        public ItemPropertyListener(ColumnWrapper columnWrapper, TableCell<PropertyElement,Object> tableCell) {
             this.columnWrapper = columnWrapper;
             this.tableCell = tableCell;
         }
@@ -363,7 +361,7 @@ public class TableWrapper extends CollectionControlWrapper {
             if (index < 0 || index >= columnWrapper.getRows().size()) {
                 return;
             }
-            Element element = columnWrapper.getRows().get(index);
+            PropertyElement element = columnWrapper.getRows().get(index);
             ItemSource property = element.getProperty(propertyId);
 
             property.setValue(newValue);
@@ -374,9 +372,9 @@ public class TableWrapper extends CollectionControlWrapper {
 
         private ColumnWrapper columnWrapper;
 
-        private TableCell<Element,Boolean> tableCell;
+        private TableCell<PropertyElement,Boolean> tableCell;
 
-        public BooleanPropertyListener(ColumnWrapper columnWrapper, TableCell<Element,Boolean> tableCell) {
+        public BooleanPropertyListener(ColumnWrapper columnWrapper, TableCell<PropertyElement,Boolean> tableCell) {
             this.columnWrapper = columnWrapper;
             this.tableCell = tableCell;
         }
@@ -390,7 +388,7 @@ public class TableWrapper extends CollectionControlWrapper {
             if (index < 0 || index >= columnWrapper.getRows().size()) {
                 return;
             }
-            Element element = columnWrapper.getRows().get(index);
+            PropertyElement element = columnWrapper.getRows().get(index);
             ItemSource property = element.getProperty(propertyId);
 
             property.setValue(newValue);

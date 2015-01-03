@@ -83,7 +83,11 @@ public class DataManager implements DataRecordProvider, DataChangeListener {
 	}
 	
 	public DataTable getTable(String name) {
-		return this.dataTablesMap.get(name);
+		DataTable dataTable = this.dataTablesMap.get(name);
+		if (dataTable == null) {
+			throw new RuntimeException(MessageFormat.format("Table ''{0}'' does not exist", name));
+		}
+		return dataTable;
 	}
 	
 	public void resolveDataReferences() {

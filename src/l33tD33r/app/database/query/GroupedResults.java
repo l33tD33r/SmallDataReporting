@@ -27,11 +27,11 @@ public class GroupedResults {
 		}
 	}
 	
-	protected void addRow(ResultRow row) {
+	public void addRow(ResultRow row) {
 		KeySet keySet = createGroupKey(row);
 		ArrayList<ResultRow> groupRowList = groupedRowsMap.get(keySet);
 		if (groupRowList == null) {
-			groupRowList = new ArrayList<ResultRow>();
+			groupRowList = new ArrayList<>();
 			groupedRowsMap.put(keySet, groupRowList);
 		}
 		groupRowList.add(row);
@@ -47,8 +47,8 @@ public class GroupedResults {
 		Object[] groupedValues = groupedValueList.toArray(new Object[groupedValueList.size()]);
 		return new KeySet(groupedValues);
 	}
-	
-	protected ArrayList<ResultRow> getGroupedRows() {
+
+	public ArrayList<ResultRow> getGroupedRows() {
 		ArrayList<ResultRow> groupedRows = new ArrayList<>();
 		for (ArrayList<ResultRow> groupRows : groupedRowsMap.values()) {
             ResultRow groupedRow = createGroupedRow(groupRows);

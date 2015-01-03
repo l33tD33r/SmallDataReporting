@@ -54,6 +54,12 @@ public class ReportSerialization {
         }
         report.setChart(chart);
 
+        Element parametersElement = XmlUtils.getChildElement(reportElement, "Parameters");
+        if (parametersElement != null) {
+            Map<String,Object> parameters = createParameters(parametersElement);
+            report.setParameters(parameters);
+        }
+
         return report;
 	}
 	
@@ -61,6 +67,8 @@ public class ReportSerialization {
 		String tableName = XmlUtils.getElementStringValue(tableViewElement, "Table");
 		String name = XmlUtils.getElementStringValue(tableViewElement, "Name");
 		String title = XmlUtils.getElementStringValue(tableViewElement, "Title");
+
+        boolean hidden = XmlUtils.getElementBooleanValue(tableViewElement, "Hidden");
 
         Element sourceFilterElement = XmlUtils.getChildElement(tableViewElement, "SourceFilter");
         ExpressionNode sourceFilterExpression = null;
@@ -83,7 +91,7 @@ public class ReportSerialization {
 		Element columnsElement = XmlUtils.getChildElement(tableViewElement, "Columns");
 		Column[] columns = createColumns(columnsElement);
 
-		return new TableReport(tableName, name, title, sourceFilterExpression, group, columns, resultFilterExpression);
+		return new TableReport(tableName, name, title, hidden, sourceFilterExpression, group, columns, resultFilterExpression);
 	}
 
     private static UnionReport createUnionView(Element unionViewElement) {
@@ -102,6 +110,8 @@ public class ReportSerialization {
 
         String name = XmlUtils.getElementStringValue(unionViewElement, "Name");
         String title = XmlUtils.getElementStringValue(unionViewElement, "Title");
+
+        boolean hidden = XmlUtils.getElementBooleanValue(unionViewElement, "Hidden");
 
         Element sourceFilterElement = XmlUtils.getChildElement(unionViewElement, "SourceFilter");
         ExpressionNode sourceFilterExpression = null;
@@ -124,7 +134,7 @@ public class ReportSerialization {
         Element columnsElement = XmlUtils.getChildElement(unionViewElement, "Columns");
         Column[] columns = createColumns(columnsElement);
 
-        return new UnionReport(sourceQueriesArray, name, title, sourceFilterExpression, group, columns, resultFilterExpression);
+        return new UnionReport(sourceQueriesArray, name, title, hidden, sourceFilterExpression, group, columns, resultFilterExpression);
     }
 
     private static JoinReport createJoinView(Element joinViewElement) {
@@ -143,6 +153,8 @@ public class ReportSerialization {
 
         String name = XmlUtils.getElementStringValue(joinViewElement, "Name");
         String title = XmlUtils.getElementStringValue(joinViewElement, "Title");
+
+        boolean hidden = XmlUtils.getElementBooleanValue(joinViewElement, "Hidden");
 
         Element sourceFilterElement = XmlUtils.getChildElement(joinViewElement, "SourceFilter");
         ExpressionNode sourceFilterExpression = null;
@@ -165,7 +177,7 @@ public class ReportSerialization {
         Element columnsElement = XmlUtils.getChildElement(joinViewElement, "Columns");
         Column[] columns = createColumns(columnsElement);
 
-        return new JoinReport(sourceQueries[0], sourceQueries[1], joinRules, name, title, sourceFilterExpression, group, columns, resultFilterExpression);
+        return new JoinReport(sourceQueries[0], sourceQueries[1], joinRules, name, title, hidden, sourceFilterExpression, group, columns, resultFilterExpression);
     }
 
     private static JoinRules createJoinRules(Element joinRulesElement) {
@@ -204,7 +216,7 @@ public class ReportSerialization {
             }
 
             String groupRuleString = XmlUtils.getElementStringValue(columnElement, "GroupRule");
-            GroupRule groupRule = null;
+            GroupRule groupRule = GroupRule.By;
             if (groupRuleString != null) {
                 groupRule = GroupRule.valueOf(groupRuleString);
             }
@@ -221,12 +233,27 @@ public class ReportSerialization {
 			String dataTypeString = XmlUtils.getElementStringValue(columnElement, "DataType");
 			DataType dataType = DataType.valueOf(dataTypeString);
 
-			columnList.add(new Column(header, width, name, groupRule, sortRule, expression, dataType));
+            Element summarizationElement = XmlUtils.getChildElement(columnElement, "Summarization");
+            ColumnSummarization summarization = null;
+            if (summarizationElement != null) {
+                String summarizationRuleString = XmlUtils.getElementStringValue(summarizationElement, "Rule");
+                if (summarizationRuleString == null || summarizationRuleString.isEmpty()) {
+                    throw new RuntimeException();
+                }
+                SummarizationRule summarizationRule = SummarizationRule.valueOf(summarizationRuleString);
+                        String summarizationResetColumnName = XmlUtils.getElementStringValue(summarizationElement, "ResetColumn");
+
+                summarization = new ColumnSummarization();
+                summarization.setRule(summarizationRule);
+                summarization.setResetColumnName(summarizationResetColumnName == null || summarizationResetColumnName.isEmpty() ? null : summarizationResetColumnName);
+            }
+
+			columnList.add(new Column(header, width, name, groupRule, sortRule, expression, dataType, summarization));
 		}
 		return columnList.toArray(new Column[columnList.size()]);
 	}
 
-    private Map<String,Object> createParameters(Element parametersElement) {
+    private static Map<String,Object> createParameters(Element parametersElement) {
         Map<String,Object> parameters = new HashMap<>();
 
         for (Element parameterElement : XmlUtils.getChildElements(parametersElement, "Parameter")) {

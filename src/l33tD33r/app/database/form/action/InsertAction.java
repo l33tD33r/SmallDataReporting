@@ -41,7 +41,6 @@ public class InsertAction extends Action {
         return new ArrayList<>(fields);
     }
     public void addField(Field field) {
-        field.setParentAction(this);
         fields.add(field);
     }
 

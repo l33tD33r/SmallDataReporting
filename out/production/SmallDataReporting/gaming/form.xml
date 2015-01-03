@@ -46,19 +46,28 @@
         </Actions>
     </Form>
     <Form>
-        <Name>TestInteger</Name>
-        <Title>Test Integer</Title>
+        <Name>CreatePlayer</Name>
+        <Title>Create Player</Title>
         <Items>
-            <Item id="Int" type="Integer"/>
+            <Item id="Name" type="String" />
+            <Item id="Notes" type="String" />
         </Items>
         <Views>
-            <View model="Item" item="Int" type="IntegerField" label="Integer"/>
+            <View model="Item" item="Name" type="TextField" label="Name" />
+            <View model="Item" item="Notes" type="TextArea" label="Description" />
         </Views>
-        <Outputs>
-            <Output type="Console">
-                <WriteLine source="Item" item="Int" />
-            </Output>
-        </Outputs>
+        <Validations>
+
+        </Validations>
+        <Actions>
+            <Action type="Insert" table="Player">
+                <Fields>
+                    <Field name="Name" source="Item" item="Name"/>
+                    <Field name="Notes" source="Item" item="Notes"/>
+                    <Field name="Email" source="Value" value="" type="String"/>
+                </Fields>
+            </Action>
+        </Actions>
     </Form>
     <Form>
         <Name>NewSettlersGame</Name>
@@ -162,17 +171,7 @@
             </Action>
         </Actions>
         <Outputs>
-            <!--
-            <Output type="Console">
-                <WriteLine source="Item" item="Location"/>
-                <WriteLine source="Collection" collection="SettlersGamePlayers">
-                    <Properties>
-                        <Property id="Player"/>
-                        <Property id="Color"/>
-                    </Properties>
-                </WriteLine>
-            </Output>
-            -->
+
         </Outputs>
     </Form>
 </Forms>

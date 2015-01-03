@@ -27,10 +27,12 @@ public class ReportManager {
 	private ReportProvider reportProvider;
 	
 	private LinkedHashMap<String,Report> reportsMap;
+	private LinkedHashMap<String,Report> visibleReportsMap;
 	
 	private ReportManager(ReportProvider reportProvider) {
 		this.reportProvider = reportProvider;
-		this.reportsMap = new LinkedHashMap<String, Report>();
+		reportsMap = new LinkedHashMap<>();
+		visibleReportsMap = new LinkedHashMap<>();
 		loadReports();
 	}
 	
@@ -46,6 +48,9 @@ public class ReportManager {
 	
 	private void loadReport(Report report) {
 		reportsMap.put(report.getName(), report);
+		if (!report.isHidden()) {
+			visibleReportsMap.put(report.getName(), report);
+		}
 	}
 	
 	public void reloadReports() {
@@ -60,4 +65,8 @@ public class ReportManager {
     public ArrayList<String> getReportNames() {
         return new ArrayList<>(reportsMap.keySet());
     }
+
+	public ArrayList<String> getVisibleReportNames() {
+		return new ArrayList<>(visibleReportsMap.keySet());
+	}
 }

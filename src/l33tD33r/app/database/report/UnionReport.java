@@ -9,8 +9,8 @@ public class UnionReport extends Report {
 
     private String[] sourceReportNames;
 
-    public UnionReport(String[] sourceReportNames, String name, String title, ExpressionNode sourceFilterExpression, boolean group, Column[] columns, ExpressionNode resultFilterExpression) {
-        super(name, title, sourceFilterExpression, group, columns, resultFilterExpression);
+    public UnionReport(String[] sourceReportNames, String name, String title, boolean hidden, ExpressionNode sourceFilterExpression, boolean group, Column[] columns, ExpressionNode resultFilterExpression) {
+        super(name, title, hidden, sourceFilterExpression, group, columns, resultFilterExpression);
 
         this.sourceReportNames = sourceReportNames;
     }
@@ -30,6 +30,7 @@ public class UnionReport extends Report {
         SortRule[] columnsSortRule = new SortRule[columns.length];
         ExpressionNode[] columnsExpression = new ExpressionNode[columns.length];
         DataType[] columnsDataType = new DataType[columns.length];
+        ColumnSummarization[] columnSummarizations = new ColumnSummarization[columns.length];
         for (int i=0; i < columns.length; i++) {
             Column column = columns[i];
             columnsName[i] = column.getName();
@@ -37,8 +38,9 @@ public class UnionReport extends Report {
             columnsSortRule[i] = column.getSortRule();
             columnsExpression[i] = column.getExpression();
             columnsDataType[i] = column.getDataType();
+            columnSummarizations[i] = column.getSummarization();
         }
 
-        return QueryManager.createUnionQuery(sourceQueries, getName(), getSourceFilterExpression(), getGroup(), columnsName, columnsGroupRule, columnsSortRule, columnsExpression, columnsDataType, getResultFilterExpression());
+        return QueryManager.createUnionQuery(sourceQueries, getName(), getSourceFilterExpression(), getGroup(), columnsName, columnsGroupRule, columnsSortRule, columnsExpression, columnsDataType, columnSummarizations, getResultFilterExpression());
     }
 }

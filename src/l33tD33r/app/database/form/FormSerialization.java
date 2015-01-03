@@ -126,7 +126,20 @@ public class FormSerialization {
             throw new RuntimeException("Collection - id is required");
         }
 
-        Collection collection = new Collection(id);
+        String type = collectionElement.getAttribute("type");
+
+        switch (type) {
+            case "Property":
+                return createPropertyCollection(id, collectionElement);
+            case "Report":
+                return createReportCollection(id, collectionElement);
+            default:
+                throw new RuntimeException(MessageFormat.format("Collection ''{0}'' ", id, type));
+        }
+    }
+
+    private PropertyCollection createPropertyCollection(String id, Element collectionElement) {
+        PropertyCollection collection = new PropertyCollection(id);
 
         Element propertiesElement = XmlUtils.getChildElement(collectionElement, "Properties");
         if (propertiesElement == null) {
@@ -153,6 +166,24 @@ public class FormSerialization {
         }
 
         return collection;
+    }
+
+    private ReportCollection createReportCollection(String id, Element collectionElement) {
+        String reportName = XmlUtils.getElementStringValue(collectionElement, "Report");
+
+        ArrayList<String> columnNameList = new ArrayList<>();
+
+        Element columnNamesElement = XmlUtils.getChildElement(collectionElement, "Columns");
+
+        for (Element columnNameElement : XmlUtils.getChildElements(columnNamesElement, "Column")) {
+            String columnName = XmlUtils.getStringValue(columnNameElement);
+            columnNameList.add(columnName);
+        }
+
+        String[] columnNames = new String[columnNameList.size()];
+        columnNameList.toArray(columnNames);
+
+        return new ReportCollection(id, reportName, columnNames);
     }
 
     private View createView(Element viewElement) {
@@ -330,7 +361,7 @@ public class FormSerialization {
         batchInsertAction.setTable(table);
 
         String sourceCollectionId = actionElement.getAttribute("sourceCollection");
-        Collection sourceCollection = form.getCollection(sourceCollectionId);
+        PropertyCollection sourceCollection = form.getCollection(sourceCollectionId);
         if (sourceCollection == null) {
             throw new RuntimeException(MessageFormat.format("Form does not contain a collection with id '{0}'", sourceCollectionId));
         }
@@ -355,10 +386,10 @@ public class FormSerialization {
     private Field createField(Element fieldElement) {
         return createFieldInner(fieldElement, null);
     }
-    private Field createBatchField(Element fieldElement, Collection collection) {
+    private Field createBatchField(Element fieldElement, PropertyCollection collection) {
         return createFieldInner(fieldElement, collection);
     }
-    private Field createFieldInner(Element fieldElement, Collection collection) {
+    private Field createFieldInner(Element fieldElement, PropertyCollection collection) {
         Field field = new Field();
 
         String name = fieldElement.getAttribute("name");
@@ -456,7 +487,7 @@ public class FormSerialization {
         return new FixedValueSource(type, type.parse(stringValue));
     }
 
-    private ValueSource createCollectionValueSource(Collection collection, Element sourceElement) {
+    private ValueSource createCollectionValueSource(PropertyCollection collection, Element sourceElement) {
         String sourceType = sourceElement.getAttribute("source");
 
         switch (sourceType) {
@@ -471,7 +502,7 @@ public class FormSerialization {
         }
     }
 
-    private PropertyRefSource createPropertyRefSource(Collection collection, Element sourceElement) {
+    private PropertyRefSource createPropertyRefSource(PropertyCollection collection, Element sourceElement) {
         String propertyId = sourceElement.getAttribute("property");
 
         if (propertyId == null || propertyId.isEmpty()) {

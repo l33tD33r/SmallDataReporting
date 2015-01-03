@@ -12,6 +12,8 @@ public abstract class Report {
 	
 	private String title;
 
+	private boolean hidden;
+
 	private ExpressionNode sourceFilterExpression;
 
 	private boolean group;
@@ -26,9 +28,10 @@ public abstract class Report {
 	
 	private Query query;
 	
-	protected Report(String name, String title, ExpressionNode sourceFilterExpression, boolean group, Column[] columns, ExpressionNode resultFilterExpression) {
+	protected Report(String name, String title, boolean hidden, ExpressionNode sourceFilterExpression, boolean group, Column[] columns, ExpressionNode resultFilterExpression) {
 		this.name = name;
 		this.title = title;
+		this.hidden = hidden;
 		this.sourceFilterExpression = sourceFilterExpression;
 		this.group = group;
 		this.columns = columns;
@@ -43,6 +46,10 @@ public abstract class Report {
 	public String getTitle() {
 		return title;
 	}
+
+	public boolean isHidden() {
+		return hidden;
+	}
 	
 	protected abstract Query createQuery();
 	
@@ -55,6 +62,10 @@ public abstract class Report {
 		}
 		return query;
 	}
+
+	public void resetQuery() {
+		query = null;
+	}
 	
 	protected ExpressionNode getSourceFilterExpression() {
 		return sourceFilterExpression;
@@ -65,8 +76,8 @@ public abstract class Report {
 	protected Boolean getGroup() {
 		return group;
 	}
-	
-	protected Column[] getColumns() {
+
+	public Column[] getColumns() {
 		return columns;
 	}
 	

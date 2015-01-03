@@ -282,7 +282,7 @@ public class WorkspaceController {
 
         ArrayList<ReportItem> allReports = new ArrayList<>();
 
-        for (String reportName : ReportManager.getSingleton().getReportNames()) {
+        for (String reportName : ReportManager.getSingleton().getVisibleReportNames()) {
             allReports.add(new ReportItem(reportName));
         }
 

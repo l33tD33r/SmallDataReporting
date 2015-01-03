@@ -2,13 +2,13 @@ package l33tD33r.app.database.form;
 
 import l33tD33r.app.database.form.action.Action;
 import l33tD33r.app.database.form.data.Collection;
+import l33tD33r.app.database.form.data.PropertyCollection;
 import l33tD33r.app.database.form.data.ItemSource;
 import l33tD33r.app.database.form.output.Output;
 import l33tD33r.app.database.form.view.View;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**

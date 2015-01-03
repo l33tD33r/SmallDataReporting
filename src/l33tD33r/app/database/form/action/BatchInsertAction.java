@@ -7,7 +7,6 @@ import l33tD33r.app.database.form.data.*;
 import l33tD33r.app.ui.workspace.data.DataRecordReference;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Simon on 2014-11-29.
@@ -18,7 +17,7 @@ public class BatchInsertAction extends Action {
 
     private String updatePropertyId;
 
-    private Collection sourceCollection;
+    private PropertyCollection sourceCollection;
 
     private ArrayList<PropertyRefSource> propertySources;
 
@@ -40,11 +39,11 @@ public class BatchInsertAction extends Action {
         this.updatePropertyId = updatePropertyId;
     }
 
-    public void setSourceCollection(Collection sourceCollection) {
+    public void setSourceCollection(PropertyCollection sourceCollection) {
         this.sourceCollection = sourceCollection;
     }
 
-    private void updateCurrentElement(Element currentElement) {
+    private void updateCurrentElement(PropertyElement currentElement) {
         propertySources.forEach(s -> s.setCurrentElement(currentElement));
     }
 
@@ -67,7 +66,7 @@ public class BatchInsertAction extends Action {
 
     @Override
     public void execute() {
-        for (Element element : sourceCollection.getInsertElements()) {
+        for (PropertyElement element : sourceCollection.getInsertElements()) {
             updateCurrentElement(element);
 
             DataRecord newRecord = DataManager.getSingleton().createNewRecord(getTable());

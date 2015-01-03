@@ -1,7 +1,7 @@
 package l33tD33r.app.ui.workspace.control;
 
 import javafx.scene.control.TableCell;
-import l33tD33r.app.database.form.data.Element;
+import l33tD33r.app.database.form.data.PropertyElement;
 
 /**
  * Created by Simon on 12/15/2014.
@@ -10,7 +10,7 @@ public abstract class TableCellWrapper<TCellValue> {
 
     private TableColumnWrapper columnWrapper;
 
-    private TableCell<Element,TCellValue> tableCell;
+    private TableCell<PropertyElement,TCellValue> tableCell;
 
     public TableCellWrapper(TableColumnWrapper columnWrapper) {
         this.columnWrapper = columnWrapper;
@@ -20,12 +20,12 @@ public abstract class TableCellWrapper<TCellValue> {
         return columnWrapper;
     }
 
-    public TableCell<Element,TCellValue> getTableCell() {
+    public TableCell<PropertyElement,TCellValue> getTableCell() {
         if (tableCell == null) {
             tableCell = createTableCell();
         }
         return tableCell;
     }
 
-    protected abstract TableCell<Element,TCellValue> createTableCell();
+    protected abstract TableCell<PropertyElement,TCellValue> createTableCell();
 }

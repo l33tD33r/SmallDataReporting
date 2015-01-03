@@ -41,3 +41,11 @@ out/production/SmallDataReporting/shadowrun/data.xml
 out/production/SmallDataReporting/shadowrun/schema.xml
 out/production/SmallDataReporting/gaming/form.xml
 .idea/workspace.xml
+data/gaming_actual/data.xml
+out/production/SmallDataReporting/gaming/data.xml
+out/production/SmallDataReporting/gaming/form.xml
+out/production/SmallDataReporting/gaming/report.xml
+out/production/SmallDataReporting/gaming/schema.xml
+out/production/SmallDataReporting/gaming/transaction.form.xml
+out/production/SmallDataReporting/gaming_actual/data.xml
+out/production/SmallDataReporting/shadowrun/data.xml
