@@ -83,7 +83,13 @@ public class XmlUtils {
     }
 
     public static Integer getElementIntegerValue(Element parentElement, String childElementName) {
+        return getElementIntegerValue(parentElement, childElementName, 0);
+    }
+    public static Integer getElementIntegerValue(Element parentElement, String childElementName, int defaultValue) {
         Element childElement = getChildElement(parentElement, childElementName);
+        if (childElement == null) {
+            return defaultValue;
+        }
         return getIntegerValue(childElement);
     }
 

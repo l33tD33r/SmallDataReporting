@@ -13,10 +13,17 @@ public class PropertyCollection implements Collection{
 
     private ArrayList<ItemTemplate> propertyTemplates;
 
+    private ArrayList<PropertyElement> seedElements;
+
     private ArrayList<PropertyElement> elements;
+
+    private int maxSize;
+
+    private int minSize;
 
     public PropertyCollection(String id) {
         setId(id);
+        seedElements = new ArrayList<>();
         elements = new ArrayList<>();
         propertyTemplates = new ArrayList<>();
     }
@@ -55,45 +62,96 @@ public class PropertyCollection implements Collection{
         return elements.get(index);
     }
 
-    public PropertyElement addElement() {
+    public void addElement() {
+        if (getSize() >= getMaxSize()) {
+            return;
+        }
+
+        PropertyElement element = null;
+
+        if (hasSeedElements()) {
+            element = retrieveNextSeedElement();
+        } else {
+            element = createElement();
+        }
+
+        addElement(element);
+    }
+
+    private void addElement(PropertyElement element) {
+        elements.add(element);
+    }
+
+    private boolean hasSeedElements() {
+        return seedElements.size() > 0;
+    }
+
+    private PropertyElement retrieveNextSeedElement() {
+        return seedElements.remove(0);
+    }
+
+    private void addSeedElement(PropertyElement element) {
+        seedElements.add(element);
+    }
+
+    private PropertyElement createElement() {
         PropertyElement element = new PropertyElement();
         propertyTemplates.forEach(t -> element.addProperty(new ItemSource(t)));
-        elements.add(element);
         return element;
     }
 
-    public void setupInitialElements(List<Map<String,String>> elementsInitialValues) {
-        for (Map<String,String> initialValues : elementsInitialValues) {
-            PropertyElement element = addElement();
+    public void setupSeedElements(List<Map<String,String>> seedElementsInitialValues) {
+        int index = 0;
+        for (Map<String,String> initialValues : seedElementsInitialValues) {
+            addSeedElement(createElement());
+
+            PropertyElement element = seedElements.get(index);
 
             for (String propertyId : initialValues.keySet()) {
                 ItemSource property = element.getProperty(propertyId);
                 property.setStringValue(initialValues.get(propertyId));
             }
+
+            index++;
+        }
+    }
+
+    public void setupInitialElements(List<Map<String,String>> initialElementsInitialValues) {
+        int index = 0;
+        for (Map<String,String> initialValues : initialElementsInitialValues) {
+            addElement(createElement());
+
+            PropertyElement element = elements.get(index);
+
+            for (String propertyId : initialValues.keySet()) {
+                ItemSource property = element.getProperty(propertyId);
+                property.setStringValue(initialValues.get(propertyId));
+            }
+
+            index++;
         }
     }
 
     public void removeElement(int index) {
+        if (elements.size() <= getMinSize()) {
+            return;
+        }
         elements.remove(index);
     }
 
-    private int elementCountForInsert = 0;
-
-    public int getElementCountForInsert() {
-        return elementCountForInsert;
+    public int getMaxSize() {
+        return maxSize;
     }
 
-    public void setElementCountForInsert(int count) {
-        elementCountForInsert = count;
+    public void setMaxSize(int maxSize) {
+        this.maxSize = maxSize;
     }
 
-    public ArrayList<PropertyElement> getInsertElements() {
-        ArrayList<PropertyElement> insertElements = new ArrayList<>();
+    public int getMinSize() {
+        return minSize;
+    }
 
-        for (int i=0; i < getElementCountForInsert(); i++) {
-            insertElements.add((PropertyElement)getElement(i));
-        }
-
-        return insertElements;
+    public void setMinSize(int minSize) {
+        this.minSize = minSize;
     }
 }

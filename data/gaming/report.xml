@@ -395,7 +395,7 @@
 				<Right>
 					<Expression type="Value">
 						<Type>Integer</Type>
-						<Value>10</Value>
+						<Value>0</Value>
 					</Expression>
 				</Right>
 			</Expression>

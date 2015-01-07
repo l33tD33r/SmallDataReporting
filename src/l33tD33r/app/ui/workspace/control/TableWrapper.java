@@ -57,7 +57,7 @@ public class TableWrapper extends CollectionControlWrapper {
 
     public PropertyCollection getCollection() {
         if (collection == null) {
-            collection = getForm().getCollection(getTable().getCollectionId());
+            collection = (PropertyCollection)getForm().getCollection(getTable().getCollectionId());
         }
         return collection;
     }
@@ -75,10 +75,10 @@ public class TableWrapper extends CollectionControlWrapper {
         }
 
         PropertyCollection collection = getCollection();
-        if (collection.getElements().size() > 0) {
-            rows.add(collection.getElement(0));
+
+        for (Element element : collection.getElements()) {
+            rows.add((PropertyElement)element);
         }
-        collection.setElementCountForInsert(rows.size());
 
         setControl(tableView);
     }
@@ -102,10 +102,10 @@ public class TableWrapper extends CollectionControlWrapper {
                 Button addButton = new Button("Add");
                 addButton.setOnAction( e-> {
                     PropertyCollection collection = getCollection();
+                    collection.addElement();
                     if (collection.getElements().size() > rows.size()) {
-                        rows.add(collection.getElement(rows.size()));
+                        rows.add((PropertyElement)collection.getElement(rows.size()));
                     }
-                    collection.setElementCountForInsert(rows.size());
                 });
 
                 buttonBox.getChildren().add(addButton);
@@ -114,10 +114,11 @@ public class TableWrapper extends CollectionControlWrapper {
             if (getTable().isAllowRemove()) {
                 Button removeButton = new Button("Remove");
                 removeButton.setOnAction(e -> {
-                    if (rows.size() > 0) {
+                    PropertyCollection collection = getCollection();
+                    collection.removeElement(collection.getSize()-1);
+                    if (rows.size() > collection.getSize()) {
                         rows.remove(rows.size()-1);
                     }
-                    collection.setElementCountForInsert(rows.size());
                 });
 
                 buttonBox.getChildren().add(removeButton);
@@ -265,7 +266,7 @@ public class TableWrapper extends CollectionControlWrapper {
                     case DropDown:
                         TableDropDownView dropDownView = (TableDropDownView) view;
                         ArrayList<DataRecordReference> dataRecordReferences = ControlFactory.getSingleton().createReferenceRecordList(dropDownView.getTable());
-                        ComboBoxTableCell<PropertyElement, Object> comboBoxTableCell = new ComboBoxTableCell<>(new ReferenceStringConverter(dataRecordReferences), dataRecordReferences.toArray());
+                        ComboBoxTableCell<PropertyElement, Object> comboBoxTableCell = new ComboBoxTableCell<PropertyElement, Object>(new ReferenceStringConverter(dataRecordReferences), dataRecordReferences.toArray());
                         comboBoxTableCell.itemProperty().addListener(new ItemPropertyListener(columnWrapper, comboBoxTableCell));
                         tableCell = comboBoxTableCell;
                         break;

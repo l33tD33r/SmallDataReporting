@@ -44,8 +44,8 @@ public class CollectionRefSource {
     public ArrayList<ElementRefSource> getElementSources() {
         ArrayList<ElementRefSource> elementSources = new ArrayList<>();
 
-        for (PropertyElement element : collection.getElements()) {
-            ElementRefSource elementSource = new ElementRefSource(element);
+        for (Element element : collection.getElements()) {
+            ElementRefSource elementSource = new ElementRefSource((PropertyElement)element);
 
             elementSources.add(elementSource);
         }

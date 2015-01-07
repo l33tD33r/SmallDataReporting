@@ -66,8 +66,9 @@ public class BatchInsertAction extends Action {
 
     @Override
     public void execute() {
-        for (PropertyElement element : sourceCollection.getInsertElements()) {
-            updateCurrentElement(element);
+        for (Element element : sourceCollection.getElements()) {
+            PropertyElement propertyElement = (PropertyElement)element;
+            updateCurrentElement(propertyElement);
 
             DataRecord newRecord = DataManager.getSingleton().createNewRecord(getTable());
 
@@ -83,7 +84,7 @@ public class BatchInsertAction extends Action {
                 DataManager.getSingleton().insertRecord(getTable(), newRecord);
 
                 if (updatePropertyId != null) {
-                    ItemSource property = element.getProperty(updatePropertyId);
+                    ItemSource property = propertyElement.getProperty(updatePropertyId);
                     property.setValue(newRecord.getId());
                 }
             } catch (DataRecordExistsException e) {

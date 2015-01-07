@@ -79,7 +79,7 @@
             <Item id="SettlersGameInstance" type="Reference" table="SettlersOfCatan_GameInstance"/>
         </Items>
         <Collections>
-            <Collection id="SettlersGamePlayers">
+            <Collection id="SettlersGamePlayers" type="Property">
                 <Properties>
                     <Property id="StartingPosition" type="Integer" />
                     <Property id="Player" type="Reference" table="Player"/>
@@ -88,13 +88,9 @@
                     <Property id="Points" type="Integer"/>
                     <Property id="Winner" type="Boolean"/>
                 </Properties>
-                <Elements>
-                    <Element>
-                        <StartingPosition>1</StartingPosition>
-                    </Element>
-                    <Element>
-                        <StartingPosition>2</StartingPosition>
-                    </Element>
+                <MinSize>2</MinSize>
+                <MaxSize>6</MaxSize>
+                <SeedElements>
                     <Element>
                         <StartingPosition>3</StartingPosition>
                     </Element>
@@ -107,7 +103,15 @@
                     <Element>
                         <StartingPosition>6</StartingPosition>
                     </Element>
-                </Elements>
+                </SeedElements>
+                <InitialElements>
+                    <Element>
+                        <StartingPosition>1</StartingPosition>
+                    </Element>
+                    <Element>
+                        <StartingPosition>2</StartingPosition>
+                    </Element>
+                </InitialElements>
             </Collection>
         </Collections>
         <Views>

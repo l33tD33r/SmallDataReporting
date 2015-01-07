@@ -149,23 +149,44 @@ public class FormSerialization {
             collection.addPropertyTemplate(createItemTemplate(propertyElement));
         }
 
-        Element elementsElement = XmlUtils.getChildElement(collectionElement, "Elements");
-        if (elementsElement != null) {
-            ArrayList<Map<String,String>> elementsInitialValues = new ArrayList<>();
-            for (Element elementElement : XmlUtils.getChildElements(elementsElement, "Element")) {
-                Map<String,String> initialValues = new HashMap<>();
-                for (Element valueElement : XmlUtils.getChildElements(elementElement)) {
-                    String key = valueElement.getTagName();
-                    String propertyValue = XmlUtils.getStringValue(valueElement);
-                    initialValues.put(key, propertyValue);
-                }
-                elementsInitialValues.add(initialValues);
-            }
+        int minSize = XmlUtils.getElementIntegerValue(collectionElement, "MinSize", -1);
 
-            collection.setupInitialElements(elementsInitialValues);
+        collection.setMinSize(minSize);
+
+        int maxSize = XmlUtils.getElementIntegerValue(collectionElement, "MaxSize", -1);
+
+        collection.setMaxSize(maxSize);
+
+        Element seedElementsElement = XmlUtils.getChildElement(collectionElement, "SeedElements");
+
+        if (seedElementsElement != null) {
+            List<Map<String,String>> seedElementsInitialValues = createCollectionElementsInitialValues(seedElementsElement);
+
+            collection.setupSeedElements(seedElementsInitialValues);
+        }
+
+        Element initialElementsElement = XmlUtils.getChildElement(collectionElement, "InitialElements");
+        if (initialElementsElement != null) {
+            List<Map<String,String>> initialElementsInitialValues = createCollectionElementsInitialValues(initialElementsElement);
+
+            collection.setupInitialElements(initialElementsInitialValues);
         }
 
         return collection;
+    }
+
+    private List<Map<String,String>> createCollectionElementsInitialValues(Element elementsElement) {
+        ArrayList<Map<String,String>> elementsInitialValues = new ArrayList<>();
+        for (Element elementElement : XmlUtils.getChildElements(elementsElement, "Element")) {
+            Map<String,String> initialValues = new HashMap<>();
+            for (Element valueElement : XmlUtils.getChildElements(elementElement)) {
+                String key = valueElement.getTagName();
+                String propertyValue = XmlUtils.getStringValue(valueElement);
+                initialValues.put(key, propertyValue);
+            }
+            elementsInitialValues.add(initialValues);
+        }
+        return elementsInitialValues;
     }
 
     private ReportCollection createReportCollection(String id, Element collectionElement) {
@@ -361,7 +382,7 @@ public class FormSerialization {
         batchInsertAction.setTable(table);
 
         String sourceCollectionId = actionElement.getAttribute("sourceCollection");
-        PropertyCollection sourceCollection = form.getCollection(sourceCollectionId);
+        PropertyCollection sourceCollection = (PropertyCollection)form.getCollection(sourceCollectionId);
         if (sourceCollection == null) {
             throw new RuntimeException(MessageFormat.format("Form does not contain a collection with id '{0}'", sourceCollectionId));
         }
